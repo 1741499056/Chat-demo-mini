@@ -1,0 +1,22 @@
+<view class="container">
+  <!-- 背景图容器 -->
+  <image class="background-image" src="/images/登录背景1.png" mode="aspectFill">
+    <view class="background-text">
+      <text class="title-line">欢迎来到“灵枢诗鉴”</text>
+      <text class="subtitle-line">快开启你的学习之旅吧</text>
+    </view>
+  </image>
+
+  <!-- 原有导航栏和搜索栏 -->
+  <view class="nav-container">
+    <!-- 保持原有导航代码不变 -->
+  </view>
+
+  <!-- 新增内容区块 -->
+  <view class="content-wrapper">
+    <view class="poem-card">
+      <text class="poem-title">《江南》</text>
+      <text class="poem-content">江南可采莲，莲叶何田田。鱼戏莲叶间...</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,51 @@
+<!-- 个人中心页面 - 淡蓝色渐变版 -->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="content-card user-card">
+    <image class="user-avatar" src="/images/登录背景1.png"></image>
+    <view class="user-detail">
+      <text class="user-name">李白月</text>
+      <text class="user-desc">古诗文学习，从这里开始</text>
+    </view>
+    <button class="bg-setting-btn">设置背景</button>
+  </view>
+
+  <!-- 选项卡卡片 -->
+  <view class="content-card tabs-card">
+    <view class="nav-tabs">
+      <view class="nav-tab active">我的收藏</view>
+      <view class="nav-tab">学习计划</view>
+    </view>
+  </view>
+
+  <!-- 功能列表卡片 -->
+  <view class="content-card list-card">
+    <view class="nav-list">
+      <view class="nav-item">
+        <image class="nav-icon" src="/icons/清除缓存.jpg"></image>
+        <text class="nav-text">清理缓存</text>
+        <image class="nav-arrow" src="/icons/右箭头.jpg"></image>
+      </view>
+      <view class="nav-item">
+        <image class="nav-icon" src="/icons/关于我们.jpg"></image>
+        <text class="nav-text">关于我们</text>
+        <image class="nav-arrow" src="/icons/右箭头.jpg"></image>
+      </view>
+      <view class="nav-item">
+        <image class="nav-icon" src="/icons/用户协议.jpg"></image>
+        <text class="nav-text">用户协议</text>
+        <image class="nav-arrow" src="/icons/右箭头.jpg"></image>
+      </view>
+      <view class="nav-item">
+        <image class="nav-icon" src="/icons/意见反馈.jpg"></image>
+        <text class="nav-text">意见反馈</text>
+        <image class="nav-arrow" src="/icons/右箭头.jpg"></image>
+      </view>
+      <view class="nav-item">
+        <image class="nav-icon" src="/icons/隐私安全.jpg"></image>
+        <text class="nav-text">隐私安全</text>
+        <image class="nav-arrow" src="/icons/右箭头.jpg"></image>
+      </view>
+    </view>
+  </view>
+</view>

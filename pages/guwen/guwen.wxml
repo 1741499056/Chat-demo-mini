@@ -1,0 +1,244 @@
+<!-- 顶部状态栏 -->
+<view class="status-bar"></view>
+
+<!-- 导航栏容器 -->
+<view class="nav-container">
+  <!-- 主标题 -->
+  <!-- <view class="nav-title">古典书籍</view> -->
+  <!-- 导航标签 -->
+  <scroll-view class="nav-tabs" scroll-x>
+    <block wx:for="{{tabs}}" wx:key="index">
+      <view class="tab-item {{currentTab === index ? 'active' : ''}}" bindtap="switchTab" data-index="{{index}}" data-url="{{item.url}}">
+        {{item.name}}
+      </view>
+    </block>
+  </scroll-view>
+</view>
+
+<!-- 古籍展示页面 -->
+<view class="container">
+  <!-- 标题区 -->
+  <view class="header">
+    <text class="title">国学典籍珍藏</text>
+    <text class="subtitle">传世经典 · 永恒智慧</text>
+  </view>
+
+<!-- 古文搜索栏  数据需要js-->
+<!-- 在导航栏容器下方添加搜索栏 -->
+<view class="search-container">
+  <view class="search-bar">
+    <!-- <image class="search-icon" src="/images/search-icon.png"></image> -->
+    <input 
+      class="search-input" 
+      placeholder="请输入古诗文关键词" 
+      placeholder-style="color:#8c7b6b"
+      bindinput="handleSearchInput"
+      value="{{searchKeyword}}"
+    />
+    <view class="search-btn" bindtap="handleSearch">搜索</view>
+  </view>
+</view>
+
+
+
+
+  <!-- 书籍卡片列表 -->
+  <view class="book-list">
+    <!-- 《三国志》卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/三国志.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">三国志</text>
+        <view class="author-line">
+          <text class="author">[晋]陈寿 撰</text>
+          <text class="annotator">[宋]裴松之 注</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 《孙子兵法》卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/孙子兵法.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="book-title">孙子兵法</text>
+        <!-- <text class="tagline">兵家至圣超凡思想的结晶</text> -->
+        <view class="author-line">
+          <text class="author">兵者，诡道也</text>
+        </view>
+        <view class="publisher">
+          <text>《深度军事》编委会 译注</text>
+          <text>清华大学出版社</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 《汉书》卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/汉书.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">汉书</text>
+        <view class="author-line">
+          <text class="author">汉朝结晶</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+
+    <!-- 唐书卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/唐书.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">唐书</text>
+        <view class="author-line">
+          <text class="author">大唐盛世</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+
+
+    <!-- 史记卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/史记.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">史记</text>
+        <view class="author-line">
+          <text class="author">史家之绝唱，无韵之离骚</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 论语卡片 -->
+    <view class="book-card">
+      <image class="book-cover" src="/images/论语.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">论语</text>
+        <view class="author-line">
+          <text class="author">学而时习之，不亦说乎</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 诗经卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/诗经.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">诗经</text>
+        <view class="author-line">
+          <text class="author">风雅颂，赋比兴</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 资治通鉴卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/资治通鉴.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">资治通鉴</text>
+        <view class="author-line">
+          <text class="author">兼听则明，偏信则暗</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 离骚卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/离骚.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">离骚</text>
+        <view class="author-line">
+          <text class="author">路漫漫其修远兮，吾将上下而求索</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 左传卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/论语.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">左传</text>
+        <view class="author-line">
+          <text class="author">人谁无过？过而能改，善莫大焉</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 吕氏春秋卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/吕氏春秋.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">吕氏春秋</text>
+        <view class="author-line">
+          <text class="author">全则必缺，极则必反，盈则必亏</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+        <!-- 明史卡片 -->
+        <view class="book-card">
+      <image class="book-cover" src="/images/明史.jpg" mode="aspectFill"></image>
+      <view class="book-info">
+        <text class="series">中华国学文库</text>
+        <text class="book-title">明史</text>
+        <view class="author-line">
+          <text class="author">日月山河永在！</text>
+        </view>
+        <view class="publisher">
+          <!-- <image class="seal" src="/images/red-seal.png"></image> -->
+          <text>中华书局</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</view>
