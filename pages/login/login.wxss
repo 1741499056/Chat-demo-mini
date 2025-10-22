@@ -36,8 +36,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* 置于底层 */
-  object-fit: cover;
+  z-index: -2;
+  opacity: 0.5;
 }
 
 .app-name {
@@ -87,7 +87,7 @@
 .login-type-tabs text {
   padding: 20rpx 40rpx;
   font-size: 36rpx;
-  color: #999999;
+  color: black;
 }
 
 .login-type-tabs text.active {
@@ -107,7 +107,7 @@
 .label {
   width: 160rpx;
   font-size: 32rpx;
-  color: #333333;
+  color: black;
 }
 
 input {
@@ -142,7 +142,7 @@ input {
 
 .forgot-password text {
   font-size: 28rpx;
-  color: #999999;
+  color: black;
 }
 
 .login-btn {
@@ -176,7 +176,7 @@ input {
   display: block;
   text-align: center;
   font-size: 28rpx;
-  color: #999999;
+  color: black;
 }
 
 .divider::before,
@@ -238,3 +238,69 @@ input {
 .show {
   display: block;
 }  
+/* 年级选择样式 */
+.grade-value {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.grade-arrow {
+  font-size: 40rpx;
+  color: #999;
+  transform: rotate(90deg);
+}
+
+/* 年级选择器模态框 */
+.grade-picker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grade-picker-content {
+  background: white;
+  width: 80%;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.grade-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.picker-container {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.picker-item {
+  padding: 30rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.picker-item:last-child {
+  border-bottom: none;
+}
+
+/* 防止事件冒泡 */
+.preventDefault {
+  pointer-events: none;
+}

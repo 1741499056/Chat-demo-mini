@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">
+      <!-- <image src="/icons/back.png" class="back-icon" /> -->
+    </view>
+    <view class="title-container">
+      <view class="title">{{poemData.name}}</view>
+    </view>
+  </view>
+  
+  <!-- 新增：固定位置的背诵按钮 -->
+  <view class="recite-btn-fixed" bindtap="startRecitePractice">
+    <text>背诵练习</text>
+  </view>
+
+  <!-- 作者信息 -->
+  <view class="author-info">
+    <text class="dynasty">{{poemData.dynasty}}</text>
+    <text class="author">{{poemData.author}}</text>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content-scroll" scroll-y="true">
+    <!-- 原文 -->
+    <view class="section">
+      <view class="section-title">原文</view>
+      <view class="section-content original-content">
+        <text>{{poemData.originalContent}}</text>
+      </view>
+    </view>
+
+    <!-- 译文 -->
+    <view class="section" wx:if="{{poemData.modernContent}}">
+      <view class="section-title">译文</view>
+      <view class="section-content">
+        <text>{{poemData.modernContent}}</text>
+      </view>
+    </view>
+
+    <!-- 注释 -->
+    <view class="section" wx:if="{{poemData.annotation}}">
+      <view class="section-title">注释</view>
+      <view class="section-content">
+        <text>{{poemData.annotation}}</text>
+      </view>
+    </view>
+
+    <!-- 赏析 -->
+    <view class="section" wx:if="{{poemData.appreciation}}">
+      <view class="section-title">赏析</view>
+      <view class="section-content">
+        <text>{{poemData.appreciation}}</text>
+      </view>
+    </view>
+
+    <!-- 创作背景 -->
+    <view class="section" wx:if="{{poemData.background}}">
+      <view class="section-title">创作背景</view>
+      <view class="section-content">
+        <text>{{poemData.background}}</text>
+      </view>
+    </view>
+
+    <!-- 网友评价 -->
+    <view class="section" wx:if="{{poemData.peopleAppreciation}}">
+      <view class="section-title">网友评价</view>
+      <view class="section-content">
+        <text>{{poemData.peopleAppreciation}}</text>
+      </view>
+    </view>
+
+    <!-- 相关古诗 -->
+    <view class="section" wx:if="{{relatedPoems.length > 0}}">
+      <view class="section-title">相关古诗</view>
+      <view class="related-poems">
+        <block wx:for="{{relatedPoems}}" wx:key="id">
+          <view class="related-poem" bindtap="navigateToRelated" data-id="{{item.id}}">
+            <text class="related-title">{{item.name}}</text>
+            <text class="related-author">{{item.dynasty}}·{{item.author}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,541 @@
+/* 重置默认样式 */
+page {
+  background-color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 容器样式 */
+.container {
+  padding: 20rpx;
+  padding-bottom: 60rpx;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fa 100%);
+  min-height: 100vh;
+}
+
+/* 页面标题 */
+.header {
+  text-align: center;
+  background: linear-gradient(120deg, #ffffff 0%, #f7f7f7 100%);
+  color: #1d4ed8;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(37, 99, 235, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.header .title {
+  font-size: 40rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 15rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.header .tips {
+  font-size: 28rpx;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+  margin-top: 10rpx;
+  position: relative;
+  z-index: 2;
+}
+
+/* 技巧卡片样式 */
+.skill-card {
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 40rpx;
+  border: 1px solid #e0e7ff;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.skill-card:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.skill-desc {
+  position: relative;
+  padding: 32rpx;
+  font-size: 30rpx;
+  line-height: 1.7;
+  color: #374151;
+  background-color: #fafbff;
+  border-bottom: 1px solid #e0e7ff;
+}
+
+/* 题目列表 */
+.exercise-list {
+  margin-top: 20rpx;
+}
+
+/* 题目卡片 */
+.exercise-card {
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin: 0 auto 35rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.exercise-card:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.index {
+  font-weight: bold;
+  font-size: 34rpx;
+  color: #2563eb;
+  background: #dbeafe;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.exercise-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.difficulty-badge {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  margin-bottom: 10rpx;
+}
+
+.difficulty-primary {
+  background: rgba(72, 187, 120, 0.15);
+  color: #16a34a;
+}
+
+.difficulty-intermediate {
+  background: rgba(245, 158, 11, 0.15);
+  color: #ca8a04;
+}
+
+.difficulty-advanced {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.source {
+  font-size: 24rpx;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* 内容样式 */
+.content {
+  font-size: 32rpx;
+  padding: 25rpx;
+  line-height: 1.7;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  margin-bottom: 25rpx;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+/* 开始答题按钮 */
+.answer-button {
+  height: 80rpx;
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(37, 99, 235, 0.3);
+  transition: all 0.3s;
+  width: 100%;
+  margin: 20rpx 0 15rpx;
+  padding: 0 30rpx;
+}
+
+/* 断句操作提示 */
+.answer-instruction {
+  font-size: 28rpx;
+  color: #6b7280;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+/* 放大空格并优化间距 */
+.break-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20rpx 0;
+  padding: 25rpx; /* 保留容器外边距，这是您想要的整体padding */
+  background: #ffffff;
+  border-radius: 16rpx;
+  align-items: center;
+  min-height: 140rpx;
+  border: 1rpx solid #e0e7ff;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.05);
+  line-height: 1.8;
+}
+
+.char-container {
+  display: flex;
+  align-items: center;
+  margin: 0; /* 取消字符容器的内边距 */
+  position: relative;
+}
+
+.char-text {
+  font-size: 46rpx;
+  color: #1e3a8a;
+  line-height: 1;
+  text-align: center;
+  padding: 0; /* 取消文字的内边距 */
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.break-space {
+  width: 60rpx; /* 放大空格宽度 */
+  height: 70rpx; /* 放大空格高度 */
+  background: #f8fafc;
+  border-radius: 8rpx; /* 稍微增大圆角以匹配更大的尺寸 */
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 0; /* 取消空格左边距 */
+  margin-right: 0; /* 确保没有右边距 */
+  box-shadow: inset 0 1rpx 3rpx rgba(0,0,0,0.05);
+  border: 1rpx solid #e2e8f0;
+  position: relative;
+}
+
+
+
+.break-space::after {
+  content: '';
+  position: absolute;
+  top: -10rpx;
+  left: -10rpx;
+  right: -10rpx;
+  bottom: -10rpx;
+}
+
+.break-space.break-selected {
+  background: #2563eb;
+  transform: scale(1.05);
+  box-shadow: 0 2rpx 8rpx rgba(37, 99, 235, 0.3);
+  border-color: #2563eb;
+}
+
+.break-space.break-animating {
+  animation: clickEffect 0.15s ease;
+}
+
+@keyframes clickEffect {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.space-indicator {
+  font-size: 24rpx;
+  color: #94a3b8;
+  font-family: monospace;
+  opacity: 0.7;
+}
+
+.slash-icon {
+  color: white;
+  font-size: 26rpx;
+  font-weight: bold;
+  margin-left: 2rpx;
+}
+
+/* 提交按钮样式 */
+.submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 26rpx 0;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  font-size: 30rpx;
+  font-weight: 500;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  box-shadow: 0 2rpx 6rpx rgba(72, 187, 120, 0.4);
+  margin-top: 20rpx;
+}
+
+.submit-button:active {
+  transform: translateY(-1rpx);
+  box-shadow: 0 4rpx 12rpx rgba(72, 187, 120, 0.5);
+}
+
+/* 答案解析区域样式 */
+.answer-container {
+  margin-top: 34rpx;
+  padding-top: 34rpx;
+  border-top: 2rpx dashed #dbeafe;
+}
+
+.result-indicator {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  text-align: center;
+}
+
+.result-indicator.correct {
+  background: rgba(72, 187, 120, 0.2);
+  color: #48bb78;
+}
+
+.result-indicator.incorrect {
+  background: rgba(245, 101, 101, 0.2);
+  color: #f56565;
+}
+
+.answer-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.sentence-break-result {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-radius: 16rpx;
+  padding: 30rpx 25rpx;
+  margin-bottom: 25rpx;
+  border: 1rpx solid #bfdbfe;
+}
+
+.sentence-text {
+  font-size: 38rpx;
+  line-height: 1.6;
+  color: #2563eb;
+  word-break: break-all;
+  white-space: pre-wrap;
+  text-align: justify;
+}
+
+.analysis-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.analysis-text {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fa 100%);
+  border-radius: 16rpx;
+  padding: 25rpx;
+  font-size: 30rpx;
+  color: #4b5563;
+  line-height: 1.75;
+  white-space: normal;
+  word-wrap: break-word;
+  border: 1rpx solid #dbeafe;
+}
+
+/* 收起全部按钮 */
+.toggle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 26rpx 0;
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  color: white;
+  font-size: 30rpx;
+  font-weight: 500;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  box-shadow: 0 2rpx 6rpx rgba(37, 99, 235, 0.4);
+  margin-top: 20rpx;
+}
+
+/* 加载和错误状态样式 */
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 100;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 8rpx solid #dbeafe;
+  border-top: 8rpx solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30rpx;
+}
+
+.loading-text {
+  font-size: 32rpx;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+
+.error-card {
+  width: 85%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  border-radius: 32rpx;
+  padding: 50rpx 40rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  color: #f56565;
+  margin-bottom: 30rpx;
+}
+
+.error-message {
+  font-size: 34rpx;
+  color: #4b5563;
+  margin-bottom: 40rpx;
+  line-height: 1.6;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 30rpx;
+  justify-content: center;
+}
+
+.retry-button, .back-button {
+  padding: 20rpx 40rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.retry-button {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 2rpx 6rpx rgba(37, 99, 235, 0.4);
+}
+
+.back-button {
+  background: linear-gradient(135deg, #94a3b8 0%, #6b7280 100%);
+  box-shadow: 0 2rpx 6rpx rgba(107, 114, 128, 0.4);
+}
+
+/* 空数据状态样式 */
+.empty-guide {
+  background: white;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  text-align: center;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.08);
+  margin: 30rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  color: #9ca3af;
+  margin-bottom: 30rpx;
+}
+
+.empty-title {
+  font-size: 36rpx;
+  color: #374151;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #6b7280;
+  margin-bottom: 40rpx;
+  line-height: 1.6;
+}
+
+.guide-buttons {
+  display: flex;
+  gap: 20rpx;
+  justify-content: center;
+}
+
+.guide-button {
+  padding: 20rpx 40rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.guide-button.primary {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 2rpx 6rpx rgba(37, 99, 235, 0.4);
+}
+
+.guide-button.secondary {
+  background: linear-gradient(135deg, #94a3b8 0%, #6b7280 100%);
+  box-shadow: 0 2rpx 6rpx rgba(107, 114, 128, 0.4);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}

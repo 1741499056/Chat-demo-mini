@@ -1,0 +1,284 @@
+<!-- 文件上传区域改为语音输入区域 -->
+<view class="upload-section" wx:if="{{!hasUploaded}}">
+  <view class="section-title">
+    <view class="icon">🎤</view>
+    <text class="title-text">语音背诵录音</text>
+  </view>
+  
+  <!-- 语音录制区域 -->
+  <view class="recording-section">
+    <view class="recording-status">
+      <view class="recording-icon {{isRecording ? 'pulse' : ''}}">
+        {{isRecording ? '🔴' : '⚪'}}
+      </view>
+      <view class="recording-text">
+        {{isRecording ? '录音中...' : '点击开始录音'}}
+      </view>
+      <view class="recording-time" wx:if="{{isRecording}}">
+        {{formatTime(recordingTime)}}
+      </view>
+    </view>
+    
+    <!-- 录音控制按钮 -->
+    <view class="recording-controls">
+      <button 
+        class="btn {{isRecording ? 'btn-stop' : 'btn-record'}}" 
+        bindtap="{{isRecording ? 'stopRecording' : 'startRecording'}}"
+        disabled="{{isRecording && recordingTime < 3}}"
+      >
+        <text>{{isRecording ? '停止录音' : '开始录音'}}</text>
+        <view class="btn-icon">{{isRecording ? '⏹️' : '🎤'}}</view>
+      </button>
+      
+      <button 
+        class="btn btn-play" 
+        bindtap="playRecording" 
+        disabled="{{!audioFilePath || isRecording}}"
+        wx:if="{{audioFilePath && !isRecording}}"
+      >
+        <text>播放录音</text>
+        <view class="btn-icon">▶️</view>
+      </button>
+    </view>
+    
+    <!-- 录音波形显示 -->
+    <view class="waveform" wx:if="{{isRecording}}">
+      <view 
+        class="wave-bar" 
+        wx:for="{{waveformData}}" 
+        wx:key="index"
+        style="height: {{item}}rpx;"
+      ></view>
+    </view>
+  </view>
+  
+  <!-- 录音文件信息 -->
+  <view class="recording-info" wx:if="{{audioFilePath && !isRecording}}">
+    <view class="info-item">
+      <text class="label">录音时长：</text>
+      <text class="value">{{formatTime(recordingTime)}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">文件大小：</text>
+      <text class="value">{{audioFileSize}} KB</text>
+    </view>
+    <view class="info-item">
+      <text class="label">录音时间：</text>
+      <text class="value">{{recordingTimestamp}}</text>
+    </view>
+  </view>
+  
+  <!-- 古诗选择 -->
+  <view class="poem-selector">
+    <view class="section-title">
+      <view class="icon">📜</view>
+      <text class="title-text">选择古诗</text>
+    </view>
+    <picker bindchange="onPoemChange" value="{{poemIndex}}" range="{{poemList}}" range-key="name">
+      <view class="picker">
+        <text class="picker-label">当前选择：</text>
+        <text class="picker-value">{{poemList[poemIndex].name}}</text>
+        <view class="picker-arrow">▼</view>
+      </view>
+    </picker>
+  </view>
+  
+  <!-- 上传按钮 -->
+  <button class="btn btn-primary upload-btn" bindtap="uploadAndEvaluate" disabled="{{!audioFilePath}}">
+    <text>上传并获取点评</text>
+    <view class="btn-icon">🚀</view>
+  </button>
+</view>
+
+<!-- 音频文件列表改为录音文件显示 -->
+<view class="audio-section" wx:if="{{hasUploaded && !loading && !error}}">
+  <view class="section-title">
+    <view class="icon">🎧</view>
+    <text class="title-text">录音文件</text>
+  </view>
+  <view class="audio-list">
+    <view class="audio-item">
+      <view class="audio-icon">🎤</view>
+      <view class="audio-info">
+        <text class="audio-name">语音背诵录音</text>
+        <text class="audio-duration">{{formatTime(recordingTime)}}</text>
+      </view>
+      <view class="play-btn" bindtap="playRecording">▶</view>
+    </view>
+  </view>
+  
+  <!-- 点评结果展示 -->
+  <view class="evaluation-section">
+    <view class="section-title">
+      <view class="icon">📝</view>
+      <text class="title-text">AI点评结果</text>
+    </view>
+    
+    <view class="evaluation-content">
+      <!-- 总体评分 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">总体评分：</view>
+        <view class="evaluation-text">{{overallScore}}分</view>
+      </view>
+      
+      <!-- 详细评分 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">详细评分：</view>
+        <view class="detail-scores">
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.content_completeness}}</view>
+            <view class="detail-label">内容完整度</view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.structural_correctness}}</view>
+            <view class="detail-label">结构正确性</view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.key_imagery_preservation}}</view>
+            <view class="detail-label">关键意象保留</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 主要错误 -->
+      <view class="evaluation-item" wx:if="{{majorErrors.length > 0}}">
+        <view class="evaluation-label">主要错误：</view>
+        <view class="error-list">
+          <view class="error-item" wx:for="{{majorErrors}}" wx:key="index">
+            <view class="error-header">
+              <view class="error-type">{{item.error_type}}</view>
+              <view class="severity {{item.severity}}">{{item.severity}}</view>
+            </view>
+            <view class="error-detail">
+              <text class="label">位置：</text>
+              <text class="value">{{item.position}}</text>
+            </view>
+            <view class="error-detail">
+              <text class="label">缺失内容：</text>
+              <text class="value">{{item.missing_content}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 表扬 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">表扬：</view>
+        <view class="evaluation-text">{{feedback.praise}}</view>
+      </view>
+      
+      <!-- 改进建议 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">改进建议：</view>
+        <view class="evaluation-suggestions">
+          <block wx:for="{{feedback.suggestions}}" wx:key="index">
+            <view class="suggestion-item">
+              <text class="suggestion-index">{{index + 1}}.</text>
+              <text class="suggestion-text">{{item}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 重新上传按钮 -->
+  <view class="reupload-section">
+    <button class="btn btn-reupload" bindtap="reUpload">
+      <text>重新背诵并上传</text>
+      <view class="btn-icon">🔄</view>
+    </button>
+  </view>
+</view>
+
+<!-- 新增：背诵记录按钮 -->
+<view class="records-btn-container">
+  <button class="btn btn-records" bindtap="showReciteRecords">
+    <text>查看背诵记录</text>
+    <view class="btn-icon">📊</view>
+  </button>
+</view>
+
+<!-- 新增：背诵记录弹窗 -->
+<view class="records-modal" wx:if="{{showRecordsModal}}">
+  <view class="records-modal-content">
+    <view class="records-header">
+      <text class="records-title">背诵记录</text>
+      <view class="records-actions">
+        <text class="refresh-btn" bindtap="refreshRecords">刷新</text>
+        <text class="close-btn" bindtap="hideReciteRecords">×</text>
+      </view>
+    </view>
+    
+    <!-- 记录列表 -->
+    <view wx:if="{{!selectedRecord}}" class="records-list">
+      <view wx:if="{{recordsLoading}}" class="records-loading">
+        <text>加载中...</text>
+      </view>
+      
+      <view wx:elif="{{reciteRecords && reciteRecords.length === 0}}" class="records-empty">
+        <text class="empty-text">暂无背诵记录</text>
+        <text class="empty-desc">完成一次背诵后，记录将显示在这里</text>
+      </view>
+      
+      <scroll-view wx:else class="records-scroll" scroll-y>
+        <view wx:for="{{reciteRecords}}" wx:key="id" class="record-item" bindtap="viewRecordDetail" data-id="{{item.id}}">
+          <view class="record-header">
+            <text class="record-score {{item.overallScore >= 80 ? 'good' : item.overallScore >= 60 ? 'medium' : 'poor'}}">
+              评分: {{item.overallScore}}
+            </text>
+            <text class="record-time">{{item.displayTime || formatDisplayTime(item.createdAt)}}</text>
+          </view>
+          <view class="record-feedback">
+            <text class="feedback-text">{{item.praiseFeedback || '暂无反馈'}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+    
+    <!-- 记录详情 -->
+    <view wx:if="{{selectedRecord}}" class="record-detail">
+      <view class="detail-header">
+        <text class="back-btn" bindtap="backToRecordList">‹ 返回</text>
+        <text class="detail-title">背诵详情</text>
+      </view>
+      
+      <scroll-view class="detail-content" scroll-y>
+        <view class="detail-section">
+          <text class="section-label">综合评分</text>
+          <text class="section-value score-{{selectedRecord.overallScore >= 80 ? 'good' : selectedRecord.overallScore >= 60 ? 'medium' : 'poor'}}">
+            {{selectedRecord.overallScore}}分
+          </text>
+        </view>
+        
+        <view class="detail-section">
+          <text class="section-label">表扬反馈</text>
+          <text class="section-value praise">{{selectedRecord.praiseFeedback || '暂无表扬反馈'}}</text>
+        </view>
+        
+        <view wx:if="{{selectedRecord.majorErrors && selectedRecord.majorErrors.length > 0}}" class="detail-section">
+          <text class="section-label">主要错误</text>
+          <view wx:for="{{selectedRecord.majorErrors}}" wx:key="index" class="error-item">
+            <text class="error-position">{{item.position || '未知位置'}}</text>
+            <text class="error-type {{item.severity === '严重' ? 'severe' : 'normal'}}">
+              {{item.error_type || '未知错误类型'}} ({{item.severity || '未知严重程度'}})
+            </text>
+            <text class="error-desc">{{item.missing_content || '未知缺失内容'}}</text>
+          </view>
+        </view>
+        
+        <view wx:if="{{selectedRecord.suggestions && selectedRecord.suggestions.length > 0}}" class="detail-section">
+          <text class="section-label">改进建议</text>
+          <view wx:for="{{selectedRecord.suggestions}}" wx:key="index" class="suggestion-item">
+            <text class="suggestion-text">{{item}}</text>
+          </view>
+        </view>
+        
+        <view class="detail-section">
+          <text class="section-label">背诵时间</text>
+          <text class="section-value time">{{selectedRecord.displayTime || formatDisplayTime(selectedRecord.createdAt)}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

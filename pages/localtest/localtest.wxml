@@ -1,0 +1,172 @@
+<view class="container">
+  <!-- 技能卡片 -->
+  <view class="skill-card" wx:if="{{currentSkill}}">
+    <view class="skill-header">
+      <view class="skill-info">
+        <text class="skill-title">{{currentSkill.name}}</text>
+        <view class="difficulty-tag">
+          <text class="tag-content">{{currentSkill.difficulty}}</text>
+        </view>
+      </view>
+    </view>
+
+    <text class="skill-description">{{currentSkill.description}}</text>
+
+    <view class="steps-container">
+      <text class="steps-title">技巧步骤：</text>
+      <view class="step" wx:for="{{currentSkill.steps}}" wx:key="index">
+        <text class="step-number">{{index+1}}.</text>
+        <text class="step-content">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 练习容器 -->
+  <view class="exercises-container">
+    <view class="section-header">
+      <text class="section-title">断句练习题目</text>
+      <view class="button-group">
+        <view class="generate-button {{isButtonLocked ? 'locked' : ''}}" bindtap="showGenerateMoreModal" wx:if="{{!isButtonLocked}}">
+          <text class="generate-icon">➕</text>
+          <text class="button-text">生成更多题目</text>
+        </view>
+        <view class="generate-button locked" wx:if="{{isButtonLocked}}">
+          <text class="button-text">请稍后({{lockTime}}s)</text>
+        </view>
+        <!-- 新增答题记录按钮 -->
+        <view class="record-button" bindtap="goToBreakingHistory">
+          <text class="record-icon">📝</text>
+          <text class="button-text">答题记录</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 练习列表 -->
+    <view class="exercise-list">
+      <block wx:for="{{exerciseList}}" wx:key="id">
+        <view class="exercise-card {{animationClass}}" style="min-height: {{exerciseCardHeight}}px;">
+          <view class="exercise-header">
+            <text class="source">{{item.source_text || '无来源信息'}}</text>
+            <view class="exercise-info">
+              <view class="difficulty-badge difficulty-{{item.difficulty === '初级' ? 'primary' : item.difficulty === '中级' ? 'intermediate' : 'advanced'}}">
+                {{item.difficulty || '初级'}}
+              </view>
+            </view>
+          </view>
+
+          <!-- 题目内容 -->
+          <view class="question-content">
+            <text class="question-text">{{item.content}}</text>
+          </view>
+
+          <!-- 答题按钮 -->
+          <view class="answer-button" bindtap="startAnswer" data-index="{{index}}" wx:if="{{!item.hasStarted}}">
+            <text>开始答题</text>
+          </view>
+
+          <!-- 断句操作区 -->
+          <view class="answer-section" wx:if="{{item.hasStarted && !item.hasSubmitted}}">
+            <text class="answer-instruction">请点击文字后面的空格进行断句：</text>
+
+            <!-- 合并原题展示和断句操作的容器 -->
+            <view class="break-container">
+              <block wx:for="{{item.originalChars}}" wx:key="index" wx:for-item="char" wx:for-index="charIndex">
+                <view class="char-container">
+                  <!-- 原题字符 -->
+                  <text class="char-text">{{char}}</text>
+                  <!-- 断句空格 -->
+                  <view class="break-space {{item.breakChars[charIndex] ? 'break-selected' : ''}} {{item.breakAnimating[charIndex] ? 'break-animating' : ''}}" bindtap="toggleBreak" data-exerciseindex="{{index}}" data-charindex="{{charIndex}}">
+                    <text class="slash-icon" wx:if="{{item.breakChars[charIndex]}}">/</text>
+                    <text class="space-indicator" wx:else>␣</text>
+                  </view>
+                </view>
+              </block>
+            </view>
+
+            <view class="submit-button" bindtap="submitAnswer" data-index="{{index}}">
+              <text>提交答案</text>
+            </view>
+          </view>
+
+          <!-- 答案解析区域 -->
+          <view class="answer-container" wx:if="{{item.hasSubmitted}}">
+            <view class="result-indicator {{item.isCorrect ? 'correct' : 'incorrect'}}">
+              <text>{{item.isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}</text>
+            </view>
+
+            <view class="answer-section">
+              <text class="answer-label">正确答案:</text>
+              <view class="sentence-break-result">
+                <text class="sentence-text">{{item.answer}}</text>
+              </view>
+            </view>
+
+            <view class="analysis-section">
+              <text class="analysis-label">解析说明:</text>
+              <view class="analysis-text">
+                <text>{{item.analysis}}</text>
+              </view>
+            </view>
+
+            <!-- 修改部分：按钮名称统一为“收起全部” -->
+            <view class="toggle-button" bindtap="toggleAllAnswers" data-index="{{index}}">
+              <text>收起全部</text>
+            </view>
+
+            <!-- 修改部分：移除 detailed-analysis 的显示逻辑，点击“收起全部”后不显示任何内容 -->
+            <!-- 以下部分已被移除 -->
+            <!--
+            <view class="detailed-analysis" wx:if="{{item.showDetail}}">
+              <text class="detailed-text">这里是更详细的解析内容...</text>
+            </view>
+            -->
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空数据提示 -->
+    <view class="no-data" wx:if="{{exerciseList.length === 0 && !isLoading}}">
+      <text>📭 暂无题目数据</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载题目...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-container" wx:if="{{loadError}}">
+    <view class="error-card">
+      <text class="error-icon">❌</text>
+      <text class="error-message">{{errorMsg}}</text>
+      <view class="action-buttons">
+        <view class="retry-button" bindtap="retryGenerate">
+          <text>重试</text>
+        </view>
+        <view class="back-button" bindtap="goBack">
+          <text>返回</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成更多模态框 -->
+  <view class="modal-container" wx:if="{{showGenerateModal}}">
+    <view class="modal-backdrop" bindtap="hideGenerateModal"></view>
+    <view class="generate-modal">
+      <text class="modal-title">生成更多题目</text>
+      <text class="modal-text">建议先完成本地题库再生成更多题目</text>
+      <view class="modal-buttons">
+        <view class="modal-button cancel" bindtap="hideGenerateModal">
+          <text>取消</text>
+        </view>
+        <view class="modal-button confirm" bindtap="confirmGenerateMore">
+          <text>确定生成</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

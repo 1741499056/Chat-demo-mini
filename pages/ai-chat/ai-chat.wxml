@@ -1,0 +1,137 @@
+<view class="chat-container">
+  <!-- 顶部标题栏 -->
+  <view class="header">
+    <view class="company-name">德烁财务报销</view>
+    <view class="header-actions">
+      <view class="action-btn" bindtap="showHistory">
+        <text class="action-text">历史记录</text>
+      </view>
+      <view class="action-btn" bindtap="clearChatHistory">
+        <text class="action-text">清空</text>
+      </view>
+      <view class="action-btn" bindtap="generateQRCode">
+        <text class="action-text">二维码</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录面板 -->
+  <view class="history-panel" wx:if="{{showHistoryPanel}}">
+    <view class="history-header">
+      <text>聊天历史</text>
+      <view class="close-btn" bindtap="hideHistory">×</view>
+    </view>
+    <scroll-view class="history-list" scroll-y>
+      <block wx:for="{{chatHistoryList}}" wx:key="timestamp">
+        <view class="history-item" bindtap="loadHistory" data-index="{{index}}">
+          <text class="history-preview">{{item.preview}}</text>
+          <text class="history-time">{{formatTime(item.timestamp, 'short')}}</text>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+
+  <!-- 消息展示区域 -->
+  <scroll-view 
+    class="message-area" 
+    scroll-y 
+    scroll-into-view="{{scrollToView}}" 
+    scroll-with-animation
+    enable-back-to-top
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <view class="message-list">
+      <block wx:for="{{messageList}}" wx:key="timestamp">
+        <view class="message-item {{item.role === 'user' ? 'user-message' : 'ai-message'}}">
+          <view class="avatar-container" wx:if="{{item.role !== 'user'}}">
+            <!-- AI头像 -->
+          </view>
+          
+          <view class="message-content">
+            <view class="message-bubble {{item.role === 'user' ? 'user-bubble' : 'ai-bubble'}}">
+              <rich-text 
+                class="message-text" 
+                user-select 
+                nodes="{{item.content}}"
+              ></rich-text>
+              <view class="typing-indicator" wx:if="{{isLoading && streamingMessageIndex === index}}">
+                <view class="dot"></view>
+                <view class="dot"></view>
+                <view class="dot"></view>
+              </view>
+            </view>
+            <view class="message-time">{{formatTime(item.timestamp, 'short')}}</view>
+          </view>
+          
+          <view class="avatar-container" wx:if="{{item.role === 'user'}}">
+            <!-- 用户头像 -->
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <view id="bottom-anchor"></view>
+  </scroll-view>
+
+  <!-- 二维码预览区域 -->
+  <view class="qrcode-preview" wx:if="{{qrCodeUrl}}">
+    <view class="qrcode-header">
+      <text>分享二维码</text>
+      <view class="close-btn" bindtap="closeQRCode">×</view>
+    </view>
+    <image src="{{qrCodeUrl}}" mode="widthFix" class="qrcode-image"></image>
+    <view class="qrcode-tips">长按保存或分享二维码</view>
+    
+    <view class="share-buttons">
+      <button class="share-btn" open-type="share">
+        <text>分享给好友</text>
+      </button>
+      <button class="share-btn" bindtap="saveQRCode">
+        <text>保存到相册</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 分享到朋友圈引导提示 -->
+  <view class="share-guide" wx:if="{{showShareGuide}}">
+    <view class="guide-content">
+      <text class="guide-text">点击右上角"..."，选择"分享到朋友圈"</text>
+      <button class="guide-btn" bindtap="hideShareGuide">知道了</button>
+    </view>
+  </view>
+
+  <!-- 输入区域 -->
+  <view class="input-area" style="bottom: {{inputBoxBottom}}px">
+    <view class="input-container">
+      <input
+        class="message-input"
+        value="{{inputValue}}"
+        bindinput="onInput"
+        bindfocus="onInputFocus"
+        bindblur="onInputBlur"
+        placeholder="请输入您的问题..."
+        placeholder-class="placeholder"
+        confirm-type="send"
+        bindconfirm="sendMessage"
+        disabled="{{isLoading}}"
+        adjust-position="{{false}}"
+        cursor-spacing="20"
+      />
+      <view
+        class="send-button {{isLoading || !inputValue.trim() ? 'send-button-disabled' : ''}}"
+        bindtap="sendMessage"
+      >
+        <text class="send-text">发送</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 仅保留生成二维码的加载遮罩 -->
+  <view class="loading-mask" wx:if="{{isGeneratingQR}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">生成二维码中...</text>
+    </view>
+  </view>
+</view>

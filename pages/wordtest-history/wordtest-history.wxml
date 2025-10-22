@@ -1,0 +1,54 @@
+<view class="page-container">
+  <!-- 头部 -->
+  <view class="header">
+    <text class="title">题目历史记录</text>
+    <text class="subtitle">共{{total}}条历史记录</text>
+  </view>
+
+  <!-- 历史记录列表 -->
+  <scroll-view scroll-y class="list-container" bindscrolltolower="loadMore">
+    <!-- 有数据的情况 -->
+    <block wx:if="{{historyList.length > 0}}">
+      <view class="card" wx:for="{{historyList}}" wx:key="id">
+        <!-- 右上角区域：用户名、时间和按钮 -->
+        <view class="top-right-container">
+          <text class="username">{{item.username}}</text>
+          <view class="time-section">
+            <text class="time-icon">🕒</text>
+            <text class="time">{{item.formattedTime}}</text>
+          </view>
+          <!-- 按钮组 -->
+          <view class="button-group">
+            <button class="view-btn" bindtap="viewQuestions" data-sessionid="{{item.sessionId}}">查看题目</button>
+            <button class="delete-btn" bindtap="deleteRecord" data-sessionid="{{item.sessionId}}">删除记录</button>
+          </view>
+        </view>
+
+        <!-- 中间：单词 -->
+        <view class="word-section">
+          <text class="word">{{item.word}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <block wx:else>
+      <view class="empty-container">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">暂无历史记录</text>
+        <text class="empty-hint">开始生成题目将出现在这里</text>
+      </view>
+    </block>
+
+    <!-- 加载提示 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <text class="loading-icon">⏳</text>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view wx:if="{{!hasMore && historyList.length > 0}}" class="no-more">
+      —— 已经到底了 ——
+    </view>
+  </scroll-view>
+</view>

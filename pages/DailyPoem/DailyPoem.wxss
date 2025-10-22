@@ -1,0 +1,177 @@
+/* pages/DailyPoem/DailyPoem.wxss */
+/* 页面容器 */
+
+.page-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 背景图样式 */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 0.7;
+}
+
+/* 遮罩层 */
+.content-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.4);
+  z-index: -1;
+}
+
+/* 题词样式 */
+.motto {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.motto text {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 4px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* 内容容器 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1px 20px 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 诗词卡片 */
+.poem-card {
+  width: 90%;
+  background-color: rgba(255,255,255,0.88);
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #222;
+}
+
+.author {
+  font-size: 17px;
+  color: #444;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+/* 诗词内容 */
+.content {
+  text-align: center;
+  margin: 18px 0;
+  padding: 12px;
+  width: 100%;
+  min-height: 130px;
+}
+
+.couplet-line {
+  font-size: 16px;
+  margin: 14px 0;
+  line-height: 2.8;
+  word-break: keep-all;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #222;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 15px;
+  color: #555;
+  text-align: right;
+  margin-top: 10px;
+}
+
+/* 分享按钮 */
+.learnmore {
+  width: 82%;
+  background-color: #07C160;
+  color: white;
+  border-radius: 20px;
+  margin-top: 18px; 
+  padding: 12px;
+  font-size: 18px;
+   transform: translateY(-70px);
+
+}
+/* 添加刷新按钮区域样式 */
+.refresh-box {
+  width: 90%;
+  background-color: rgba(255,255,255,0.88);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.refresh-button {
+  width: 100%;
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.refresh-icon {
+  width: 22px;
+  height: 22px;
+  margin-left: 8px;
+  transition: transform .3s ease;
+}
+
+.refreshing {
+  animation: rotate360 1s linear infinite;
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 修改了解更多按钮位置 */
+.learnmore {
+  width: 90%;
+  margin-top: 370px;
+  transform: translateY(-200px);
+}
+
+/* 修复诗句显示 - 去除换行符影响 */
+.couplet-line {
+  white-space: pre-wrap;
+  display: block;
+}

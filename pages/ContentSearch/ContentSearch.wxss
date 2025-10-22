@@ -1,0 +1,412 @@
+/* 容器样式优化 */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #e6f7ff, #f8f9fa);
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+  padding-bottom: 150rpx;
+}
+
+/* 搜索栏 - 增强视觉层次感 */
+.search-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  padding: 22rpx 30rpx;
+  background: rgba(255, 255, 255, 0.95);
+  align-items: center;
+  box-shadow: 0 8rpx 24rpx rgba(24, 144, 255, 0.18);
+  backdrop-filter: blur(10rpx);
+  border-bottom: 1rpx solid #e6f7ff;
+}
+
+.search-input {
+  flex: 1;
+  height: 86rpx;
+  border: 1rpx solid #d9e9fc;
+  border-radius: 46rpx;
+  padding: 0 35rpx;
+  font-size: 32rpx;
+  margin-right: 24rpx;
+  background-color: rgba(240, 249, 255, 0.9);
+  box-shadow: inset 0 3rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #1890ff;
+  background-color: #ffffff;
+  box-shadow: inset 0 3rpx 12rpx rgba(24, 144, 255, 0.1);
+}
+
+.search-btn {
+  height: 86rpx;
+  min-width: 140rpx;
+  border-radius: 46rpx;
+  background: linear-gradient(135deg, #1890ff, #096dd9);
+  color: white;
+  font-size: 32rpx;
+  line-height: 86rpx;
+  padding: 0 20rpx;
+  border: none;
+  box-shadow: 0 6rpx 20rpx rgba(24, 144, 255, 0.35);
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.search-btn:active {
+  transform: translateY(3rpx);
+  box-shadow: 0 3rpx 12rpx rgba(24, 144, 255, 0.35);
+}
+
+/* 朝代选择器 - 现代设计风格 */
+.dynasty-selector {
+  position: fixed;
+  top: 135rpx;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  height: 90rpx;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 1rpx solid #edf2f7;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  backdrop-filter: blur(8rpx);
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.05);
+}
+
+.picker {
+  font-size: 30rpx;
+  color: #1890ff;
+  font-weight: 500;
+  background-color: rgba(230, 247, 255, 0.8);
+  border-radius: 40rpx;
+  padding: 0 36rpx;
+  height: 66rpx;
+  line-height: 66rpx;
+  margin-right: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+}
+
+.picker.active {
+  background-color: #1890ff;
+  color: white;
+  box-shadow: 0 4rpx 12rpx rgba(24, 144, 255, 0.35);
+}
+
+/* 结果列表 - 优化留白和结构 */
+.result-list {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 0rpx;
+  padding-bottom: 0rpx;
+}
+
+.top-spacer {
+  height: 50rpx;
+}
+
+.bottom-spacer {
+  height: 0rpx;
+}
+
+.search-header {
+  padding: 0 30rpx 10rpx;
+}
+
+.result-count {
+  font-size: 32rpx;
+  color: #666;
+  font-weight: 500;
+  padding: 0 30rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+/* 诗词卡片 - 优雅设计 */
+.result-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  margin: 0 30rpx 30rpx;
+  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.06);
+  border: 1rpx solid rgba(221, 238, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.result-card:active {
+  transform: translateY(-6rpx);
+  box-shadow: 0 15rpx 35rpx rgba(0, 0, 0, 0.1);
+}
+
+.result-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8rpx;
+  height: 100%;
+  background: linear-gradient(to bottom, #1890ff, #52c41a);
+  opacity: 0.8;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  padding-left: 20rpx;
+  position: relative;
+}
+
+.title::after {
+  content: "·";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #1890ff;
+  font-weight: 900;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx dashed #e8f0fa;
+}
+
+.author, .dynasty {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 400;
+  position: relative;
+  padding-left: 8rpx;
+}
+
+.author::before {
+  content: "作者: ";
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.dynasty::before {
+  content: "朝代: ";
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.content {
+  font-size: 34rpx;
+  color: #333;
+  line-height: 1.75;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  flex: 1;
+  font-family: "KaiTi", "楷体", sans-serif;
+  text-indent: 2em;
+  padding-top: 8rpx;
+}
+
+/* 空状态与加载状态增强 */
+.empty-result, .loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  padding-top: 100rpx;
+}
+
+.empty-result .empty-icon {
+  font-size: 200rpx;
+  color: #e6f7ff;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 36rpx;
+  color: #595959;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+}
+
+.empty-tip {
+  font-size: 30rpx;
+  color: #8c8c8c;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.suggestion-btn {
+  display: inline-block;
+  background-color: rgba(24, 144, 255, 0.1);
+  color: #1890ff;
+  border-radius: 40rpx;
+  padding: 10rpx 30rpx;
+  font-size: 28rpx;
+  margin: 6rpx 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.loading-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 8rpx solid rgba(24, 144, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: #1890ff;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 分页容器优化 - 缩小尺寸 */
+.pagination-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25rpx 25rpx; /* 减小内边距 */
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1rpx solid #e9f2fc;
+  z-index: 100;
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.08);
+  height: 100rpx; /* 减小高度 */
+}
+
+/* 页码控制 - 缩小元素 */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15rpx; /* 减小间距 */
+  max-width: 100%;
+}
+
+.pagination-arrow {
+  width: 60rpx; /* 缩小 */
+  height: 60rpx; /* 缩小 */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f7ff;
+  border: 1rpx solid #d1e6ff;
+}
+
+.pagination-arrow.disabled {
+  opacity: 0.5;
+  background: #f9f9f9;
+}
+
+.arrow-icon {
+  width: 30rpx; /* 缩小 */
+  height: 30rpx; /* 缩小 */
+}
+
+.page-current-container {
+  min-width: 70rpx; /* 缩小 */
+  height: 60rpx; /* 缩小 */
+  border-radius: 10rpx; /* 缩小 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx; /* 缩小 */
+  color: #1890ff;
+  font-weight: bold;
+  background: #f0f7ff;
+  border: 1rpx solid #d1e6ff;
+}
+
+.goto-group {
+  display: flex;
+  align-items: center;
+  gap: 12rpx; /* 减小间距 */
+  margin-left: 15rpx; /* 减小左边距 */
+}
+
+.goto-label {
+  font-size: 28rpx; /* 缩小 */
+  color: #666;
+  white-space: nowrap;
+}
+
+.goto-input {
+  width: 90rpx; /* 缩小 */
+  height: 50rpx; /* 缩小 */
+  border: 1rpx solid #d9d9d9;
+  border-radius: 6rpx; /* 缩小 */
+  padding: 0 12rpx; /* 减小内边距 */
+  font-size: 28rpx; /* 缩小 */
+  background: #fafafa;
+  color: #333;
+  text-align: center;
+}
+
+.goto-button {
+  height: 50rpx; /* 缩小 */
+  min-width: 90rpx; /* 缩小 */
+  line-height: 50rpx; /* 调整行高 */
+  padding: 0 12rpx; /* 减小内边距 */
+  font-size: 28rpx; /* 缩小 */
+  background: #1890ff;
+  color: white;
+  border-radius: 6rpx; /* 缩小 */
+  border: none;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 返回顶部按钮优化 */
+.float-nav-tool {
+  position: fixed;
+  bottom: 200rpx;
+  right: 40rpx;
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1890ff, #096dd9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 30rpx rgba(24, 144, 255, 0.5);
+  z-index: 1000;
+  opacity: 0.92;
+  transition: all 0.3s;
+  font-size: 40rpx;
+  color: #fff;
+}
+
+.float-nav-tool:active {
+  transform: scale(0.9);
+  opacity: 1;
+  box-shadow: 0 6rpx 25rpx rgba(24, 144, 255, 0.5);
+}

@@ -1,0 +1,434 @@
+/* 容器样式 */
+
+.container {
+
+  padding: 30rpx;
+
+  background-color: #e6f7ff;
+  /* 淡蓝色背景 */
+
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+}
+
+/* 页面标题 */
+
+.header {
+
+  text-align: center;
+
+  padding: 40rpx 0;
+
+  margin-bottom: 30rpx;
+
+}
+
+.main-title {
+
+  font-size: 48rpx;
+
+  font-weight: 600;
+
+  color: #1890ff;
+
+  display: block;
+
+  margin-bottom: 20rpx;
+
+  letter-spacing: 1rpx;
+
+}
+
+.tips {
+
+  font-size: 28rpx;
+
+  color: #64748b;
+
+  display: block;
+
+}
+
+/* 知识点列表 */
+
+.skill-list {
+
+  height: calc(100vh - 250rpx);
+
+  padding-bottom: 30rpx;
+
+}
+
+/* 知识点卡片 */
+
+.skill-card {
+
+  background: white;
+
+  border-radius: 20rpx;
+
+  padding: 35rpx;
+
+  margin-bottom: 35rpx;
+
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.08);
+
+  transition: all 0.3s ease;
+
+  border: 1rpx solid rgba(224, 240, 255, 0.8);
+
+}
+
+.skill-card:active {
+
+  transform: translateY(-5rpx);
+
+  box-shadow: 0 15rpx 40rpx rgba(0, 0, 0, 0.12);
+
+}
+
+/* 知识点名称和难度标签 */
+
+.skill-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25rpx;
+
+  padding-bottom: 25rpx;
+
+  border-bottom: 1rpx dashed #e2e8f0;
+
+}
+
+.name {
+
+  font-size: 40rpx;
+
+  font-weight: 600;
+
+  color: #1e293b;
+
+  letter-spacing: 0.5rpx;
+
+}
+
+.difficulty {
+
+  padding: 8rpx 20rpx;
+
+  border-radius: 30rpx;
+
+  font-size: 26rpx;
+
+  font-weight: 600;
+
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+
+}
+
+.beginner {
+
+  background: linear-gradient(to right, #e7f4ff, #d4ebff);
+
+  color: #1890ff;
+
+  border: 1rpx solid #bae7ff;
+
+}
+
+.intermediate {
+
+  background: linear-gradient(to right, #fff7e6, #ffecd9);
+
+  color: #fa8c16;
+
+  border: 1rpx solid #ffd591;
+
+}
+
+.advanced {
+
+  background: linear-gradient(to right, #fff0f0, #ffe6e6);
+
+  color: #f5222d;
+
+  border: 1rpx solid #ffccc7;
+
+}
+
+/* 知识点描述 */
+
+.description {
+
+  color: #555;
+
+  font-size: 30rpx;
+
+  line-height: 1.7;
+
+  max-height: 300rpx;
+
+  padding: 25rpx 0;
+
+  overflow-y: auto;
+
+  border-top: 1rpx dashed #e8f4ff;
+
+  border-bottom: 1rpx dashed #e8f4ff;
+
+  margin: 20rpx 0;
+
+}
+
+/* 新增字段展示区域 */
+
+.additional-info {
+
+  margin-top: 25rpx;
+
+  padding-top: 25rpx;
+
+  border-top: 1rpx dashed #e8f4ff;
+
+}
+
+.info-item {
+
+  margin-bottom: 20rpx;
+
+  font-size: 30rpx;
+
+  display: flex;
+
+  align-items: flex-start;
+
+}
+
+.info-label {
+
+  font-weight: 600;
+
+  color: #1890ff;
+
+  margin-right: 15rpx;
+
+  min-width: 120rpx;
+
+  background: rgba(24, 144, 255, 0.08);
+
+  padding: 5rpx 15rpx;
+
+  border-radius: 10rpx;
+
+}
+
+.info-content {
+
+  color: #555;
+
+  flex: 1;
+
+  line-height: 1.6;
+
+}
+
+.step-list {
+
+  margin-top: 15rpx;
+
+  padding-left: 30rpx;
+
+}
+
+.step-item {
+
+  display: flex;
+
+  margin-bottom: 15rpx;
+
+  line-height: 1.7;
+
+  position: relative;
+
+}
+
+.step-item::before {
+
+  content: '';
+
+  position: absolute;
+
+  left: -20rpx;
+
+  top: 12rpx;
+
+  width: 8rpx;
+
+  height: 8rpx;
+
+  background: #1890ff;
+
+  border-radius: 50%;
+
+}
+
+.step-index {
+
+  font-weight: bold;
+
+  margin-right: 15rpx;
+
+  min-width: 40rpx;
+
+  color: #1890ff;
+
+}
+
+.step-content {
+
+  flex: 1;
+
+  color: #555;
+
+}
+
+/* 生成题目按钮 */
+
+.generate-btn {
+
+  margin-top: 30rpx;
+
+  background: linear-gradient(to right, #1890ff, #40a9ff);
+
+  color: white;
+
+  font-size: 32rpx;
+
+  font-weight: 600;
+
+  padding: 20rpx 40rpx;
+
+  border-radius: 30rpx;
+
+  border: none;
+
+  box-shadow: 0 8rpx 20rpx rgba(24, 144, 255, 0.3);
+
+  transition: all 0.3s ease;
+
+  display: block;
+
+  width: 100%;
+
+  text-align: center;
+
+}
+
+.generate-btn:active {
+
+  transform: translateY(1rpx);
+
+  box-shadow: 0 5rpx 15rpx rgba(24, 144, 255, 0.3);
+
+}
+
+/* 加载状态提示 */
+
+.loading {
+
+  text-align: center;
+
+  padding: 60rpx 30rpx;
+
+  font-size: 30rpx;
+
+  color: #666;
+
+  background: white;
+
+  border-radius: 20rpx;
+
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.08);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+}
+
+.loading-icon {
+
+  font-size: 50rpx;
+
+  margin-bottom: 20rpx;
+
+}
+
+.error {
+
+  text-align: center;
+
+  padding: 60rpx 30rpx;
+
+  background: white;
+
+  border-radius: 20rpx;
+
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.08);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+}
+
+.error-icon {
+
+  font-size: 50rpx;
+
+  color: #f5222d;
+
+  margin-bottom: 20rpx;
+
+}
+
+.error-message {
+
+  font-size: 30rpx;
+
+  color: #f5222d;
+
+  margin-bottom: 30rpx;
+
+}
+
+.retry-btn {
+
+  background: linear-gradient(to right, #1890ff, #40a9ff);
+
+  color: white;
+
+  font-size: 30rpx;
+
+  padding: 15rpx 40rpx;
+
+  border-radius: 30rpx;
+
+  border: none;
+
+  box-shadow: 0 6rpx 15rpx rgba(24, 144, 255, 0.3);
+
+}

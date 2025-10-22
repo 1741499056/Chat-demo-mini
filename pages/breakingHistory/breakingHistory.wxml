@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="history-list">
+    <block wx:for="{{historyList}}" wx:key="id">
+      <view class="history-item" bindtap="showDetail" data-id="{{item.id}}">
+        <text class="question-type">{{item.questionType}}</text>
+        <text class="user-answer">用户答案: {{item.userAnswer}}</text>
+        <text class="result">{{item.isCorrect === 1? '正确' : '错误'}}</text>
+      </view>
+    </block>
+  </view>
+</view>

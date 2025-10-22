@@ -1,0 +1,765 @@
+/* 全局样式优化 */
+page {
+  background: 
+    url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center fixed,
+    url('https://newlan.oss-cn-shanghai.aliyuncs.com/paper-texture.jpg') repeat;
+  background-size: cover, auto;
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  padding-bottom: 120rpx; /* 为记录按钮留出空间 */
+  position: relative;
+  color: #5a3921;
+}
+
+page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 245, 230, 0.85);
+  z-index: -1;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* 标题样式优化 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border-bottom: 1rpx solid rgba(120, 90, 70, 0.3);
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10rpx);
+  position: relative;
+  border-radius: 0 0 20rpx 20rpx;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 245, 230, 0.9), rgba(240, 230, 220, 0.8));
+  z-index: -1;
+  border-radius: 0 0 20rpx 20rpx;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 245, 230, 0.8);
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid #c0a080;
+}
+
+.back-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #8c531b;
+  text-shadow: 极 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  letter-spacing: 2rpx;
+  position: relative;
+}
+
+.title-decoration {
+  position: absolute;
+  bottom: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80r极px;
+  height: 4rpx;
+  background: linear-gradient(to right, #8c531b, #c0a080);
+  border-radius: 2rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid rgba(120, 90, 70, 0.3);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100rpx;
+  height: 4rpx;
+  background: linear-gradient(to right, #8c531b, #c0a080);
+  border-radius: 2rpx;
+}
+
+.section-title .icon {
+  font-size: 40rpx;
+  margin-right: 15rpx;
+  color: #8c531b;
+}
+
+.section-title .title-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #8c531b;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 当前背诵古诗显示 */
+.poem-display {
+  background: rgba(255, 245, 230, 0.9);
+  border-radius: 30rpx;
+  padding: 30rpx;
+  margin: 30rpx;
+  border: 1rpx solid #c0a080;
+  box-shadow: 0 5rpx 20rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.poem-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.poem-name {
+  font-size: 32rpx;
+  color: #8c531b;
+  font-weight: bold;
+  padding: 25rpx;
+  background: rgba(240, 230, 220, 0.5);
+  border-radius: 20rpx;
+  border-left: 4rpx solid #8c531b;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+/* 录音区域样式优化 */
+.recording-section {
+  background: rgba(255, 245, 230, 0.9);
+  border-radius: 30rpx;
+  padding: 40rpx 30rpx;
+  margin: 30rpx;
+  border: 2rpx dashed rgba(140, 83, 27, 0.5);
+  box-shadow: 0 10rpx 30rpx rgba(140, 83, 27, 0.15);
+  backdrop-filter: blur(10rpx);
+  position: relative;
+  overflow: hidden;
+}
+
+.recording-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.08;
+  z-index: -1;
+}
+
+.recording-status {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.recording-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.recording-icon {
+  font-size: 100rpx;
+  margin-bottom: 25rpx;
+  transition: all 0.3s ease;
+  color: #c0392b;
+  position: relative;
+  z-index: 1;
+}
+
+.yin-yang {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120rpx;
+  height: 120rpx;
+  background: 
+    radial-gradient(circle at 50% 25%, #fff 0%, #fff 25%, #000 25%, #000 50%, transparent 50%),
+    radial-gradient(circle at 50% 75%, #000 0%, #000 25%, #fff 25%, #fff 50%, transparent 50%);
+  border-radius: 50%;
+  border: 2rpx solid #8c531b;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.recording-text {
+  font-size: 34rpx;
+  color: #8c531b;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+  letter-spacing: 1rpx;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.recording-time {
+  font-size: 30rpx;
+  color: #8c531b;
+  font-family: monospace;
+  font-weight: 500;
+}
+
+/* 按钮样式优化 */
+.btn {
+  height: 90rpx;
+  border-radius: 10rpx;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  padding: 0 40rpx;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.1);
+  margin: 0 15rpx;
+  font-family: 'STKaiti', 'KaiTi', serif;
+  font-weight: bold;
+  border: 1rpx solid #c0a080;
+}
+
+.btn:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.15);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.btn:active::after {
+  left: 100%;
+}
+
+.btn-decoration {
+  position: absolute;
+  bottom: -5rpx;
+  left: 10%;
+  width: 80%;
+  height: 4rpx;
+  background: linear-gradient(to right, #8c531b, #c0a080);
+  border-radius: 2rpx;
+}
+
+.btn-record {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+}
+
+.btn-stop {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.btn-play {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #8c531b, #c0a080);
+  color: white;
+  margin-top: 40rpx;
+}
+
+.btn-reupload {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  color: white;
+  margin-top: 50rpx;
+}
+
+.btn-records {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  margin: 30rpx auto;
+  width: 90%;
+  max-width: 400rpx;
+}
+
+.btn-icon {
+  margin-left: 15rpx;
+  font-size: 36rpx;
+}
+
+.recording-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 30rpx;
+}
+
+/* 录音波形 */
+.waveform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100rpx;
+  gap: 6rpx;
+  margin-top: 30rpx;
+}
+
+.wave-bar {
+  width: 8rpx;
+  background: linear-gradient(to top, #8c531b, #c0a080);
+  border-radius: 4rpx;
+  transition: height 0.2s;
+  box-shadow: 0 2rpx 8rpx rgba(140, 83, 27, 0.3);
+}
+
+/* 录音信息 */
+.recording-info {
+  background: rgba(255, 245, 230, 0.8);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 30rpx 0;
+  border: 1rpx solid #c0a080;
+  box-shadow: 0 5rpx 20rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.recording-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+  font-size: 30rpx;
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid rgba(192, 160, 128, 0.3);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.info-item .label {
+  color: #8c531b;
+  font-weight: bold;
+}
+
+.info-item .value {
+  color: #5a3921;
+  font-weight: 500;
+}
+
+/* 点评结果区域样式优化 */
+.evaluation-section {
+  background: rgba(255, 245, 230, 0.9);
+  border-radius: 30rpx;
+  padding: 40rpx 30rpx;
+  margin: 30rpx;
+  box-shadow: 0 15rpx 40rpx rgba(140, 83, 27, 0.15);
+  position: relative;
+  overflow: hidden;
+  border: 1rpx solid #c0a080;
+}
+
+.evaluation-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.08;
+  z-index: -1;
+}
+
+.evaluation-content {
+  margin-top: 30rpx;
+}
+
+.evaluation-item {
+  margin-bottom: 40rpx;
+  background: rgba(255, 245, 230, 0.7);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 5rpx 20rpx rgba(0, 0, 0, 0.05);
+  border: 1rpx solid #c0a080;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.evaluation-item:active {
+  transform: translateY(-4rpx);
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.evaluation-label {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #8c531b;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.evaluation-label::before {
+  content: '';
+  display: inline-block;
+  width: 10rpx;
+  height: 40rpx;
+  background: #8c531b;
+  border-radius: 5rpx;
+  margin-right: 15rpx;
+}
+
+.evaluation-text {
+  font-size: 32rpx;
+  color: #5a3921;
+  line-height: 1.6;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: rgba(240, 230, 220, 0.5);
+  border-left: 4rpx solid #8c531b;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.score-decoration {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  width: 30rpx;
+  height: 30rpx;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/seal.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.7;
+}
+
+/* 详细评分样式优化 */
+.detail-scores {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+.detail-item {
+  text-align: center;
+  flex: 1;
+  padding: 20rpx;
+  background: rgba(240, 230, 220, 0.5);
+  border-radius: 16rpx;
+  margin: 0 10rpx;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1rpx solid #c0a080;
+}
+
+.detail-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.detail-item:active {
+  transform: scale(0.95);
+}
+
+.detail-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #8c531b;
+  display: block;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.detail-label {
+  font-size: 28rpx;
+  color: #5a3921;
+  margin-top: 10rpx;
+  display: block;
+}
+
+.detail-decoration {
+  position: absolute;
+  bottom: 5rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3rpx;
+  background: linear-gradient(to right, #8c531b, #c0a080);
+  border-radius: 2rpx;
+}
+
+/* 错误列表样式优化 */
+.error-list {
+  margin-top: 20rpx;
+}
+
+.error-item {
+  background: rgba(255, 230, 230, 0.5);
+  border-left: 8rpx solid #e74c3c;
+  padding: 30rpx;
+  border-radius: 0 20rpx 20rpx 0;
+  margin-bottom: 25rpx;
+  box-shadow: 0 5rpx 20rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1rpx solid #e0c0c0;
+}
+
+.error-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.error-item:active {
+  transform: translateY(-4rpx);
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.error-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.error-type {
+  font-weight: bold;
+  color: #c0392b;
+  font-size: 32rpx;
+}
+
+.severity {
+  display: inline-block;
+  color: white;
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.2);
+}
+
+.severity.high {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.severity.medium {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.severity.low {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.error-detail {
+  font-size: 30rpx;
+  color: #5a3921;
+  margin: 15rpx 0;
+  display: flex;
+}
+
+.error-detail .label {
+  font-weight: bold;
+  min-width: 140rpx;
+  color: #8c531b;
+}
+
+.error-detail .value {
+  flex: 1;
+}
+
+.error-decoration {
+  position: absolute;
+  bottom: 5rpx;
+  right: 10rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/ink-dot.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.5;
+}
+
+/* 建议列表样式优化 */
+.evaluation-suggestions {
+  background: rgba(240, 230, 220, 0.5);
+  padding: 25rpx;
+  border-radius: 16rpx;
+  margin-top: 15rpx;
+  position: relative;
+  border: 1rpx solid #c0a080;
+}
+
+.evaluation-suggestions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg') no-repeat center center;
+  background-size: cover;
+  opacity: 0.05;
+  z-index: -1;
+}
+
+.suggestion-item {
+  display: flex;
+  margin-bottom: 20rpx;
+  font-size: 30rpx;
+  line-height: 1.6;
+  padding: 15rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 245, 230, 0.7);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1rpx dashed #c0a080;
+}
+
+.suggestion-item:active {
+  transform: translateX(10rpx);
+  background: rgba(255, 245, 230, 0.9);
+}
+
+.suggestion-index {
+  font-weight: bold;
+  color: #8c531b;
+  margin-right: 15rpx;
+  min-width: 40rpx;
+}
+
+.suggestion-text {
+  flex: 1;
+  color: #5a3921;
+}
+
+.suggestion-decoration {
+  position: absolute;
+  top: 50%;
+  right: 10rpx;
+  transform: translateY(-50%);
+  width: 15rpx;
+  height: 15rpx;
+  background: url('https://newlan.oss-cn-shanghai.aliyuncs.com/ink-dot.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.5;
+}
+
+/* 重新上传区域 */
+.reupload-section {
+  margin-top: 50rpx;
+  text-align: center;
+}
+
+/* 新增：挑战按钮容器 */
+.challenge-btn-container {
+  position: fixed;
+  bottom: 40rpx;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 100;
+}
+
+.btn-challenge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: white;
+  margin: 30rpx auto;
+  width: 90%;
+  max-width: 400rpx;
+}
+
+/* 错误提示样式 */
+.error-section {
+  background: rgba(255, 230, 230, 0.9);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 30rpx;
+  text-align: center;
+  border: 1rpx solid #ffcccc;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #e74c3c;
+  margin-bottom: 20rpx;
+  display: block;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.btn-retry {
+  background: linear-gradient(135deg, #8c531b, #c0a080);
+  color: white;
+  width: 200rpx;
+  margin: 0 auto;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}

@@ -1,56 +1,68 @@
 {
   "pages": [
-    "pages/login/login",
+    "pages/DailyPoem/DailyPoem",
     "pages/index/index",
+    "pages/login/login",
     "pages/guwen/guwen",
+    "pages/poem/poem",
     "pages/home/home",
-    "pages/search/classic",
-    "pages/search/poem",
-    "pages/search/content",
     "pages/analysis/index",
-    "pages/visualization/index",
     "pages/logs/logs",
     "pages/AI/AI",
-    "pages/ME/ME"
- 
+    "pages/ME/ME",
+    "pages/三十六计/三十六计",
+    "pages/ArticleDetail/ArticleDetail",
+    "pages/search/classic",
+    "pages/poem/poemdetail",
+    "pages/test-item/test-item",
+    "pages/sentencesegmentation/sentencesegmentation",
+    "pages/sentencetest/sentencetest",
+    "pages/word/word",
+    "pages/wordtest-history/wordtest-history",
+    "pages/localtest/localtest",
+    "pages/ContentSearch/ContentSearch",
+    "pages/ai-chat/ai-chat",
+    "pages/recite/recite",
+    "pages/allbooks/allbooks",
+    "pages/breakingHistory/breakingHistory",
+    "pages/poemRecite/poemRecite",
+    "pages/ReciteRecords/ReciteRecords"
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",
     "navigationBarBackgroundColor": "#ffffff"
   },
-  "tabBar":{
-  "list":[
-    {
-      "pagePath":"pages/index/index",
-      "text":"首页"
-    },
-    {
-      "pagePath":"pages/guwen/guwen",
-      "text":"古诗文"
-    },
-   
-    {
-      "pagePath":"pages/logs/logs",
-      "text":"创作社区"
-    },
-    {
-      "pagePath":"pages/AI/AI",
-      "text":"ai对话"
-    },
-    {
-      "pagePath":"pages/ME/ME",
-      "text":"我的"
-    }
-  ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/guwen/guwen",
+        "text": "古诗文"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "文章搜索"
+      },
+      {
+        "pagePath": "pages/poem/poem",
+        "text": "古诗搜索"
+      },
+      {
+        "pagePath": "pages/AI/AI",
+        "text": "ai对话"
+      },
+      {
+        "pagePath": "pages/ME/ME",
+        "text": "我的"
+      }
+    ],
     "color": "#999999",
     "selectedColor": "#07C160",
     "backgroundColor": "#ffffff"
-  
-},
+  },
   "style": "v2",
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "cloud": true
 }
-

@@ -1,66 +1,40 @@
-// pages/AI/AI.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-
+  // 跳转到词语查询页面
+  navigateToWord() {
+    wx.navigateTo({
+      url: '/pages/word/word'
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  // 跳转到断句训练页面
+  navigateToSentenceSegmentation() {
+    wx.navigateTo({
+      url: '/pages/sentencesegmentation/sentencesegmentation'
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  
+  // 返回首页
+  navigateToIndex: function() {
+    wx.navigateTo({
+      url: '/pages/index/index'
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
+  
+  // 新增功能页面分享功能（好友分享）
   onShareAppMessage() {
-
+    return {
+      title: '文学工具集 | 词语查询与断句训练',
+      path: '/pages/AI/AI', // 分享后跳转到首页
+      imageUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%81%B5%E6%9F%A9%E8%AF%97%E9%89%B4.png'
+    }
+  },
+  
+  // 新增功能页面朋友圈分享功能
+  onShareTimeline() {
+    return {
+      title: 'ai学习工具',
+      query: '',
+      imageUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%81%B5%E6%9F%A9%E8%AF%97%E9%89%B4.png'
+    }
   }
 })

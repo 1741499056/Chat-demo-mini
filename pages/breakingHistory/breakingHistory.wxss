@@ -1,0 +1,34 @@
+.container {
+  padding: 16px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-item {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.question-type {
+  font-weight: bold;
+  color: #333;
+}
+
+.user-answer {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+}
+
+.result {
+  display: block;
+  margin-top: 5px;
+  font-weight: bold;
+  color: #28a745;
+}
