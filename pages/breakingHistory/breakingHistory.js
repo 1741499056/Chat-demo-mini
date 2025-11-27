@@ -76,8 +76,13 @@ Page({
             if(typeof breaksStr === 'string' && breaksStr.includes('/')) {
                  return breaksStr; 
             }
+<<<<<<< HEAD
             console.error('解析 userAnswer 失败:', e);
             return `${content} [断句位置解析失败]`;
+=======
+            console.error('解析 userAnswer 失败:', e);
+            return `${content} [断句位置解析失败]`;
+>>>>>>> 97c9e560f7cd2b4e283e839f72cbcd99b56075e2
         }
         
         if (!breaks || breaks.length === 0) return content;
@@ -233,6 +238,7 @@ Page({
 
     goBack() {
         wx.navigateBack();
+<<<<<<< HEAD
     },
     // --- 【新增】跳转到报告页面 ---
     gotoReportPage() {
@@ -240,4 +246,7 @@ Page({
           url: '/pages/breakingReport/breakingReport',
       });
   }
+=======
+    }
+>>>>>>> 97c9e560f7cd2b4e283e839f72cbcd99b56075e2
 });
