@@ -37,6 +37,22 @@ Page({
     this.DailyPoem();
   },
 
+  // 新增：HTML实体解码函数（处理&nbsp;、&amp;等）
+  decodeHTMLEntities: function(text) {
+    const entityMap = {
+      '&nbsp;': ' ',
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&apos;': "'",
+      '&#39;': "'",
+      '&#34;': '"',
+      '&#xa0;': ' ' // 补充不间断空格
+    };
+    return text.replace(/&[#a-z]+;/gi, match => entityMap[match.toLowerCase()] || match);
+  },
+
   DailyPoem: function() {
     // 使用 app 的 authRequest 方法
     app.authRequest({
@@ -46,30 +62,32 @@ Page({
       wx.hideLoading();
       const poemData = res.data.data || res.data;
       
-      // 处理诗词内容：按句号分割，每句独立
+      // 处理诗词内容：清理解码+移除标签+分割句子
       let contentLines = [];
+      const cleanContent = (rawText) => {
+        // 1. 解码HTML实体
+        let decoded = this.decodeHTMLEntities(rawText);
+        // 2. 移除所有HTML标签（包括换行、空标签）
+        decoded = decoded.replace(/<[^>]*>/g, '');
+        // 3. 按句号分割，过滤空行
+        return decoded.split(/。+/).filter(line => line.trim() !== '');
+      };
+
       if (typeof poemData.content === 'string') {
-        // 去掉换行标签，然后按句号分割
-        let cleaned = poemData.content.replace(/<br\s*\/?>/gi, '');
-        // 按句号分割，去掉空行
-        contentLines = cleaned.split(/。+/).filter(line => line.trim() !== '');
-        // 每句后面加上句号（因为split去掉了句号）
-        contentLines = contentLines.map(line => line.trim() + '。');
+        // 字符串内容：清理后分割并补全句号
+        const sentences = cleanContent(poemData.content);
+        contentLines = sentences.map(s => s.trim() + '。');
       } else if (Array.isArray(poemData.content)) {
-        // 数组中的每一项可能是一行（包含两句）也可能是一句，我们将其展平
+        // 数组内容：遍历每个元素清理后合并
         poemData.content.forEach(item => {
-          // 先去除<br>标签
-          let line = item.replace(/<br\s*\/?>/gi, '');
-          // 然后按句号分割
-          let sentences = line.split(/。+/).filter(s => s.trim() !== '');
-          sentences = sentences.map(s => s.trim() + '。');
-          contentLines = contentLines.concat(sentences);
+          const sentences = cleanContent(item);
+          contentLines = contentLines.concat(sentences.map(s => s.trim() + '。'));
         });
       }
-      
-      // 如果上述处理没有得到任何行，则设为空数组
+
+      // 兜底：若无内容则设为默认提示
       if (contentLines.length === 0) {
-        contentLines = [''];
+        contentLines = ['暂无诗词内容'];
       }
 
       this.setData({
@@ -90,38 +108,44 @@ Page({
       });
     });
   },
-  aichat(){
+
+  // 跳转到AI聊天页面
+  aichat() {
     wx.navigateTo({
       url: '/pages/ai-chat/ai-chat'
     });
   },
+
+  // 跳转到学习更多页面
   learnmore() {
     wx.navigateTo({
-      url: '/pages/index/index'
+      // url: '/pages/index/index'
+      url:'/pages/index_v1/index_v1'
     });
   },
-  //跳转到背诵点评页面
-  recite(){
+
+  // 跳转到背诵点评页面
+  recite() {
     wx.navigateTo({
-      url:'/pages/recite/recite'
+      url: '/pages/recite/recite'
     });
   },
-  
-  // 新增分享函数 (微信好友分享)
+
+  // 微信好友分享
   onShareAppMessage() {
     return {
       title: `今日诗词：${this.data.poem.title}`,
       path: `/pages/DailyPoem/DailyPoem?date=${new Date().toISOString().split('T')[0]}`,
       imageUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%81%B5%E6%9F%A9%E8%AF%97%E9%89%B4.png'
-    }
+    };
   },
-  
-  // 新增分享到朋友圈功能
+
+  // 分享到朋友圈
   onShareTimeline() {
     return {
       title: `${this.data.poem.title} · ${this.data.poem.author}`,
       query: `id=${this.data.poem.id || ''}`,
       imageUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%81%B5%E6%9F%A9%E8%AF%97%E9%89%B4.png'
-    }
+    };
   }
 });

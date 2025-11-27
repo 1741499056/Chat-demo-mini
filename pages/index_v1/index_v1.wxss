@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  /* flex-direction: column; */
+  /* height: 150vh; */
+  background-color: #fff;
+  position: relative;
+  padding-top: 160rpx;
+  /* position:hidden; */
+  
+}
+
+
+
+.custom-tabbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(to bottom, #a1c4fd 0%, #CDEEFE 100%);
+  /* 消除各机型刘海屏的影响 */
+  height: calc(160rpx + env(safe-area-inset-top));
+  padding-top: calc(40rpx + env(safe-area-inset-top));
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 10rpx rgba(116, 103, 103, 0.05);
+  /* 有padding就得设置box-sizing 不然会被撑大 */
+  box-sizing: border-box;
+}
+
+.tabbar-item {
+  font-size: 38rpx;
+  padding-top: 30rpx;
+  padding-left: 20rpx;
+  text-align: center;
+  color: #666;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.content {
+  width: 100%;
+  /* margin-top: 0rpx !important; */
+  /* position: relative; */
+  /* z-index: 98; */
+  /* height: calc(100% - 160rpx); */
+  /* overflow-y: auto;  */
+}

@@ -551,15 +551,14 @@ Page({
     });
   },
   
-  // 登录成功后重定向
   redirectAfterLogin: function() {
     if (this.data.redirectUrl) {
-      // 使用重定向URL跳转
+      // 跳转到指定的redirect地址（即index_v1）
       wx.redirectTo({
         url: this.data.redirectUrl
       });
     } else {
-      // 没有重定向URL则跳转到背诵页面
+      // 无redirect时才跳首页
       wx.redirectTo({
         url: '/pages/index/index'
       });

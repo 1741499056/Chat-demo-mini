@@ -1,4 +1,4 @@
-<!-- pages/index/index.wxml -->
+
 <view class="container">
   <!-- 顶部装饰 -->
   <view class="top-decoration">
@@ -12,6 +12,12 @@
     <view class="title">语文学习助手</view>
     <view class="subtitle">传承中华文化 · 精研语言之美</view>
   </view>
+  <!-- 年级展示/年级更新模块-->
+  <view class="grade-selector" bindtap="navigateToGradeSelect">
+    <view class="grade-text">当前年级：{{currentGrade}}</view> 
+    <view class="grade-arrow">></view> 
+  </view>
+
   
   <!-- 功能网格 -->
   <view class="grid-container">
@@ -61,6 +67,12 @@
       <button class="grid-item" bindtap="navigateTo" data-url="ContentSearch">
         <view class="icon">🔎</view>
         <text>内容查询</text>
+      </button>
+    </view>
+    <view class="grid-row">
+      <button class="grid-item" bindtap="navigateTo" data-url="aichat">
+        <view class="icon">📚</view>
+        <text>大模型对话</text>
       </button>
     </view>
   </view>

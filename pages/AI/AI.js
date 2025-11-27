@@ -16,7 +16,7 @@ Page({
   // 返回首页
   navigateToIndex: function() {
     wx.navigateTo({
-      url: '/pages/index/index'
+      url: '/pages/index_v1/index_v1'
     })
   },
   

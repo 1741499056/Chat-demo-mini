@@ -1,0 +1,531 @@
+/* 诗文库页面 */
+.page-content {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(to bottom, #e6f7ff, #f8f9fa);
+}
+
+.page-selector {
+  display: flex;
+  width: 100%;
+  height: 100rpx;
+  border-bottom: 1rpx solid #eee;
+  background-color: #fff;
+}
+
+.selector-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 500;
+  color: #666;
+  position: relative;
+}
+
+.selector-active {
+  color: #1890ff;
+}
+
+.selector-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6rpx;
+  background-color: #1890ff;
+  border-radius: 3rpx 3rpx 0 0;
+}
+
+.compact-search-bar {
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.compact-search-bar .search-container {
+  position: relative;
+  width: 100%;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+}
+
+.compact-search-bar .search-input {
+  flex: 1;
+  height: 100%;
+  border: 1rpx solid #d9e9fc;
+  border-radius: 32rpx;
+  padding: 0 20rpx 0 30rpx;
+  font-size: 26rpx;
+  background-color: #f5f7fa;
+  box-sizing: border-box;
+}
+
+.compact-search-bar .search-input:focus {
+  background-color: #ffffff;
+  border-color: #1890ff;
+}
+
+.compact-search-bar .search-btn {
+  position: absolute;
+  right: 10rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 20rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #5FB3F6, #4A9FE8);
+  color: white;
+  font-size: 24rpx;
+  line-height: 48rpx;
+  box-shadow: 0 2rpx 6rpx rgba(24, 144, 255, 0.2);
+}
+
+.ancient-content {
+  width: 100%;
+  min-height: calc(100vh - 100rpx);
+  background: linear-gradient(to bottom, #e6f7ff, #f8f9fa);
+}
+
+.ancient-result-list {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ancient-top-spacer {
+  height: 10rpx;
+}
+
+.poem-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100rpx - 100rpx);
+  background: linear-gradient(to bottom, #e6f7ff, #f8f9fa);
+}
+
+.qunjicangshi-section{
+  padding: 0rpx 30rpx 10rpx;
+  margin-top: 0;
+}
+
+.qunjicangshi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.qunjicangshi-header:active {
+  opacity: 0.7;
+}
+
+.qunjicangshi-title-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.qunjicangshi-decorator {
+  width: 8rpx;
+  height: 40rpx;
+  background: linear-gradient(to bottom, #1890ff, #096dd9);
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(24, 144, 255, 0.3);
+}
+
+.qunjicangshi-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 2rpx;
+}
+
+.qunjicangshi-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.books-carousel-container {
+  width: 100%;
+  min-height: 360rpx; 
+  position: relative;
+  margin-bottom: 20rpx;
+  padding: 10rpx 0;
+  box-sizing: border-box;
+}
+
+.books-loading, .books-error {
+  width: 100%;
+  height: 320rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 16rpx;
+}
+
+.books-scroll {
+  width: 100%;
+  height: 320rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 5rpx; 
+  box-sizing: border-box;
+}
+
+.books-list {
+  display: flex;
+  gap: 20rpx;
+  padding-bottom: 20rpx;
+  box-sizing: border-box;
+}
+
+.book-card {
+  width: 220rpx;
+  height: 320rpx;
+  border-radius: 16rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: inline-flex; 
+  flex-direction: column;
+  flex-shrink: 0; 
+}
+
+.book-img-wrap {
+  width: 100%;
+  height: 220rpx;
+  overflow: hidden;
+  background-color: #f5f7fa;
+  position: relative;
+}
+
+.book-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  z-index: 2;
+  position: relative;
+}
+
+.book-info {
+  flex: 1;
+  padding: 16rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.book-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-bottom: 8rpx;
+}
+
+.book-author {
+  font-size: 22rpx;
+  color: #666666;
+  line-height: 1.2;
+}
+
+.jianduwenshi-section {
+  padding: 0 30rpx 10rpx;
+  margin-top: 0;
+}
+
+.jianduwenshi-title-wrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.jianduwenshi-decorator {
+  width: 8rpx;
+  height: 40rpx;
+  background: linear-gradient(to bottom, #1890ff, #096dd9);
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(24, 144, 255, 0.3);
+}
+
+.jianduwenshi-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 2rpx;
+}
+
+.jianduwenshi-count {
+  font-size: 32rpx;
+  color: #666;
+  font-weight: 500;
+  padding: 0 30rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.article-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  margin: 0 30rpx 30rpx;
+  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.06);
+  border: 1rpx solid rgba(221, 238, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.article-title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  padding-left: 20rpx;
+  position: relative;
+}
+
+.article-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx dashed #e8f0fa;
+}
+
+.article-author, .article-dynasty {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 400;
+  position: relative;
+  padding-left: 8rpx;
+}
+
+.article-content {
+  font-size: 34rpx;
+  color: #333;
+  line-height: 1.75;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  flex: 1;
+  font-family: "KaiTi", "楷体", sans-serif;
+  text-indent: 2em;
+  padding-top: 8rpx;
+}
+
+.empty-result, .loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  padding-top: 100rpx;
+}
+
+.empty-text {
+  font-size: 36rpx;
+  color: #595959;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+}
+
+.empty-tip {
+  font-size: 30rpx;
+  color: #8c8c8c;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.pagination-container {
+  position: fixed;
+  bottom: 0rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1rpx solid #e6f7ff;
+  z-index: 100;
+  box-shadow: 0 -6rpx 20rpx rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20rpx);
+}
+
+.total-count {
+  display: none;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+  max-width: 100%;
+}
+
+.pagination-arrow {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f6f9ff 0%, #e6f7ff 100%);
+  border: 2rpx solid rgba(24, 144, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow-icon {
+  width: 28rpx;
+  height: 28rpx;
+  transition: transform 0.2s ease;
+}
+
+.page-current-container {
+  min-width: 80rpx;
+  height: 60rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #ffffff;
+  font-weight: 600;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  box-shadow: 0 6rpx 20rpx rgba(24, 144, 255, 0.3);
+}
+
+.goto-group {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-left: 20rpx;
+  padding: 8rpx 12rpx;
+  background: rgba(24, 144, 255, 0.05);
+  border-radius: 20rpx;
+  border: 1rpx solid rgba(24, 144, 255, 0.1);
+}
+
+.goto-label {
+  font-size: 24rpx;
+  color: #1890ff;
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: 40rpx;
+}
+
+.goto-input {
+  width: 70rpx;
+  height: 48rpx;
+  border: 1rpx solid rgba(24, 144, 255, 0.3);
+  border-radius: 8rpx;
+  padding: 0 8rpx;
+  font-size: 26rpx;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  text-align: center;
+}
+
+.goto-button {
+  height: 48rpx;
+  min-width: 70rpx;
+  line-height: 48rpx;
+  padding: 0 12rpx;
+  font-size: 24rpx;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  color: white;
+  border-radius: 8rpx;
+  border: none;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 古诗页面新增样式 */
+.grade-container {
+  padding: 10rpx 30rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.grade-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.grade-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.error-retry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #f5222d;
+  margin-bottom: 20rpx;
+}
+
+.retry-btn {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 30rpx;
+  background: #1890ff;
+  color: #fff;
+  border-radius: 35rpx;
+}
+
+.link {
+  color: #1890ff;
+  text-decoration: underline;
+}
+
+.grade-tip {
+  text-align: center;
+  padding: 80rpx 20rpx;
+  font-size: 28rpx;
+  color: #666; 
+}

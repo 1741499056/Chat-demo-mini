@@ -1,0 +1,46 @@
+<view class="container">
+  <!-- 自定义顶部tabbar -->
+  <view class="custom-tabbar">
+    <view 
+      class="tabbar-item" 
+      wx:for="{{tabs}}"
+      wx:key="index"
+      data-index="{{index}}"
+      bindtap="switchTab" 
+      style="{{currentTab === index ? 'font-weight: bold; color: #333;' : ''}}" 
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 内容区域（根据选中的Tab切换显示） -->
+  <view class="content">
+    <!-- AI助手页面 -->
+    <view wx:if="{{currentTab === 0}}">
+      <AI_assistant id="AI_assistant" />
+    </view>
+
+    <!-- 诗文库页面 -->
+    <view wx:if="{{currentTab === 1}}">
+      <poetry-library 
+        id="poetry_library"
+        isLoggedIn="{{isLoggedIn}}"
+        currentGrade="{{currentGrade}}"
+        currentGradeId="{{currentGradeId}}"
+      />
+    </view>
+
+    <!-- 我的页面 -->
+    <view wx:if="{{currentTab === 2}}">
+      <my 
+        id="my"
+        userInfo="{{userInfo}}"
+        isLoggedIn="{{isLoggedIn}}"
+        currentGrade="{{currentGrade}}"
+        currentGradeId="{{currentGradeId}}"
+        gradeList="{{gradeList}}"
+        bind:logoutSuccess="onLogoutSuccess"
+      />
+    </view>
+  </view>
+</view>

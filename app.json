@@ -26,7 +26,15 @@
     "pages/allbooks/allbooks",
     "pages/breakingHistory/breakingHistory",
     "pages/poemRecite/poemRecite",
-    "pages/ReciteRecords/ReciteRecords"
+    "pages/ReciteRecords/ReciteRecords",
+    "pages/index_gradeselect/index_gradeselect",
+    "pages/index_v1/index_v1",
+    "pages/AIchat-konwledge/AIchat-konwledge",
+    "pages/AIchat-history/AIchat-history",
+    "pages/AI_assistant/AI_assistant",
+    "pages/poetry_library/poetry_library",
+    "pages/my/my",
+    "pages/breakingReport/breakingReport"
   ],
   "window": {
     "navigationBarTextStyle": "black",

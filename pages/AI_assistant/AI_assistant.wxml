@@ -1,0 +1,168 @@
+<!-- AI助手页面组件 -->
+<view class="ai-page-container">
+  <!-- 修复轮播图位置的专用容器 -->
+  <view class="swiper-fixed-container">
+    <!-- 轮播图区域 -->
+    <view class="swiper-section">
+      <swiper class="function-swiper" indicator-dots="{{true}}" circular="{{true}}" autoplay="true" interval="3000">
+        <swiper-item wx:for="{{functionPages}}" wx:key="pageIndex" class="function-page">
+          <view class="func-item-container" wx:for="{{item}}" wx:for-item="func" wx:for-index="itemIndex" wx:key="itemIndex">
+            <view 
+              wx:if="{{func}}"
+              class="func-card {{func.color}}"
+              bindtap="handleNavigate"
+              data-func="{{func}}"
+            >
+              <image src="{{func.icon}}" mode="aspectFill" class="func-icon"/>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
+
+  <!-- AI对话区域 -->
+  <view class="ai-chat-section">
+    <!-- 对话头部 -->
+    <view class="chat-header">
+      <view class="header-left">
+        <text class="chat-title">倾盖晤言，尺素传心</text>
+        <view class="connection-status">
+          <view class="status-dot {{activeConnection ? 'connected' : 'disconnected'}}"></view>
+          <text class="status-text">{{activeConnection ? '已连接' : '未连接'}}</text>
+          <text wx:if="{{!hasToken}}" class="token-warning">(未登录)</text>
+        </view>
+      </view>
+      <view class="header-right">
+        <!-- 修改为跳转到历史记录页面 -->
+        <view class="history-btn" bindtap="navigateToHistoryPage">
+          <image class="history-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.jpg" mode="aspectFit"></image>
+          <text>历史对话</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 消息列表区域 -->
+    <view class="messages-container" id="messagesContainer">
+      <scroll-view 
+        class="chat-messages" 
+        scroll-y 
+        scroll-with-animation
+        scroll-top="{{scrollTop}}"
+        bindscroll="onChatScroll"
+        enable-back-to-top="true"
+        bindtap="forceScrollToBottom"
+        style="height: 100%;"
+      >
+      
+        <!-- 历史消息 -->
+        <block wx:for="{{messages}}" wx:key="id">
+          <view class="message {{item.type}}">
+            <view class="message-avatar">
+              <image 
+                class="avatar-img" 
+                src="{{item.type === 'user' ? 'https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F.jpg' : 'https://newlan.oss-cn-shanghai.aliyuncs.com/icons/AI%E5%A4%B4%E5%83%8F.jpg'}}" 
+                mode="aspectFit"
+              ></image>
+            </view>
+            <view class="message-content">
+              <!-- 思考内容 - 可折叠 -->
+              <view wx:if="{{item.hasThink}}" class="think-section">
+                <view class="think-toggle" bindtap="toggleThink" data-index="{{index}}">
+                  <text class="toggle-icon">{{item.showThink ? '▼' : '▶'}}</text>
+                  <text class="toggle-text">{{item.showThink ? '隐藏思考过程' : '显示思考过程'}}</text>
+                </view>
+                <view wx:if="{{item.showThink}}" class="think-content">
+                  <text class="think-text">{{item.thinkContent}}</text>
+                </view>
+              </view>
+              <!-- 消息文本内容 -->
+              <text class="message-text" selectable="true">{{item.content}}</text>
+              <text class="message-time">{{item.time}}</text>
+            </view>
+          </view>
+        </block>
+
+        <!-- 流式输出显示 -->
+        <view wx:if="{{chatIsLoading}}" class="message assistant streaming">
+          <view class="message-avatar">
+            <image class="avatar-img" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/AI%E5%A4%B4%E5%83%8F.jpg" mode="aspectFit"></image>
+          </view>
+          <view class="message-content">
+            <!-- 流式思考内容控制 -->
+            <view wx:if="{{streamingHasThink}}" class="streaming-think-control">
+              <view class="think-toggle" bindtap="toggleStreamingThink">
+                <text class="toggle-icon">{{showStreamingThink ? '▼' : '▶'}}</text>
+                <text class="toggle-text">{{showStreamingThink ? '隐藏思考过程' : '显示思考过程'}}</text>
+              </view>
+            </view>
+
+            <!-- 流式思考内容显示 -->
+            <view wx:if="{{showStreamingThink && streamingThinkContent}}" class="streaming-think-content">
+              <text class="think-text">{{streamingThinkContent}}</text>
+            </view>
+
+            <!-- 主要内容显示 -->
+            <text class="message-text" selectable="true">{{streamingMainContent || streamingContent}}</text>
+            
+            <!-- 打字动画 -->
+            <view class="typing-indicator">
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 空状态 -->
+        <view wx:if="{{messages.length === 0 && !chatIsLoading}}" class="empty-chat">
+          <!-- <image class="empty-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E8%81%8A%E5%A4%A9.png" mode="aspectFit"></image> -->
+          <text class="empty-text">开始与AI助手对话吧</text>
+          <text class="empty-tip">输入问题，获取智能回答</text>
+        </view>
+
+        <!-- 底部占位，确保内容能滚动到最底部 -->
+        <view class="scroll-bottom-spacer" id="bottomSpacer"></view>
+      </scroll-view>
+    </view>
+
+    <!-- 输入区域 -->
+    <view class="chat-input-area">
+      <view class="input-container">
+        <input 
+          class="chat-input" 
+          value="{{inputMessage}}" 
+          bindinput="onAiInput" 
+          bindconfirm="sendAiMessage"
+          placeholder="输入您的问题..." 
+          disabled="{{!activeConnection || chatIsLoading || !hasToken}}"
+          adjust-position="{{true}}"
+        />
+        <view 
+          class="send-btn {{chatIsLoading || !inputMessage.trim() || !activeConnection || !hasToken ? 'disabled' : ''}}" 
+          bindtap="sendAiMessage"
+        >
+          <image class="send-icon" src="/icons/AI发送按钮.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="input-tips">
+        <text wx:if="{{!hasToken}}">请先登录后使用AI对话</text>
+        <text wx:elif="{{!activeConnection && !isConnecting}}">未连接</text>
+        <text wx:elif="{{isConnecting}}">连接中...</text>
+        <text wx:elif="{{chatIsLoading}}">AI正在思考中...</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 登录提示模态框 -->
+  <view wx:if="{{showLoginPrompt}}" class="login-prompt-overlay" bindtap="closeLoginPrompt">
+    <view class="login-prompt" bindtap="stopPropagation">
+      <text class="prompt-title">登录提示</text>
+      <text class="prompt-text">使用AI对话功能需要先登录账号</text>
+      <view class="btn-group">
+        <button class="login-btn" bindtap="goToLogin">去登录</button>
+        <button class="cancel-btn" bindtap="closeLoginPrompt">取消</button>
+      </view>
+    </view>
+  </view>
+</view>

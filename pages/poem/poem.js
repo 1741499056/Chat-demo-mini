@@ -14,9 +14,8 @@ Page({
     lastSearchKeyword: "",
     lastSearchPage: 1,
     pageSize: 10,
-    // 新增年级相关数据
     currentGrade: "", // 当前年级名称
-    isLoggedIn: false // 登录状态
+    isLoggedIn: false 
   },
 
   onLoad: function() {
@@ -26,10 +25,10 @@ Page({
   },
   
   onShow: function() {
-    this.loadGradeData(); // 每次页面显示时重新加载年级数据
+    // 每次页面显示时重新加载年级数据，并检测年级变化
+    this.loadGradeData();
   },
 
-  // 加载年级数据
   loadGradeData() {
     // 检查登录状态
     const isLoggedIn = app.globalData.isLoggedIn || wx.getStorageSync('token');
@@ -40,21 +39,37 @@ Page({
       return;
     }
     
+    // 保存旧的年级用于比较
+    const oldGrade = this.data.currentGrade;
+    
     // 从全局数据或本地存储获取当前年级
     const globalGrade = app.globalData.userGradeName;
     const storedGrade = wx.getStorageSync('userInfo')?.gradeName;
+    let newGrade = "";
     
     if (globalGrade) {
-      this.setData({
-        currentGrade: globalGrade
-      });
+      newGrade = globalGrade;
     } else if (storedGrade) {
-      this.setData({
-        currentGrade: storedGrade
-      });
+      newGrade = storedGrade;
     } else {
       // 如果都没有，尝试从服务器获取
       this.fetchUserGrade();
+      return;
+    }
+    
+    // 设置新的年级
+    this.setData({
+      currentGrade: newGrade
+    });
+    
+    // 如果年级发生变化，重新加载诗词数据
+    if (oldGrade !== newGrade && newGrade) {
+      console.log('检测到年级变化，重新加载诗词数据', { oldGrade, newGrade });
+      this.setData({ 
+        currentPage: 1,
+        loading: true 
+      });
+      this.loadPoems(1);
     }
   },
 
@@ -73,6 +88,8 @@ Page({
       success: (res) => {
         if (res.data.code === 1 && res.data.data) {
           const gradeName = res.data.data.gradeName;
+          const oldGrade = this.data.currentGrade;
+          
           this.setData({ currentGrade: gradeName });
           
           // 保存到全局数据和本地存储
@@ -80,7 +97,20 @@ Page({
           const userInfo = wx.getStorageSync('userInfo') || {};
           userInfo.gradeName = gradeName;
           wx.setStorageSync('userInfo', userInfo);
+          
+          // 关键：如果年级发生变化，重新加载诗词数据
+          if (oldGrade !== gradeName && gradeName) {
+            console.log('从服务器获取到新年级，重新加载诗词数据', { oldGrade, newGrade: gradeName });
+            this.setData({ 
+              currentPage: 1,
+              loading: true 
+            });
+            this.loadPoems(1);
+          }
         }
+      },
+      fail: (error) => {
+        console.error('获取用户信息失败:', error);
       }
     });
   },
@@ -322,7 +352,7 @@ Page({
   
   navigateToIndex: function() {
     wx.navigateTo({
-      url: '/pages/index/index'
+      url: '/pages/index_v1/index_v1'
     });
   },
   
@@ -332,7 +362,7 @@ Page({
       return {
         title: `搜索「${this.data.searchKeyword}」找到${this.data.totalCount}首诗词`,
         path: `/pages/poem/poem?keyword=${encodeURIComponent(this.data.searchKeyword)}`,
-        imageUrl: '/images/search_share.jpg'
+        imageUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%81%B5%E6%9F%A9%E8%AF%97%E9%89%B4.png'
       }
     }
     

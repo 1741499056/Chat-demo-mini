@@ -89,7 +89,7 @@ App({
       }
     } else {
       console.log('[跳转] 无目标页面，返回首页');
-      wx.switchTab({ url: '/pages/index/index' });
+      wx.switchTab({ url: '/pages/index_v1/index_v1' });
     }
   },
   
@@ -103,14 +103,14 @@ App({
     wx.removeStorageSync('userInfo');
     
     // 返回首页
-    wx.switchTab({ url: '/pages/index/index' });
+    wx.switchTab({ url: '/pages/index_v1/index_v1' });
   },
     
   globalData: {
     token: '',
     isLoggedIn: false,
     targetRoute: null,   // 存储{ path, type }对象
-    apiBaseUrl: 'https://zhixunshiyun.yezhiqiu.cn/api', // 全局API基础域名
+    // apiBaseUrl: 'https://zhixunshiyun.yezhiqiu.cn/api', // 全局API基础域名
     ossConfig: null // 会在onLaunch中初始化
   },
 

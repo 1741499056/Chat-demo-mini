@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "AI_assistant": "/pages/AI_assistant/AI_assistant",
+    "poetry-library": "/pages/poetry_library/poetry_library",
+    "my": "/pages/my/my"
+  },
+  "navigationStyle": "custom"
+}

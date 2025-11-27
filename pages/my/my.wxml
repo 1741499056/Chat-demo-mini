@@ -1,10 +1,7 @@
-<!-- 个人中心页面 - 淡蓝色渐变版 -->
-<view class="container">
-  <!-- 用户信息卡片 -->
+<view class="me-container">
   <view class="content-card user-card">
     <view class="avatar-section">
       <image class="user-avatar" src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png"></image>
-      <!-- 当前年级信息放在头像下方 -->
       <view class="grade-info" wx:if="{{isLoggedIn}}">
         <text class="current-grade" wx:if="{{currentGrade}}">{{currentGrade}}</text>
         <text class="current-grade" wx:if="{{!currentGrade}}">未设置年级</text>
@@ -16,45 +13,17 @@
       <text class="user-desc">古诗文学习，从这里开始</text>
     </view>
     
-    <!-- 根据登录状态显示不同按钮 -->
     <block wx:if="{{!isLoggedIn}}">
       <button class="login-btn" bindtap="goToLogin">去登录</button>
     </block>
     <block wx:else>
       <view class="button-group">
-        <!-- 新增：设置年级按钮 -->
-        <button class="grade-setting-btn" bindtap="showGradePicker">设置年级</button>
+        <button class="grade-setting-btn" bindtap="goToGradeSelect">设置年级</button>
         <button class="bg-setting-btn">设置背景</button>
       </view>
     </block>
   </view>
 
-  <!-- 年级选择弹窗 -->
-  <view class="grade-modal" wx:if="{{showGradeModal}}">
-    <view class="grade-mask" bindtap="hideGradePicker"></view>
-    <view class="grade-content">
-      <view class="grade-header">
-        <text class="grade-title">选择年级</text>
-        <text class="grade-close" bindtap="hideGradePicker">×</text>
-      </view>
-      <view class="grade-list">
-        <view class="grade-item {{selectedGrade && selectedGrade.id === item.id ? 'active' : ''}}" 
-              wx:for="{{gradeList}}" 
-              wx:key="id"
-              bindtap="selectGrade"
-              data-grade="{{item}}">
-          <text class="grade-name">{{item.name}}</text>
-          <text class="grade-check" wx:if="{{selectedGrade && selectedGrade.id === item.id}}">✓</text>
-        </view>
-      </view>
-      <view class="grade-actions">
-        <button class="grade-cancel" bindtap="hideGradePicker">取消</button>
-        <button class="grade-confirm" bindtap="confirmGrade">确定</button>
-      </view>
-    </view>
-  </view>
-
-  <!-- 选项卡卡片 -->
   <view class="content-card tabs-card">
     <view class="nav-tabs">
       <view class="nav-tab active">我的收藏</view>
@@ -62,7 +31,6 @@
     </view>
   </view>
 
-  <!-- 功能列表卡片 -->
   <view class="content-card list-card">
     <view class="nav-list">
       <view class="nav-item">
@@ -98,7 +66,6 @@
     </view>
   </view>
 
-  <!-- 退出按钮 - 始终显示，但根据登录状态改变样式 -->
   <view class="logout-btn {{isLoggedIn ? '' : 'logout-btn-disabled'}}" bindtap="logout">
     <text>退出登录</text>
   </view>

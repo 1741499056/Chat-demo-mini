@@ -1,11 +1,103 @@
 <view class="container">
-  <view class="history-list">
-    <block wx:for="{{historyList}}" wx:key="id">
-      <view class="history-item" bindtap="showDetail" data-id="{{item.id}}">
-        <text class="question-type">{{item.questionType}}</text>
-        <text class="user-answer">用户答案: {{item.userAnswer}}</text>
-        <text class="result">{{item.isCorrect === 1? '正确' : '错误'}}</text>
+  <view class="header">
+    <text class="title">答题记录</text>
+  </view>
+
+<view class="filter-bar">
+  
+  <view class="filter-row">
+    <text class="filter-label">难度筛选：</text>
+    <view class="tag-group">
+      <block wx:for="{{diffArr}}" wx:key="*this">
+        <text class="tag {{item===filterDiff?'active':''}}"
+              data-val="{{item}}" bindtap="onDiffTap">{{item}}</text>
+      </block>
+    </view>
+  </view>
+
+  <view class="filter-row">
+    <text class="filter-label">答题结果：</text>
+    <view class="tag-group">
+      <block wx:for="{{resArr}}" wx:key="*this">
+        <text class="tag {{item===filterRes?'active':''}}"
+              data-val="{{item}}" bindtap="onResTap">{{item}}</text>
+      </block>
+    </view>
+  </view>
+  
+  <view class="filter-row">
+    <text class="filter-label">题型筛选：</text>
+    <view class="tag-group">
+      <block wx:for="{{skillArr}}" wx:key="*this">
+        <text class="tag {{item===filterSkill?'active':''}}"
+              data-val="{{item}}" bindtap="onSkillTap">{{item}}</text>
+      </block>
+    </view>
+  </view>
+
+</view>
+
+  <block wx:if="{{!isLoading && filteredList.length > 0}}">
+    <view class="history-list">
+      <view class="record-card fade-in" wx:for="{{filteredList}}" wx:key="id">
+        
+        <view class="record-header">
+          <view class="type-tag">
+            <text>{{item.questionTypeDisplay}} · {{item.skillName}}</text>
+          </view>
+          <view class="time-status">
+            <text class="difficulty-tag {{item.difficulty}}">{{item.difficulty}}</text>
+            <text class="time">{{item.formattedTime}}</text>
+            <view class="status-badge {{item.isCorrectBool ? 'correct' : 'incorrect'}}">
+              <text>{{item.isCorrectBool ? '✓ ' : '✗ '}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="detail-section-question-content">
+          <text class="label">题目原题：</text>
+          <text class="value">{{item.content}}</text>
+        </view>
+        
+        <view class="detail-section-your-answer">
+          <text class="label">你的答案：</text>
+          <text class="value">{{item.userAnswerText}}</text>
+        </view>
+
+        <view class="detail-section-correct-answer">
+          <text class="label">正确答案：</text>
+          <text class="value">{{item.answer}}</text>
+        </view>
+        
+        <view class="detail-section-analysis-content">
+          <text class="label">题目解析：</text>
+          <text class="value">{{item.analysis}}</text>
+        </view>
       </view>
-    </block>
+    </view>
+  </block>
+
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载历史记录...</text>
+  </view>
+
+  <view wx:if="{{!isLoading && filteredList.length === 0 && !loadError}}" class="no-data">
+    <text>📭 暂无符合条件的答题记录</text>
+  </view>
+
+  <view wx:if="{{loadError}}" class="error-container">
+    <view class="error-card">
+      <text class="error-icon">!</text>
+      <text class="error-message">加载失败: {{errorMsg}}</text>
+      <view class="action-buttons">
+        <view class="retry-button" bindtap="retryLoad"><text>重新加载</text></view>
+        <view class="back-button" bindtap="goBack"><text>返回上一页</text></view>
+      </view>
+    </view>
+  </view>
+    <!-- 【新增】悬浮报告按钮 -->
+    <view class="fab-report" bindtap="gotoReportPage">
+    <text>👀断句报告</text>
   </view>
 </view>
