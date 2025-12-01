@@ -300,13 +300,19 @@ Page({
         cleanText(item.fullModernContent) || 
         '暂无内容';
       
+      // ====== 修改开始：添加三个新字段 ======
       return {
         id: item.id,
         title: cleanText(item.name) || '无标题',
         author: cleanText(item.author) || '未知',
         dynasty: cleanText(item.dynasty) || '不详',
-        content: content.substring(0, 100) + (content.length > 100 ? '...' : '') // 限制内容长度
+        content: content.substring(0, 100) + (content.length > 100 ? '...' : ''),
+        // 新增三个字段
+        gradeId: item.gradeId || '',      // 年级ID
+        grade: item.grade || '',          // 年级名称
+        page: item.page || ''             // 页码
       };
+      // ====== 修改结束 ======
     });
 
     // 计算总页数

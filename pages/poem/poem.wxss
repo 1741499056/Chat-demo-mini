@@ -584,3 +584,18 @@
   opacity: 1;
   box-shadow: 0 6rpx 25rpx rgba(24, 144, 255, 0.5);
 }
+/* 新增字段的样式 - 修改为同一行显示 */
+.extra-info {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 15px;
+  color: #666;
+}
+
+
+
+
+
+
+
