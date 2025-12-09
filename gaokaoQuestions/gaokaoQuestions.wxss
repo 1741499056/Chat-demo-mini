@@ -1,0 +1,211 @@
+/* 基础容器和主题色 (沿用列表页) */
+.container {
+  padding: 30rpx;
+  background-color: #e6f7ff; /* 淡蓝色背景 */
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.content-scroll-view {
+  height: calc(100vh - 60rpx); /* 留出上下边距 */
+}
+
+/* 文章卡片 (基于 skill-card 风格) */
+.text-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 35rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid rgba(224, 240, 255, 0.8);
+}
+
+.card-header {
+  border-bottom: 1rpx dashed #e2e8f0;
+  padding-bottom: 25rpx;
+  margin-bottom: 25rpx;
+  text-align: center;
+}
+
+.article-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1890ff;
+  display: block;
+}
+
+.article-content {
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: #333;
+  /* 模拟古文排版，可选 */
+  text-indent: 60rpx; 
+}
+
+/* 题目区标题 */
+.questions-section {
+  padding-bottom: 30rpx;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 30rpx;
+  color: #1890ff;
+  font-weight: 600;
+  margin: 30rpx 0;
+  letter-spacing: 2rpx;
+}
+
+/* 单个题目卡片 */
+.question-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 5rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.question-content {
+  display: flex;
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #1e293b;
+  margin-bottom: 30rpx;
+  border-left: 5rpx solid #40a9ff;
+  padding-left: 20rpx;
+}
+
+.q-index {
+  color: #1890ff;
+  font-weight: 700;
+  margin-right: 15rpx;
+}
+
+/* 选项列表 */
+.options-list {
+  padding-left: 20rpx;
+}
+
+.option-item {
+  display: flex;
+  margin-bottom: 15rpx;
+  font-size: 30rpx;
+  line-height: 1.6;
+  color: #555;
+  background-color: #f7f9fc;
+  padding: 15rpx 20rpx;
+  border-radius: 10rpx;
+  border: 1rpx solid #e0e6f0;
+  /* transition: all 0.3s;  */
+  /* 增加动画效果 */
+}
+
+.option-key {
+  font-weight: 600;
+  color: #1890ff;
+  margin-right: 15rpx;
+  min-width: 40rpx;
+}
+
+/* 答案解析区 */
+.answer-area {
+  margin-top: 30rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx dashed #e8f4ff;
+}
+
+.show-answer-btn {
+  width: 100%;
+  text-align: center;
+  background-color: #e6f7ff;
+  color: #1890ff;
+  font-size: 28rpx;
+  padding: 15rpx 0;
+  border-radius: 30rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.show-answer-btn.expanded {
+  background-color: #40a9ff;
+  color: white;
+}
+
+.analysis-box {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: #fffbe6; /* 浅黄色背景突出解析 */
+  border: 1rpx solid #ffe58f;
+  border-radius: 10rpx;
+}
+
+.answer-row, .analysis-row {
+  display: flex;
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.label {
+  font-weight: 600;
+  color: #fa8c16;
+  margin-right: 15rpx;
+  min-width: 150rpx;
+}
+
+.result.correct {
+  font-weight: 700;
+  color: #f5222d;
+  font-size: 32rpx;
+}
+
+.analysis-content {
+  color: #555;
+  flex: 1;
+}
+
+/* ------------------------------------------------ */
+/* 新增：选项颜色反馈样式 */
+/* ------------------------------------------------ */
+
+/* 选中且正确 (绿色) */
+.selected-correct {
+  background-color: #f6ffed; /* 浅绿背景 */
+  border-color: #52c41a;     /* 绿边框 */
+  color: #389e0d;
+  font-weight: 600;
+}
+
+.selected-correct .option-key {
+  color: #389e0d;
+}
+
+/* 选中但错误 (红色) */
+.selected-wrong {
+  background-color: #fff1f0; /* 浅红背景 */
+  border-color: #f5222d;     /* 红边框 */
+  color: #cf1322;
+  font-weight: 600;
+}
+
+.selected-wrong .option-key {
+  color: #cf1322;
+}
+
+/* 选中错误的答案后，同时高亮正确的选项（可选：如果需要） */
+.correct-unselected {
+  background-color: #e6f7ff;
+  border-color: #1890ff;
+}
+
+
+/* 加载和错误状态 (沿用列表页样式) */
+.loading, .error {
+  /* 使用列表页提供的样式 */
+  margin-top: 50rpx;
+}
+.loading-icon, .error-icon, .error-message, .retry-btn {
+  /* 使用列表页提供的样式 */
+}
