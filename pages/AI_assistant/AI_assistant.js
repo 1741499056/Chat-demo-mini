@@ -61,6 +61,12 @@ Component({
         text: 'AI对话',
         url: '/pages/AIchat-konwledge/AIchat-konwledge',
         isTabBar: false
+      },
+      {
+        icon: 'https://www.helloimg.com/i/2025/12/09/6936ff3b96898.png',
+        text: '高考真题',
+        url: '/pages/gaokaoList/gaokaoList',
+        isTabBar: false
       }
     ],
     functionPages: [], 

@@ -1,0 +1,73 @@
+<view class="container">
+    <scroll-view scroll-y class="content-scroll-view">
+        
+        <view class="text-card" wx:if="{{textInfo}}">
+            <view class="card-header">
+                <text class="article-title">{{textInfo.title}}</text>
+            </view>
+            <view class="article-content">
+                <text>{{textInfo.content}}</text>
+            </view>
+        </view>
+
+        <view class="questions-section" wx:if="{{questions.length > 0}}">
+            <view class="section-title">—— 习题精讲 ——</view>
+            
+            <block wx:for="{{questions}}" wx:key="question_id" wx:for-item="question" wx:for-index="qIndex">
+                <view class="question-card">
+                    <view class="question-content">
+                        <text class="q-index">{{qIndex + 1}}.</text>
+                        <text>{{question.question_content}}</text>
+                    </view>
+                    
+                    <view class="options-list">
+                        <block wx:for="{{question.options}}" wx:key="key" wx:for-item="option" wx:for-index="oIndex">
+                            <view 
+                                class="option-item {{userAnswer[question.question_id] === option.key ? (option.key === question.correct_answer? 'selected-correct' : 'selected-wrong'): ''}}"
+                                bindtap="selectOption"
+                                data-id="{{question.question_id}}"
+                                data-key="{{option.key}}"
+                            >
+                                <text class="option-key">{{option.key}}.</text>
+                                <text class="option-text">{{option.content}}</text>
+                            </view>
+                        </block>
+                    </view>
+
+                    <view class="answer-area">
+                        <view 
+                            class="show-answer-btn {{showAnswer[question.question_id] ? 'expanded' : ''}}" 
+                            bindtap="toggleAnswer" 
+                            data-id="{{question.question_id}}"
+                        >
+                            {{showAnswer[question.question_id] ? '隐藏答案解析' : '查看答案解析'}}
+                        </view>
+                        
+                        <view class="analysis-box" wx:if="{{showAnswer[question.question_id]}}">
+                            <view class="answer-row">
+                                <text class="label">【正确答案】</text>
+                                <text class="result correct">{{question.correct_answer}}</text>
+                            </view>
+                            <view class="analysis-row">
+                                <text class="label">【解析】</text>
+                                <text class="analysis-content">{{question.answer_analysis}}</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </block>
+        </view>
+
+        <view wx:if="{{isLoading}}" class="loading">
+            <text class="loading-icon">⏳</text>
+            <text>加载中...</text>
+        </view>
+        
+        <view wx:if="{{loadError}}" class="error">
+            <text class="error-icon">❌</text>
+            <text class="error-message">加载失败: {{errorMsg}}</text>
+            <button bindtap="retryFetch" class="retry-btn">重试</button>
+        </view>
+        
+    </scroll-view>
+</view>
