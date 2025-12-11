@@ -17,7 +17,10 @@ Page({
     selectedGradeId: null, // 选中的年级ID
     gradeName: '请选择年级', // 显示的年级名称
     gradeIndex: -1, // picker选中的索引
-    redirectUrl: null // 添加重定向URL存储
+    redirectUrl: null, // 添加重定向URL存储
+    // 新增错误提示字段
+    usernameError: '',
+    passwordError: ''
   },
 
   onLoad(options) {
@@ -101,12 +104,14 @@ Page({
   switchLoginType(e) {
     const type = e.currentTarget.dataset.type;
     this.setData({
-      activeType: type
+      activeType: type,
+      usernameError: '',
+      passwordError: ''
     });
     this.checkLoginStatus();
   },
 
-  // 手机号输入
+  // 手机号输入（用于登录）
   onPhoneInput(e) {
     const phone = e.detail.value;
     this.setData({
@@ -116,18 +121,22 @@ Page({
     this.checkLoginStatus();
   },
 
-  // 用户名输入
+  // 用户名输入（用于注册和账号登录）
   onUsernameInput(e) {
+    const username = e.detail.value;
     this.setData({
-      phone: e.detail.value
+      phone: username,
+      usernameError: this.validateUsername(username) ? '' : '用户名长度应为1-10个字符（非数字）'
     });
     this.checkLoginStatus();
   },
 
   // 密码输入
   onPasswordInput(e) {
+    const password = e.detail.value;
     this.setData({
-      password: e.detail.value
+      password: password,
+      passwordError: this.validatePassword(password) ? '' : '密码长度应为6-15位非空字符'
     });
     this.checkLoginStatus();
   },
@@ -284,23 +293,34 @@ Page({
     if (this.data.registering) return;
 
     // 表单验证
-    if (!this.validateUsername(this.data.phone)) {
-      return this.showRegisterError('请输入正确的用户名');
+    const usernameValid = this.validateUsername(this.data.phone);
+    const passwordValid = this.validatePassword(this.data.password);
+    
+    if (!usernameValid) {
+      this.setData({ usernameError: '用户名长度应为1-10个字符' });
+      return this.showRegisterError('用户名长度应为1-10个字符');
     }
-
-    if (this.data.password.length < 6) {
-      return this.showRegisterError('密码长度至少6位');
+    
+    if (!passwordValid) {
+      this.setData({ passwordError: '密码长度应为6-15位非空字符' });
+      return this.showRegisterError('密码长度应为6-15位非空字符');
     }
-
+    
     // 验证是否选择了年级
     if (!this.data.selectedGradeId) {
       return this.showRegisterError('请选择年级');
     }
-
+    
     // 验证不能选择"全部"年级
     if (this.data.selectedGradeId === 0) {
       return this.showRegisterError('请选择具体的年级，不能选择"全部"');
     }
+
+    // 清除错误信息
+    this.setData({
+      usernameError: '',
+      passwordError: ''
+    });
 
     this.setData({ registering: true });
     wx.showLoading({
@@ -337,20 +357,29 @@ Page({
 
           // 注册成功后自动设置年级
           this.setUserGrade(this.data.selectedGradeId, () => {
-            wx.showToast({
-              title: responseData.msg || '注册成功',
-              icon: 'success'
+            wx.hideLoading();
+            this.setData({ registering: false });
+            
+            // 显示注册成功弹窗
+            wx.showModal({
+              title: '注册成功',
+              content: '恭喜注册成功，赶紧登录巩固一下吧',
+              showCancel: false,
+              confirmText: '确定',
+              success: (modalRes) => {
+                if (modalRes.confirm) {
+                  // 用户点击确定后，跳转到登录页面
+                  wx.reLaunch({
+                    url: '/pages/login/login'
+                  });
+                }
+              }
             });
-
-            setTimeout(() => {
-              this.setData({ registering: false });
-              
-              // 注册成功后重定向
-              this.redirectAfterLogin();
-            }, 1500);
           });
 
         } else {
+          wx.hideLoading();
+          this.setData({ registering: false });
           const errorMsg = responseData.message || '注册失败';
           console.error('注册失败:', errorMsg);
           this.showRegisterError(errorMsg);
@@ -358,12 +387,9 @@ Page({
       },
       fail: (error) => {
         wx.hideLoading();
+        this.setData({ registering: false });
         console.error('注册请求失败:', error);
         this.showRegisterError('网络连接失败');
-      },
-      complete: () => {
-        this.setData({ registering: false });
-        wx.hideLoading();
       }
     });
   },
@@ -508,10 +534,18 @@ Page({
     });
   },
 
-  // 验证用户名
+  // 验证用户名（1-10个字符）
   validateUsername(username) {
-    const reg = /^[a-zA-Z0-9]{3,}$/;
-    return reg.test(username);
+    if (!username) return false;
+    const length = username.trim().length;
+    return length >= 1 && length <= 10;
+  },
+
+  // 验证密码（6-15位非空字符）
+  validatePassword(password) {
+    if (!password) return false;
+    const length = password.length;
+    return length >= 6 && length <= 15 && !/\s/.test(password);
   },
 
   // 验证手机号
@@ -560,7 +594,7 @@ Page({
     } else {
       // 无redirect时才跳首页
       wx.redirectTo({
-        url: '/pages/index/index'
+        url: '/pages/index_v1/index_v1'
       });
     }
   }

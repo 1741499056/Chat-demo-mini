@@ -51,7 +51,7 @@
           >
             <text class="title">{{item.title}}</text>
             <view class="info-row">
-              <text class="author">作者: {{item.author || '未知'}}</text>
+              <text class="author">{{item.author || '未知'}}</text>
               <text class="dynasty">{{item.dynasty || '不详'}}</text>
             </view>
             <text class="content">{{item.content || item.description}}</text>

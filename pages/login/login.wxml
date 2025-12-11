@@ -31,14 +31,17 @@
 
     <!-- 注册表单 -->
     <view class="{{activeType === 'code' ? 'show' : 'hide'}}">
-      <view class="input-group">
+      <view class="input-group"> 
         <text class="label">用户名</text>
-        <input type="string" placeholder="请输入用户名" bindinput="onUsernameInput" />
+        <view><input type="string" placeholder="请输入用户名" bindinput="onUsernameInput" /></view>
+       
       </view>
+      <view><text class="error-tip" wx:if="{{usernameError}}">{{usernameError}}</text></view>
       <view class="input-group">
         <text class="label">输入密码</text>
         <input password placeholder="请输入密码" bindinput="onPasswordInput" />
       </view>
+      <text class="error-tip" wx:if="{{password}}">{{passwordError}}</text>
       
       <!-- 年级选择器 -->
       <view class="input-group grade-picker-group">

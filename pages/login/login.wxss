@@ -162,6 +162,14 @@ input {
   background-color: #07C160;
   border-radius: 48rpx;
 }
+/* 错误提示文本的通用样式 */
+.error-tip {
+  display: block;       /* 让提示文本单独成行，垂直排列 */
+  margin-top: 6rpx;     /* 向下移动的距离，可根据设计调整（如 4rpx/8rpx/12rpx） */
+  /* margin-right: 32rpx; */
+  font-size: 24rpx;     /* 可选：调整字体大小 */
+  color: red;           /* 保持错误提示红色 */
+}
 
 .login-btn[disabled] {
   background-color: #e0e0e0;
