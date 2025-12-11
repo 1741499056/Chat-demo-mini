@@ -1,86 +1,128 @@
-<view class="container">
-  <!-- 顶部导航栏 -->
-  <view class="header">
-    <view class="back-btn" bindtap="goBack">
-      <!-- <image src="/icons/back.png" class="back-icon" /> -->
+<view class="main-container">
+
+<movable-area class="movable-area">
+  <movable-view class="movable-btn" x="{{controlX}}" y="{{controlY}}" direction="all" inertia="true">
+    <view class="control-wrapper {{isMenuOpen ? 'expanded' : ''}}" bindtap="toggleMenu">
+      <view class="control-icon" wx:if="{{!isMenuOpen}}">
+        <text class="icon-text">导航</text>
+      </view>
+      <view class="control-menu" wx:else>
+        <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-original">原文</view>
+        <view class="menu-divider">|</view>
+        <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-annotation">注释</view>
+        <view class="menu-divider">|</view>
+        <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-appreciation">赏析</view>
+        <view class="menu-close" catchtap="toggleMenu">×</view>
+      </view>
     </view>
-    <view class="title-container">
-      <view class="title">{{poemData.name}}</view>
+  </movable-view>
+</movable-area>
+
+<view class="back-to-origin-btn {{showBackBtn ? 'show' : ''}}" bindtap="goBackToText">
+  <text class="back-icon">↑</text>
+  <text class="back-text">回文</text>
+</view>
+
+<scroll-view 
+  class="scroll-content" 
+  scroll-y="true" 
+  scroll-into-view="{{toView}}" 
+  scroll-with-animation="true"
+  enable-back-to-top="true"
+  bindscroll="handleScroll"
+>
+  <view class="nav-placeholder"></view>
+
+  <view class="title-section">
+    <view class="poem-title">{{poemData.name}}</view>
+    <view class="recite-btn" bindtap="startRecitePractice"><text>背诵</text></view>
+  </view>
+  <view class="author-section">
+    <view class="dynasty-badge">{{poemData.dynasty}}</view>
+    <view class="author-name">{{poemData.author}}</view>
+  </view>
+
+  <view class="card-section" id="anchor-original">
+    <view class="card-header">
+      <view class="card-title">原文</view>
+      <view class="tools-row">
+        <view class="tool-toggle {{showAnnotations ? 'active' : ''}}" bindtap="toggleAnnotations">
+          <view class="toggle-icon"></view><text>注标</text>
+        </view>
+      </view>
     </view>
+
+    <view class="poem-body">
+      <block wx:for="{{renderLines}}" wx:key="index">
+        <view wx:if="{{item.isSpacer}}" class="paragraph-spacer"></view>
+
+        <view wx:else class="poem-line-wrapper">
+          <view class="origin-line">
+            <block wx:for="{{item.segments}}" wx:for-item="seg" wx:for-index="segIdx" wx:key="segIdx">
+              <view class="segment-container" id="text-seg-{{index}}-{{segIdx}}">
+                <text wx:if="{{!seg.isNote}}" class="char-text">{{seg.text}}</text>
+                
+                <view wx:else 
+                      class="note-segment-wrapper {{showAnnotations ? 'highlight-wrapper' : ''}}"
+                      catchtap="{{showAnnotations ? 'handleNoteClick' : ''}}" 
+                      data-noteid="{{seg.noteId}}"
+                      data-originid="text-seg-{{index}}-{{segIdx}}">
+                  <text class="char-text">{{seg.text}}</text>
+                  <view wx:if="{{showAnnotations}}" class="sup-badge">{{seg.noteId + 1}}</view>
+                </view>
+              </view>
+            </block>
+          </view>
+
+          <view class="trans-text" wx:if="{{showTranslation && item.translation}}">
+            {{item.translation}}
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="card-footer-btn" bindtap="toggleTranslation">
+      <text>{{showTranslation ? '隐藏译文' : '查看译文'}}</text>
+    </view>
+  </view>
+
+  <view class="card-section" id="anchor-annotation" wx:if="{{finalAnnotations.length > 0}}">
+    <view class="card-header"><view class="card-title">字词注释</view></view>
+    <view class="annotation-list">
+      <block wx:for="{{finalAnnotations}}" wx:key="index">
+        <view class="annotation-row {{activeNoteIndex === index ? 'active-highlight' : ''}}" 
+              id="note-item-{{index}}">
+          <view class="anno-num">{{index + 1}}</view>
+          <view class="anno-content">
+            <text selectable="true">{{item}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="card-section" id="anchor-appreciation" wx:if="{{poemData.appreciation}}">
+    <view class="card-header"><view class="card-title">赏析</view></view>
+    <view class="text-content"><text selectable="true">{{poemData.appreciation}}</text></view>
   </view>
   
-  <!-- 新增：固定位置的背诵按钮 -->
-  <view class="recite-btn-fixed" bindtap="startRecitePractice">
-    <text>背诵练习</text>
+  <view class="card-section" wx:if="{{poemData.peopleAppreciation}}">
+    <view class="card-header"><view class="card-title">网友评价</view></view>
+    <view class="text-content"><text selectable="true">{{poemData.peopleAppreciation}}</text></view>
   </view>
 
-  <!-- 作者信息 -->
-  <view class="author-info">
-    <text class="dynasty">{{poemData.dynasty}}</text>
-    <text class="author">{{poemData.author}}</text>
+  <view class="card-section" wx:if="{{relatedPoems.length > 0}}">
+    <view class="card-header"><view class="card-title">相关推荐</view></view>
+    <view class="related-list">
+      <block wx:for="{{relatedPoems}}" wx:key="id">
+        <view class="related-item" bindtap="navigateToRelated" data-id="{{item.id}}">
+          <text class="rel-name">{{item.name}}</text>
+          <text class="rel-author">{{item.dynasty}} · {{item.author}}</text>
+        </view>
+      </block>
+    </view>
   </view>
 
-  <!-- 内容区域 -->
-  <scroll-view class="content-scroll" scroll-y="true">
-    <!-- 原文 -->
-    <view class="section">
-      <view class="section-title">原文</view>
-      <view class="section-content original-content">
-        <text>{{poemData.originalContent}}</text>
-      </view>
-    </view>
-
-    <!-- 译文 -->
-    <view class="section" wx:if="{{poemData.modernContent}}">
-      <view class="section-title">译文</view>
-      <view class="section-content">
-        <text>{{poemData.modernContent}}</text>
-      </view>
-    </view>
-
-    <!-- 注释 -->
-    <view class="section" wx:if="{{poemData.annotation}}">
-      <view class="section-title">注释</view>
-      <view class="section-content">
-        <text>{{poemData.annotation}}</text>
-      </view>
-    </view>
-
-    <!-- 赏析 -->
-    <view class="section" wx:if="{{poemData.appreciation}}">
-      <view class="section-title">赏析</view>
-      <view class="section-content">
-        <text>{{poemData.appreciation}}</text>
-      </view>
-    </view>
-
-    <!-- 创作背景 -->
-    <view class="section" wx:if="{{poemData.background}}">
-      <view class="section-title">创作背景</view>
-      <view class="section-content">
-        <text>{{poemData.background}}</text>
-      </view>
-    </view>
-
-    <!-- 网友评价 -->
-    <view class="section" wx:if="{{poemData.peopleAppreciation}}">
-      <view class="section-title">网友评价</view>
-      <view class="section-content">
-        <text>{{poemData.peopleAppreciation}}</text>
-      </view>
-    </view>
-
-    <!-- 相关古诗 -->
-    <view class="section" wx:if="{{relatedPoems.length > 0}}">
-      <view class="section-title">相关古诗</view>
-      <view class="related-poems">
-        <block wx:for="{{relatedPoems}}" wx:key="id">
-          <view class="related-poem" bindtap="navigateToRelated" data-id="{{item.id}}">
-            <text class="related-title">{{item.name}}</text>
-            <text class="related-author">{{item.dynasty}}·{{item.author}}</text>
-          </view>
-        </block>
-      </view>
-    </view>
-  </scroll-view>
+  <view style="height: 120rpx;"></view>
+</scroll-view>
 </view>

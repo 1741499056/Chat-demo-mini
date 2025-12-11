@@ -4,7 +4,7 @@
   /* height: 150vh; */
   background-color: #fff;
   position: relative;
-  padding-top: 160rpx;
+  padding-top: calc(160rpx + env(safe-area-inset-top));
   /* position:hidden; */
   
 }
@@ -27,6 +27,7 @@
   /* 有padding就得设置box-sizing 不然会被撑大 */
   box-sizing: border-box;
 }
+
 
 .tabbar-item {
   font-size: 38rpx;
