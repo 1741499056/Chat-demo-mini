@@ -34,7 +34,9 @@
     "pages/AI_assistant/AI_assistant",
     "pages/poetry_library/poetry_library",
     "pages/my/my",
-    "pages/breakingReport/breakingReport"
+    "pages/breakingReport/breakingReport",
+    "pages/gaokaoList/gaokaoList",
+    "pages/gaokaoQuestions/gaokaoQuestions"
   ],
   "window": {
     "navigationBarTextStyle": "black",
