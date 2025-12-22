@@ -36,7 +36,8 @@
     "pages/my/my",
     "pages/breakingReport/breakingReport",
     "pages/gaokaoList/gaokaoList",
-    "pages/gaokaoQuestions/gaokaoQuestions"
+    "pages/gaokaoQuestions/gaokaoQuestions",
+    "pages/tbQuestion/tbQuestion"
   ],
   "window": {
     "navigationBarTextStyle": "black",

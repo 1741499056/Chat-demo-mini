@@ -67,6 +67,12 @@ Component({
         text: '高考真题',
         url: '/pages/gaokaoList/gaokaoList',
         isTabBar: false
+      },
+      {
+        icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/%E8%AF%BE%E5%86%85%E7%9C%9F%E9%A2%98.jpg',
+        text: '课内真题',
+        url: '/pages/tbQuestion/tbQuestion',
+        isTabBar: false
       }
     ],
     functionPages: [], 
