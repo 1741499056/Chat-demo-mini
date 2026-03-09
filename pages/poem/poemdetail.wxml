@@ -1,5 +1,7 @@
+<!-- pages/poem/detail/index.wxml -->
 <view class="main-container">
 
+<!-- 1. 悬浮导航球 -->
 <movable-area class="movable-area">
   <movable-view class="movable-btn" x="{{controlX}}" y="{{controlY}}" direction="all" inertia="true">
     <view class="control-wrapper {{isMenuOpen ? 'expanded' : ''}}" bindtap="toggleMenu">
@@ -8,6 +10,8 @@
       </view>
       <view class="control-menu" wx:else>
         <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-original">原文</view>
+        <view class="menu-divider">|</view>
+        <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-translation">译文</view>
         <view class="menu-divider">|</view>
         <view class="menu-item" catchtap="scrollToTarget" data-id="anchor-annotation">注释</view>
         <view class="menu-divider">|</view>
@@ -18,34 +22,42 @@
   </movable-view>
 </movable-area>
 
-<view class="back-to-origin-btn {{showBackBtn ? 'show' : ''}}" bindtap="goBackToText">
-  <text class="back-icon">↑</text>
-  <text class="back-text">回文</text>
+<!-- 2. AI 智能浮窗按钮  -->
+<view class="ai-tip-toast {{showAiTipToast ? 'show' : ''}}">
+  <text>💡 已开启精准翻译：滑动选中文字即可 AI 翻译</text>
+</view>
+<view class="ai-float-btn {{showAiBtn ? 'visible' : ''}}" catchtap="onAiAsk">
+  <view class="ai-btn-inner">
+    <text class="ai-emoji">✨</text>
+    <text class="ai-tip">AI 解读选中文字</text>
+  </view>
 </view>
 
+<!-- 3. 主内容滚动区 -->
 <scroll-view 
   class="scroll-content" 
   scroll-y="true" 
   scroll-into-view="{{toView}}" 
   scroll-with-animation="true"
-  enable-back-to-top="true"
-  bindscroll="handleScroll"
 >
   <view class="nav-placeholder"></view>
-
+  <!-- 背诵跳转 -->
+  <view class="recite" bindtap="toRecite">背诵</view>
+  <!-- 标题 -->
   <view class="title-section">
     <view class="poem-title">{{poemData.name}}</view>
-    <view class="recite-btn" bindtap="startRecitePractice"><text>背诵</text></view>
   </view>
   <view class="author-section">
     <view class="dynasty-badge">{{poemData.dynasty}}</view>
     <view class="author-name">{{poemData.author}}</view>
   </view>
 
+  <!-- === 原文卡片 (核心区域) === -->
   <view class="card-section" id="anchor-original">
     <view class="card-header">
       <view class="card-title">原文</view>
       <view class="tools-row">
+        <!-- 模式切换开关 -->
         <view class="tool-toggle {{showAnnotations ? 'active' : ''}}" bindtap="toggleAnnotations">
           <view class="toggle-icon"></view><text>注标</text>
         </view>
@@ -53,39 +65,61 @@
     </view>
 
     <view class="poem-body">
-      <block wx:for="{{renderLines}}" wx:key="index">
-        <view wx:if="{{item.isSpacer}}" class="paragraph-spacer"></view>
-
-        <view wx:else class="poem-line-wrapper">
-          <view class="origin-line">
-            <block wx:for="{{item.segments}}" wx:for-item="seg" wx:for-index="segIdx" wx:key="segIdx">
-              <view class="segment-container" id="text-seg-{{index}}-{{segIdx}}">
-                <text wx:if="{{!seg.isNote}}" class="char-text">{{seg.text}}</text>
-                
-                <view wx:else 
-                      class="note-segment-wrapper {{showAnnotations ? 'highlight-wrapper' : ''}}"
-                      catchtap="{{showAnnotations ? 'handleNoteClick' : ''}}" 
-                      data-noteid="{{seg.noteId}}"
-                      data-originid="text-seg-{{index}}-{{segIdx}}">
-                  <text class="char-text">{{seg.text}}</text>
-                  <view wx:if="{{showAnnotations}}" class="sup-badge">{{seg.noteId + 1}}</view>
+      
+      <!-- 模式A: 注标模式 (点击高亮跳转) -->
+      <block wx:if="{{showAnnotations}}">
+        <block wx:for="{{renderLines}}" wx:key="index">
+          <view wx:if="{{item.isSpacer}}" class="paragraph-spacer"></view>
+          <view wx:else class="poem-line-wrapper">
+            <view class="origin-line">
+              <block wx:for="{{item.segments}}" wx:for-item="seg" wx:key="segIdx">
+                <view class="segment-container">
+                  <text wx:if="{{!seg.isNote}}" class="char-text">{{seg.text}}</text>
+                  <view wx:else 
+                        class="note-segment-wrapper highlight-wrapper"
+                        catchtap="handleNoteClick" 
+                        data-noteid="{{seg.noteId}}">
+                    <text class="char-text">{{seg.text}}</text>
+                    <view class="sup-badge">{{seg.noteId + 1}}</view>
+                  </view>
                 </view>
-              </view>
-            </block>
+              </block>
+            </view>
           </view>
-
-          <view class="trans-text" wx:if="{{showTranslation && item.translation}}">
-            {{item.translation}}
-          </view>
-        </view>
+        </block>
       </block>
-    </view>
 
-    <view class="card-footer-btn" bindtap="toggleTranslation">
-      <text>{{showTranslation ? '隐藏译文' : '查看译文'}}</text>
+      <!-- 模式B: 选读模式 (Editor 组件) -->
+      <block wx:else>
+        <!-- [关键修复]：catchtouchend 监听手指离开，主动查询选区 -->
+        <view class="editor-wrapper" catchtouchend="onEditorTouchEnd">
+          <editor id="poemEditor" 
+                  class="ql-editor-view"
+                  read-only="true"
+                  bindready="onEditorReady"
+                  bindstatuschange="onEditorStatusChange">
+          </editor>
+        </view>
+        <view class="hint-text">💡 提示：手指滑动选中文字，即可唤起AI解读</view>
+      </block>
+
     </view>
   </view>
 
+  <!-- 译文卡片 -->
+  <view class="card-section" id="anchor-translation">
+    <view class="card-header"><view class="card-title">译文</view></view>
+    <view class="text-content">
+      <block wx:if="{{poemData.modernContentArray.length > 0}}">
+        <view wx:for="{{poemData.modernContentArray}}" wx:key="index" class="para-item">
+          <text selectable="true">{{item}}</text>
+        </view>
+      </block>
+      <text wx:else class="no-data-text">暂无译文</text>
+    </view>
+  </view>
+
+  <!-- 注释卡片 -->
   <view class="card-section" id="anchor-annotation" wx:if="{{finalAnnotations.length > 0}}">
     <view class="card-header"><view class="card-title">字词注释</view></view>
     <view class="annotation-list">
@@ -101,28 +135,34 @@
     </view>
   </view>
 
+  <!-- 赏析卡片 -->
   <view class="card-section" id="anchor-appreciation" wx:if="{{poemData.appreciation}}">
     <view class="card-header"><view class="card-title">赏析</view></view>
-    <view class="text-content"><text selectable="true">{{poemData.appreciation}}</text></view>
-  </view>
-  
-  <view class="card-section" wx:if="{{poemData.peopleAppreciation}}">
-    <view class="card-header"><view class="card-title">网友评价</view></view>
-    <view class="text-content"><text selectable="true">{{poemData.peopleAppreciation}}</text></view>
-  </view>
-
-  <view class="card-section" wx:if="{{relatedPoems.length > 0}}">
-    <view class="card-header"><view class="card-title">相关推荐</view></view>
-    <view class="related-list">
-      <block wx:for="{{relatedPoems}}" wx:key="id">
-        <view class="related-item" bindtap="navigateToRelated" data-id="{{item.id}}">
-          <text class="rel-name">{{item.name}}</text>
-          <text class="rel-author">{{item.dynasty}} · {{item.author}}</text>
-        </view>
-      </block>
+    <view class="text-content">
+      <view wx:for="{{poemData.appreciationArray}}" wx:key="index" class="para-item">
+        <text selectable="true">{{item}}</text>
+      </view>
     </view>
   </view>
-
+  
   <view style="height: 120rpx;"></view>
 </scroll-view>
+
+<!-- AI 结果弹窗 (Modal) -->
+<view class="ai-modal-mask" wx:if="{{showAiModal}}" bindtap="closeAiModal" id="">
+  <view class="ai-modal-content" catchtap="true">
+    <view class="ai-modal-header">
+      <text class="ai-modal-title">✨ AI 深度解析</text>
+      <view class="ai-modal-close" bindtap="closeAiModal">×</view>
+    </view>
+    <scroll-view scroll-y="true" class="ai-modal-body">
+      <view class="selected-quote">“{{selectionText}}”</view>
+      <text class="ai-result-text" selectable="true">{{aiResult}}</text>
+      <view wx:if="{{aiLoading}}" class="loading-dots">
+        <text>正在思考中...</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
 </view>
