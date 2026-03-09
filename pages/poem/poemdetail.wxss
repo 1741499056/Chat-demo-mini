@@ -94,34 +94,77 @@ page {
   opacity: 0.8;
 }
 
-/* ================== 回到原文按钮 (Footer Action) ================== */
-.back-to-origin-btn {
+/* ================== AI 智能浮窗按钮 ================== */
+/* 提示小窗口样式 */
+.ai-tip-toast {
   position: fixed;
-  bottom: 80rpx;
-  right: -120rpx; /* 默认隐藏在屏幕外 */
-  background: rgba(58, 123, 213, 0.9);
-  color: #fff;
-  padding: 16rpx 24rpx;
-  border-radius: 40rpx 0 0 40rpx;
+  bottom: 300rpx; 
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  padding: 16rpx 32rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  z-index: 1;
+  pointer-events: none; 
+  opacity: 0;
+  transition: all 0.3s ease;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
-  z-index: 998;
+  white-space: nowrap;
+}
+
+/* 显示状态 */
+.ai-tip-toast.show {
+  opacity: 1;
+  bottom: 320rpx; /* 向上微微浮动的效果 */
+}
+.ai-float-btn {
+  position: fixed;
+  bottom: 160rpx;
+  left: 50%;
+  transform: translateX(-50%) translateY(100rpx) scale(0.9);
+  opacity: 0;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.ai-float-btn.visible {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ai-btn-inner {
+  background: #2c3e50;
+  color: #fff;
+  padding: 20rpx 40rpx;
+  border-radius: 60rpx;
+  box-shadow: 0 10rpx 30rpx rgba(44, 62, 80, 0.3);
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  transition: right 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  font-size: 26rpx;
+  gap: 16rpx;
 }
 
-.back-to-origin-btn.show {
-  right: 0;
+.ai-emoji {
+  font-size: 36rpx;
+  animation: pulse 2s infinite;
 }
 
-.back-icon {
-  font-weight: bold;
+.ai-tip {
   font-size: 30rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
 }
 
-/* ================== 顶部标题区 (Header) ================== */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ================== 标题与作者区 ================== */
 .scroll-content {
   flex: 1;
   height: 0;
@@ -144,21 +187,6 @@ page {
   color: #2c3e50;
   display: inline-block;
   max-width: 90%;
-}
-
-.recite-btn {
-  position: absolute;
-  top: 50%;
-  right: 10rpx;
-  transform: translateY(-50%);
-  background: #3a7bd5;
-  color: #fff;
-  padding: 12rpx 30rpx;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-  box-shadow: 0 4rpx 10rpx rgba(58, 123, 213, 0.4);
-  z-index: 10;
 }
 
 .author-section {
@@ -184,7 +212,7 @@ page {
   letter-spacing: 2rpx;
 }
 
-/* ================== 通用卡片容器 (Card) ================== */
+/* ================== 卡片组件通用样式 ================== */
 .card-section {
   background: #fff;
   border-radius: 24rpx;
@@ -199,7 +227,9 @@ page {
   align-items: center;
   margin-bottom: 24rpx;
   padding-bottom: 16rpx;
-  border-bottom: 1rpx dashed #eee;
+  border-bottom: 1rpx;
+  border-bottom-style: dashed;
+  border-bottom-color: #eee;
 }
 
 .card-title {
@@ -222,7 +252,7 @@ page {
   border-radius: 4rpx;
 }
 
-/* 工具栏开关 */
+/* 工具栏与开关 */
 .tools-row {
   display: flex;
   gap: 20rpx;
@@ -257,15 +287,10 @@ page {
   border-color: #3a7bd5;
 }
 
-/* ================== 核心：古文排版 (Poem Body) ================== */
+/* ================== 诗词原文正文 ================== */
 .poem-body {
   display: flex;
   flex-direction: column;
-}
-
-.paragraph-spacer {
-  height: 0;
-  margin-bottom: 50rpx;
 }
 
 .poem-line-wrapper {
@@ -273,7 +298,6 @@ page {
   text-align: justify;
 }
 
-/* 原文行 */
 .origin-line {
   display: block;
   font-size: 42rpx;
@@ -284,7 +308,11 @@ page {
   font-weight: 500;
 }
 
-/* 注释高亮逻辑 */
+/* 原文段落首行缩进 */
+.is-first-paragraph {
+  padding-left: 2em;
+}
+
 .segment-container {
   display: inline;
 }
@@ -315,38 +343,65 @@ page {
   min-width: 26rpx;
   height: 26rpx;
   border-radius: 13rpx;
-  text-align: center;
   transform: scale(0.85);
 }
 
-/* 译文样式 */
-.trans-text {
-  display: block;
-  margin-top: 8rpx;
-  font-size: 26rpx;
-  color: #7f8c8d;
-  text-align: justify;
-  line-height: 1.5;
-  padding-left: 2rpx;
+/* Editor 选读视图样式 */
+.editor-wrapper {
+  width: 100%;
+  min-height: 200rpx;
 }
 
-.card-footer-btn {
-  margin-top: 20rpx;
-  padding: 20rpx 0;
+.ql-editor-view {
+  width: 100%;
+  height: auto;
+  font-family: "STKaiti", "KaiTi", serif;
+  font-size: 42rpx;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+.hint-text {
+  font-size: 24rpx;
+  color: #999;
   text-align: center;
-  background-color: #f9fbfd;
+  margin-top: 30rpx;
+  background: #f8f8f8;
+  padding: 12rpx;
   border-radius: 12rpx;
-  color: #3a7bd5;
+}
+
+/* ================== 译文与赏析段落 ================== */
+.text-content {
+  font-size: 32rpx;
+  color: #444;
+  line-height: 1.8;
+  text-align: justify;
+  padding: 10rpx 0;
+}
+
+/* 每一段译文/赏析的样式 */
+.para-item {
+  text-indent: 2em;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+/* 最后一个段落不需要下边距 */
+.para-item:last-child {
+  margin-bottom: 0;
+}
+
+.no-data-text {
+  color: #999;
   font-size: 28rpx;
-  font-weight: 500;
-  border: 1rpx solid #eef2f8;
+  text-align: center;
+  display: block;
+  width: 100%;
+  padding: 20rpx 0;
 }
 
-.card-footer-btn:active {
-  background-color: #eef5fc;
-}
-
-/* ================== 注释列表区 (Annotations) ================== */
+/* ================== 注释列表 ================== */
 .annotation-list {
   display: flex;
   flex-direction: column;
@@ -392,39 +447,105 @@ page {
   word-break: break-all;
 }
 
-/* ================== 其他文本内容 (赏析等) ================== */
-.text-content {
-  font-size: 30rpx;
-  color: #444;
-  line-height: 1.8;
-  text-align: justify;
-  text-indent: 2em;
+/* ================== AI 弹窗样式 ================== */
+.ai-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
 }
 
-/* ================== 相关推荐列表 ================== */
-.related-list {
+.ai-modal-content {
+  width: 85%;
+  max-height: 70vh;
+  background: #fff;
+  border-radius: 24rpx;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+  animation: modalPop 0.3s ease-out;
 }
 
-.related-item {
-  padding: 24rpx;
-  background: #fcfcfc;
-  border: 1rpx solid #f0f0f0;
-  border-radius: 12rpx;
-  margin-bottom: 20rpx;
+@keyframes modalPop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.ai-modal-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #f9fbfd;
 }
 
-.rel-name {
-  font-size: 30rpx;
-  color: #333;
-  font-weight: 500;
+.ai-modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
-.rel-author {
-  font-size: 24rpx;
+.ai-modal-close {
+  font-size: 44rpx;
   color: #999;
+  line-height: 1;
+  padding: 0 10rpx;
 }
+
+.ai-modal-body {
+  padding: 30rpx;
+  min-height: 200rpx;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.selected-quote {
+  font-size: 30rpx;
+  color: #3a7bd5;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  padding: 20rpx;
+  border-left: 8rpx solid #3a7bd5;
+  background: #f0f7ff;
+  border-radius: 8rpx;
+  font-family: "STKaiti", serif;
+}
+
+.ai-result-text {
+  font-size: 32rpx;
+  color: #333;
+  line-height: 1.7;
+  text-align: justify;
+  white-space: pre-wrap; /* 允许 AI 返回的内容识别换行符 */
+}
+
+.loading-dots {
+  padding: 20rpx 0;
+  color: #999;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.recite {
+  position: absolute;
+  top: 5rpx;
+  right:0rpx;
+  z-index: 2;
+  height: 80rpx;
+  width: 80rpx;
+  text-align: center;
+  line-height: 80rpx;
+  background: rgba(44, 109, 204, 0.9);
+  border-radius: 50%;
+  color: #fff;
+}
+
