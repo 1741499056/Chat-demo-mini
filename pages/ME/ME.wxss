@@ -1,0 +1,353 @@
+/* 全局样式 - 淡蓝色背景 */
+page {
+  background: linear-gradient(to bottom, #f0f8ff, #e6f2ff);
+  min-height: 100vh;
+}
+
+/* 页面容器 */
+.container {
+  padding: 20rpx; /* 恢复内边距，作为整体边距 */
+}
+
+/* 统一卡片样式 - 带淡蓝色渐变 */
+.content-card {
+  width: 100%;
+  background: linear-gradient(135deg, #e6f2ff, #f0f8ff);
+  border-radius: 20rpx; /* 移除圆角 */
+  margin-bottom: 30rpx; /* 移除底部间距 */
+  box-shadow: none; /* 移除阴影 */
+  border: 1rpx solid rgba(0, 114, 255, 0.1); /* 统一边框 */
+}
+
+/* 用户信息区域 */
+.user-card {
+  display: flex;
+  align-items: flex-start;
+  padding: 40rpx 32rpx;
+  background: linear-gradient(135deg, #e6f7ff, #f0faff);
+  position: relative;
+  min-height: 240rpx;
+  border-left: 1rpx solid rgba(0, 114, 255, 0.1);
+  border-right: 1rpx solid rgba(0, 114, 255, 0.1);
+  border-bottom: 1rpx solid rgba(0, 114, 255, 0.1);
+  border-top: none;
+  padding-top: 20rpx;
+  margin: 0 20rpx; /* 只设置左右边距为20rpx */
+  box-sizing: border-box; /* 确保边框和内边距包含在元素总宽度内 */
+}
+
+/* 头像区域 */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20rpx;
+}
+
+.user-avatar {
+  width: 190rpx;
+  height: 190rpx;
+  border-radius: 50%;
+  border: 8rpx solid rgba(255,255,255,0.8);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 年级信息区域 */
+.grade-info {
+  margin-top: 15rpx;
+  text-align: center;
+}
+
+.current-grade {
+  font-size: 24rpx;
+  color: #666;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+  max-width: 180rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-detail {
+  flex: 1;
+  margin-top: 20rpx; /* 增加上边距使整体下移 */
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 15rpx; /* 保持原有间距 */
+  margin-top: 0; /* 重置上边距 */
+}
+
+.user-desc {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-top: 0; /* 重置上边距 */
+}
+
+/* 按钮组样式 */
+.button-group {
+  position: absolute;
+  right: 32rpx;
+  bottom: 29rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10rpx;
+}
+
+/* 设置年级按钮样式 */
+.grade-setting-btn {
+  width: 160rpx;
+  height: 64rpx;
+  line-height: 40rpx;
+  font-size: 26rpx;
+  color: #1989fa;
+  background-color: rgba(25, 137, 250, 0.1);
+  border-radius: 32rpx;
+  border: none;
+}
+
+.bg-setting-btn {
+  width: 160rpx;
+  height: 64rpx;
+  line-height: 40rpx;
+  font-size: 26rpx;
+  color: #07c160;
+  background-color: rgba(7, 193, 96, 0.1);
+  border-radius: 32rpx;
+  border: none;
+}
+
+/* 登录按钮样式 */
+.login-btn {
+  width: 160rpx;
+  height: 64rpx;
+  line-height: 40rpx;
+  font-size: 26rpx;
+  color: #ffffff;
+  background-color: #07c160;
+  border-radius: 32rpx;
+  border: none;
+  position: absolute;
+  right: 32rpx;
+  bottom: 29rpx;
+}
+
+/* 选项卡卡片 - 强化渐变效果 */
+.tabs-card {
+  background: linear-gradient(135deg, #e6f2ff, #d9ecff);
+  border-top: 1rpx solid rgba(0, 114, 255, 0.1); /* 添加上边框 */
+  border-bottom: 1rpx solid rgba(0, 114, 255, 0.1); /* 添加下边框 */
+  margin-top: 30rpx;
+}
+
+.nav-tabs {
+  display: flex;
+  width: 100%;
+}
+
+.nav-tab {
+  flex: 1;
+  text-align: center;
+  padding: 28rpx 0;
+  font-size: 30rpx;
+  color: #666;
+  position: relative;
+  background-color: transparent;
+}
+
+.nav-tab.active {
+  color: #07c160;
+  font-weight: 500;
+}
+
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80rpx;
+  height: 6rpx;
+  background-color: #07c160;
+  border-radius: 3rpx;
+}
+
+/* 功能列表卡片 */
+.list-card {
+  background: linear-gradient(135deg, #e6f7ff, #f0faff);
+  border-bottom: none; /* 移除底部边框 */
+}
+
+.nav-list {
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid rgba(0, 114, 255, 0.1);
+  background-color: rgba(255,255,255,0.6);
+}
+
+.nav-item:last-child {
+  border-bottom: none;
+}
+
+.nav-icon {
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 24rpx;
+}
+
+.nav-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.nav-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.5;
+}
+
+.logout-btn {
+  margin-top: 20rpx; /* 减少上边距，使按钮上移 */
+  padding: 30rpx 0;
+  text-align: center;
+  /* 移除原有的红色边框，或者改为更淡的红色边框 */
+  border: 1rpx solid #ff0000; /* 淡红色边框，可根据需要调整 */
+  background-color: #e6f2ff; /* 淡红色背景 */
+  color: #ff0000;
+  font-size: 34rpx;
+  border-radius: 10rpx; 
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1); /* 将阴影颜色改为更中性的黑色，但透明度很低，这样不会太突兀 */
+  margin-left: 20rpx; 
+  margin-right: 20rpx;
+  width: calc(100% - 450rpx);
+}
+/* 禁用状态的退出按钮样式 */
+.logout-btn-disabled {
+  background-color: #f0f0f0 !important;
+  color: #999 !important;
+  border: 1rpx solid #e0e0e0 !important;
+  cursor: not-allowed;
+}
+
+/* 年级选择弹窗样式 */
+.grade-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+.grade-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.grade-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.grade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.grade-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.grade-close {
+  font-size: 40rpx;
+  color: #999;
+  padding: 10rpx;
+}
+
+.grade-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20rpx 0;
+}
+
+.grade-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 32rpx;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+
+.grade-item.active {
+  background-color: #f0f8ff;
+  color: #1989fa;
+}
+
+.grade-name {
+  font-size: 30rpx;
+}
+
+.grade-check {
+  color: #1989fa;
+  font-weight: bold;
+}
+
+.grade-actions {
+  display: flex;
+  padding: 20rpx 32rpx;
+  gap: 20rpx;
+  flex-shrink: 0;
+}
+
+.grade-cancel, .grade-confirm {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  border: none;
+}
+
+.grade-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.grade-confirm {
+  background: #1989fa;
+  color: #fff;
+}

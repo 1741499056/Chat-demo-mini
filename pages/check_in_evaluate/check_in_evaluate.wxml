@@ -1,0 +1,109 @@
+<view class="page-bg">
+  <image class="bg-img" src="/icons/check_in_bg.jpg" mode="aspectFill"></image>
+</view>
+
+<scroll-view class="scroller" scroll-y="true">
+  <view class="content-wrapper">
+    <view class="card header-card">
+      <view class="poem-info">
+        <text class="p-label">当前背诵</text>
+        <text class="p-name">《{{poemTitle || '未选择古诗'}}》</text>
+      </view>
+      <view class="p-tips">需达到 80 分方可完成打卡</view>
+    </view>
+
+    <view class="card record-main" wx:if="{{!hasResults}}">
+      <view class="timer {{isRecording ? 'active' : ''}}">
+        {{isRecording ? formatTime(recordingTime) : (audioFilePath ? '录音已就绪' : '等待录音')}}
+      </view>
+      
+      <view class="wave-box" style="justify-content: center; align-items: center;">
+         <text style="color: #999;" wx:if="{{!isRecording && !audioFilePath}}">准备好了请点击下方麦克风</text>
+         <text style="color: #07c160;" wx:if="{{isRecording}}">正在捕捉您的声音...</text>
+         <text style="color: #1890ff;" wx:if="{{audioFilePath && !isRecording}}">声音已录制完毕</text>
+      </view>
+
+      <view class="ctrl-area">
+        <view class="side-tool {{(!audioFilePath || isRecording) ? 'disabled' : ''}}" bindtap="playRecording">
+        <view class="tool-icon"><image src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/%E8%AF%95%E5%90%AC.png" mode="aspectFit"/></view>
+          <text>试听</text>
+        </view>
+
+        <view class="mic-btn {{isRecording ? 'recording' : ''}}" bindtap="{{isRecording ? 'stopRecording' : 'startRecording'}}">
+          <view class="mic-inner">
+            <view wx:if="{{!isRecording}}" class="mic-icon"><image src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/%E9%BA%A6%E5%85%8B%E9%A3%8E.png" mode="aspectFit"/></view>
+            <view wx:else class="stop-rect"></view>
+          </view>
+        </view>
+
+        <view class="side-tool {{(!audioFilePath || isRecording) ? 'disabled' : ''}}" bindtap="reUpload">
+          <view class="tool-icon"><image src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/%E9%87%8D%E5%BD%95.png" mode="aspectFit"/></view>
+          <text>重录</text>
+        </view>
+      </view>
+      
+      <view class="hint-text">
+        {{isRecording ? '正在倾听您的背诵...' : (audioFilePath ? '录音完成，请提交分析' : '点击麦克风开始录音')}}
+      </view>
+
+    <button class="submit-btn {{!audioFilePath ? 'btn-disabled' : ''}}" 
+              bindtap="uploadAndEvaluate" 
+              loading="{{loading}}" 
+              disabled="{{!audioFilePath || loading}}">
+        {{loading ? 'AI 老师阅卷中...' : '提交背诵测评'}}
+      </button> 
+    </view>
+
+    <view class="evaluation-container" wx:if="{{hasResults && !loading}}">
+      
+      <view class="card result-card">
+        <view class="score-circle">
+          <text class="score-num">{{overallScore}}</text>
+          <text class="score-unit">分</text>
+        </view>
+        <view class="result-status {{checkInSuccess ? 'pass' : 'fail'}}">
+          {{checkInSuccess ? '恭喜！今日打卡成功' : '挑战未通过，再试一次吧'}}
+        </view>
+        
+        <view class="detail-grid">
+          <view class="grid-item">
+            <text class="grid-val">{{detailedScores.content_completeness}}</text>
+            <text class="grid-lab">内容完整</text>
+          </view>
+          <view class="grid-item">
+            <text class="grid-val">{{detailedScores.structural_correctness}}</text>
+            <text class="grid-lab">结构正确</text>
+          </view>
+          <view class="grid-item">
+            <text class="grid-val">{{detailedScores.key_imagery_preservation}}</text>
+            <text class="grid-lab">意象保留</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card error-card" wx:if="{{majorErrors.length > 0}}">
+        <view class="card-title">❌ 纠错细节</view>
+        <view class="error-item" wx:for="{{majorErrors}}" wx:key="index">
+          <view class="error-tag {{item.severity === '严重' ? 'high' : ''}}">{{item.error_type}}</view>
+          <view class="error-info">
+            <view class="err-pos">位置：<text>{{item.position}}</text></view>
+            <view class="err-desc">应当为：<text>{{item.missing_content}}</text></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="card feedback-card">
+        <view class="card-title">✍️ AI 老师点评</view>
+        <view class="praise-text">{{feedback.praise}}</view>
+        <view class="suggestion-box">
+          <view class="suggestion-item" wx:for="{{feedback.suggestions}}" wx:key="index">
+            <text class="dot">·</text>
+            <text class="sug-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <button class="re-record-btn" bindtap="reUpload">重新背诵</button>
+    </view>
+  </view>
+</scroll-view>

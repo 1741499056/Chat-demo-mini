@@ -1,0 +1,57 @@
+{
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "projectname": "%25E7%2581%25B5%25E6%259F%25A9%25E8%25AF%2597%25E9%2589%25B4",
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": false,
+    "skylineRenderEnable": false,
+    "preloadBackgroundData": false,
+    "autoAudits": false,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "showShadowRootInWxmlPanel": true,
+    "useStaticServer": false,
+    "useLanDebug": false,
+    "showES6CompileOption": false,
+    "bigPackageSizeSupport": true,
+    "checkInvalidKey": true,
+    "ignoreDevUnusedFiles": true
+  },
+  "libVersion": "3.8.9",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/recite/recite",
+          "pathName": "pages/recite/recite",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "pages/check_in_evaluate/check_in_evaluate",
+          "pathName": "pages/check_in_evaluate/check_in_evaluate",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/check_in/check_in",
+          "pathName": "pages/check_in/check_in",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/poem/poemdetail",
+          "pathName": "pages/poem/poemdetail",
+          "query": "id=954",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

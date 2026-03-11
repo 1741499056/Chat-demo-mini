@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "答题记录",
+  "usingComponents": {},
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#e3f4fe",
+  "backgroundTextStyle":"light"
+  
+}

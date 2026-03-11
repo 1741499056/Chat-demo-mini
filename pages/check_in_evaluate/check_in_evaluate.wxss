@@ -1,0 +1,414 @@
+/* ==========================================================================
+   1. 页面背景与整体布局
+   ========================================================================== */
+
+   .page-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  .bg-img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .scroller {
+    height: 100vh;
+  }
+  
+  .content-wrapper {
+    padding: 40rpx 30rpx;
+  }
+  
+  /* ==========================================================================
+     2. 通用卡片组件
+     ========================================================================== */
+  
+  .card {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20rpx);
+    border-radius: 40rpx;
+    padding: 40rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 15rpx 40rpx rgba(27, 77, 62, 0.1);
+  }
+  
+  .card-title {
+    font-weight: bold;
+    font-size: 32rpx;
+    color: #1b4d3e;
+    margin-bottom: 20rpx;
+  }
+  
+  /* ==========================================================================
+     3. 顶部信息区域
+     ========================================================================== */
+  
+  .header-card {
+    text-align: center;
+    border-bottom: 6rpx solid #1b4d3e;
+  }
+  
+  .p-name {
+    display: block;
+    font-size: 44rpx;
+    font-weight: bold;
+    color: #1b4d3e;
+    margin-top: 10rpx;
+  }
+  
+  .p-tips {
+    font-size: 24rpx;
+    color: #888;
+    margin-top: 15rpx;
+  }
+  
+  /* ==========================================================================
+     4. 录音交互区域
+     ========================================================================== */
+  
+  .timer {
+    font-size: 60rpx;
+    font-weight: bold;
+    text-align: center;
+    color: #1b4d3e;
+    font-family: monospace;
+  }
+  
+  .wave-box {
+    height: 120rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rpx;
+    margin: 30rpx 0;
+  }
+  
+  .wave-item {
+    width: 8rpx;
+    background: #1b4d3e;
+    border-radius: 4rpx;
+    height: 20rpx;
+  }
+  
+  .wave-item.animating {
+    transition: height 0.2s;
+  }
+  
+  .ctrl-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 40rpx 0;
+  }
+  
+  /* 麦克风按钮 */
+  .mic-btn {
+    width: 180rpx;
+    height: 180rpx;
+    background: rgba(27, 77, 62, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mic-inner {
+    width: 130rpx;
+    height: 130rpx;
+    background: rgb(163, 186, 172);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10rpx 30rpx rgba(27, 77, 62, 0.3);
+  }
+  
+  .mic-icon {
+    width: 100rpx;
+    height: 100rpx;
+  }
+  .mic-icon image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .stop-rect {
+    width: 40rpx;
+    height: 40rpx;
+    background: white;
+    border-radius: 6rpx;
+  }
+  
+  /* 侧边工具按钮 */
+  .side-tool {
+    font-size: 24rpx;
+    color: #1b4d3e;
+    text-align: center;
+  }
+
+  
+  .side-tool.disabled {
+    opacity: 0.3;
+  }
+  
+  .tool-icon {
+    width: 84rpx;  
+    height: 84rpx;
+    margin-bottom: 8rpx;
+    display: block; 
+    margin: 0 auto 8rpx; 
+  }
+  .tool-icon image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .hint-text {
+    text-align: center;
+    font-size: 24rpx;
+    color: #999;
+    margin-bottom: 20rpx;
+  }
+  
+  /* ==========================================================================
+     5. 评分结果页面
+     ========================================================================== */
+  
+  .result-card {
+    transition: all 0.3s ease;
+  }
+  
+  .score-circle {
+    width: 200rpx;
+    height: 200rpx;
+    border: 10rpx solid #1b4d3e;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+  }
+  
+  .score-num {
+    font-size: 80rpx;
+    font-weight: bold;
+    color: #1b4d3e;
+    line-height: 1;
+  }
+  
+  .score-unit {
+    font-size: 24rpx;
+    color: #666;
+  }
+  
+  .result-status {
+    text-align: center;
+    margin-top: 20rpx;
+    font-weight: bold;
+    font-size: 32rpx;
+    padding: 10rpx 0;
+  }
+  
+  .result-status.pass {
+    color: #27ae60;
+  }
+  
+  .result-status.fail {
+    color: #e74c3c;
+  }
+  
+  /* 得分网格 */
+  .detail-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40rpx;
+    border-top: 1rpx solid #eee;
+    padding-top: 30rpx;
+  }
+  
+  .grid-item {
+    text-align: center;
+    flex: 1;
+  }
+  
+  .grid-val {
+    display: block;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #1b4d3e;
+  }
+  
+  .grid-lab {
+    font-size: 22rpx;
+    color: #888;
+  }
+  
+  /* ==========================================================================
+     6. 纠错与点评细节
+     ========================================================================== */
+  
+  /* 纠错部分 */
+  .error-card {
+    border-left: 10rpx solid #e74c3c;
+  }
+  
+  .error-item {
+    background: rgba(231, 76, 60, 0.05);
+    padding: 20rpx;
+    border-radius: 15rpx;
+    margin-bottom: 15rpx;
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+    border: 1rpx solid rgba(231, 76, 60, 0.1);
+  }
+  
+  .error-tag {
+    background: #e74c3c;
+    color: white;
+    font-size: 20rpx;
+    padding: 4rpx 12rpx;
+    border-radius: 8rpx;
+  }
+  
+  .error-tag.high {
+    background: #c0392b;
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  .error-info {
+    font-size: 24rpx;
+    flex: 1;
+  }
+  
+  .err-pos {
+    display: block;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .error-info .err-pos text,
+  .error-info .err-desc text {
+    color: #e74c3c;
+    font-weight: 500;
+    margin-left: 10rpx;
+  }
+  
+  /* AI 点评部分 */
+  .feedback-card {
+    border-left: 10rpx solid #1b4d3e;
+  }
+  
+  .praise-text {
+    color: #1b4d3e;
+    font-style: italic;
+    font-size: 28rpx;
+    line-height: 1.6;
+    background: rgba(27, 77, 62, 0.03);
+    padding: 20rpx;
+    border-radius: 15rpx;
+    position: relative;
+    display: block;
+    margin-bottom: 20rpx;
+  }
+  
+  .praise-text::before {
+    content: '"';
+    font-size: 60rpx;
+    color: rgba(27, 77, 62, 0.1);
+    position: absolute;
+    top: -10rpx;
+    left: 10rpx;
+  }
+  
+  .suggestion-box {
+    margin-top: 25rpx;
+  }
+  
+  .suggestion-item {
+    display: flex;
+    align-items: flex-start;
+    font-size: 26rpx;
+    color: #555;
+    margin-bottom: 10rpx;
+    line-height: 1.6;
+  }
+  
+  .dot {
+    color: #1b4d3e;
+    font-weight: bold;
+    margin-right: 10rpx;
+  }
+  
+  .sug-text {
+    flex: 1;
+  }
+  
+  /* ==========================================================================
+     7. 按钮状态与动画
+     ========================================================================== */
+  
+  .submit-btn {
+    background: #1b4d3e;
+    color: white;
+    border-radius: 50rpx;
+    font-weight: bold;
+    margin-top: 20rpx;
+    width: 100%;
+  }
+  
+  .submit-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  .btn-disabled {
+    background: #ccc !important;
+    color: #eee !important;
+  }
+  
+  .re-record-btn {
+    background: white;
+    color: #1b4d3e;
+    border: 2rpx solid #1b4d3e;
+    border-radius: 50rpx;
+    margin-top: 20rpx;
+  }
+  
+  .re-record-btn:active {
+    background: #f8f8f8;
+  }
+  
+  /* 录音呼吸动画 */
+  .recording .mic-inner {
+    animation: breathe 1.5s infinite;
+    background: #e74c3c;
+  }
+  
+  @keyframes breathe {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0rpx rgba(231, 76, 60, 0.4);
+    }
+    70% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 30rpx rgba(231, 76, 60, 0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* 错误抖动动画 */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5rpx); }
+    75% { transform: translateX(5rpx); }
+  }

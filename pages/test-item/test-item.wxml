@@ -1,0 +1,138 @@
+<view style="height: 100vh; display: flex; flex-direction: column;">
+  <!-- 顶部导航 -->
+  <view class="test-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>返回</text>
+    </view>
+    <text class="test-title">词语专项测试题</text>
+    <view style="width: 80rpx"></view>
+  </view>
+  
+  <!-- 题目区域 -->
+  <scroll-view scroll-y style="flex: 1; background-color: #f8f9fa;">
+    <view class="questions-section">
+      <view class="questions-header">
+        <view class="question-tabs">
+          <view 
+            class="question-tab {{activeTab === 'choice' ? 'active' : ''}}"
+            bindtap="switchTab" 
+            data-type="choice"
+          >
+            选择题
+          </view>
+          <view 
+            class="question-tab {{activeTab === 'blank' ? 'active' : ''}}"
+            bindtap="switchTab" 
+            data-type="blank"
+          >
+            填空题
+          </view>
+        </view>
+      </view>
+
+      <!-- 选择题 -->
+      <block wx:if="{{activeTab === 'choice'}}">
+        <view class="questions-container">
+          <block wx:for="{{questionDetail.choiceQuestionsList}}" wx:key="id">
+            <view class="question-card {{item.answered ? (item.isCorrect ? 'correct-card' : 'incorrect-card') : ''}}">
+              <!-- 题干区域 -->
+              <view class="question-content-card">
+                <text class="question-content">{{item.content}}</text>
+              </view>
+              
+              <!-- 选项部分 - 修改后 -->
+              <view class="options-container">
+                <block wx:for="{{item.options}}" wx:key="id" wx:for-item="option" wx:for-index="oIndex">
+                  <view 
+                    class="option-row" 
+                    bindtap="selectOption" 
+                    data-qindex="{{index}}" 
+                    data-oindex="{{oIndex}}"
+                  >
+                    <view class="option-circle">
+                      <text class="option-letter">{{optionLetters[oIndex]}}</text>
+                    </view>
+                    
+                    <!-- 结构化选项显示 -->
+                    <block wx:if="{{option.isStructured}}">
+                      <view class="option-structured">
+                        <text class="option-code">{{option.optionPart1}}</text>
+                        <text class="option-circles">{{option.optionPart2}}</text>
+                      </view>
+                    </block>
+                    
+                    <!-- 正常选项显示 -->
+                    <block wx:else>
+                      <text class="option-text">{{option.text}}</text>
+                    </block>
+                  </view>
+                </block>
+              </view>
+              
+              <!-- 答案反馈 -->
+              <view wx:if="{{item.answered}}" class="answer-feedback {{item.isCorrect ? 'feedback-correct' : 'feedback-incorrect'}}">
+                <text class="feedback-header">{{item.isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}</text>
+                <text>正确答案：{{optionLetters[item.answer]}}</text>
+                <text>解析：{{item.analysis}}</text>
+              </view>
+              
+              <button 
+                class="reset-btn"
+                bindtap="resetChoiceAnswer"
+                data-qindex="{{index}}"
+              >
+                重新答题
+              </button>
+            </view>
+          </block>
+        </view>
+      </block>
+      
+      <!-- 填空题 -->
+      <block wx:if="{{activeTab === 'blank'}}">
+        <view class="questions-container">
+          <block wx:for="{{questionDetail.blankQuestionsList}}" wx:key="id">
+            <view class="question-card">
+              <!-- 题干区域 -->
+              <view class="question-content-card">
+                <text class="question-content">{{item.content}}</text>
+              </view>
+              
+              <view class="blank-container">
+                <input 
+                  class="blank-input" 
+                  bindinput="onBlankInput" 
+                  data-qindex="{{index}}" 
+                  value="{{item.userAnswer}}"
+                  placeholder="请在此输入答案"
+                  disabled="{{item.answered}}"
+                />
+                <button 
+                  class="blank-submit-btn"
+                  bindtap="{{item.answered ? 'resetBlankAnswer' : 'submitBlankAnswer'}}"
+                  data-qindex="{{index}}"
+                >
+                  {{item.answered ? '重答' : '提交'}}
+                </button>
+              </view>
+              
+              <!-- 答案反馈 -->
+              <view wx:if="{{item.answered}}" class="answer-feedback {{item.isCorrect ? 'feedback-correct' : 'feedback-incorrect'}}">
+                <text class="feedback-header">{{item.isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}</text>
+                <text>正确答案：{{item.answer}}</text>
+                <text>解析：{{item.analysis}}</text>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+      
+      <!-- 加载状态 -->
+      <block wx:if="{{loading}}">
+        <view class="loading">
+          <text class="loading-text">加载题目中...</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

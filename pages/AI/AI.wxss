@@ -1,0 +1,405 @@
+/* 页面背景 - 添加更柔和的渐变效果 */
+page {
+  background-image: url('https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 减少覆盖层透明度，使背景图片更明显 */
+page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 250, 255, 0.8) 100%);
+  z-index: 0;
+}
+
+/* 添加微妙的背景装饰 - 增强视觉效果 */
+page::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(106, 17, 203, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(0, 205, 172, 0.05) 0%, transparent 45%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+  z-index: 0;
+  animation: gradientShift 20s ease infinite alternate;
+  mix-blend-mode: overlay;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* 容器样式 - 添加更精致的动画效果 */
+.container {
+  position: relative;
+  min-height: 100vh;
+  padding: 20rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  animation: fadeIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 标题区域 - 添加更精致的装饰效果 */
+.header {
+  text-align: center;
+  margin: 10rpx 0 0;
+  padding-top: 40rpx;
+  position: relative;
+  perspective: 1000rpx;
+}
+
+.title {
+  font-size: 58rpx;
+  font-weight: 750;
+  color: #2c3e50;
+  display: block;
+  letter-spacing: 1.5rpx;
+  margin-bottom: 5rpx;
+  position: relative;
+  text-shadow: 0 3rpx 6rpx rgba(0, 0, 0, 0.08);
+  transform: translateZ(30rpx);
+  transition: all 0.4s ease;
+}
+
+.title:hover {
+  transform: translateZ(50rpx);
+  text-shadow: 0 5rpx 15rpx rgba(0, 0, 0, 0.1);
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -18rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140rpx;
+  height: 6rpx;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  border-radius: 6rpx;
+  box-shadow: 0 3rpx 10rpx rgba(106, 17, 203, 0.25);
+  transition: all 0.4s ease;
+}
+
+.title:hover::after {
+  width: 160rpx;
+  box-shadow: 0 5rpx 15rpx rgba(106, 17, 203, 0.35);
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #7f8c8d;
+  display: block;
+  margin-top: 35rpx;
+  font-weight: 400;
+  letter-spacing: 1.5rpx;
+  animation: fadeIn 0.8s ease-out 0.2s both;
+  position: relative;
+  padding: 10rpx 20rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20rpx;
+  backdrop-filter: blur(5rpx);
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+}
+
+/* 卡片区域 - 添加整体动画效果 */
+.card-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 70rpx;
+  position: relative;
+  z-index: 2;
+  padding: 0 15rpx;
+  margin-top: -0rpx;
+  top: -100rpx;
+  animation: slideUp 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(80rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 功能卡片样式 - 添加更精致的视觉效果 */
+.function-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 36rpx;
+  box-shadow: 
+    0 15rpx 40rpx rgba(0,0,0,0.15),
+    0 0 0 1rpx rgba(240, 240, 240, 0.8),
+    inset 0 0 20rpx rgba(255, 255, 255, 0.8);
+  padding: 50rpx 40rpx;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(0) scale(1);
+  backdrop-filter: blur(12rpx);
+  transform-style: preserve-3d;
+}
+
+.function-card:hover {
+  transform: translateY(-10rpx) scale(1.02);
+  box-shadow: 
+    0 20rpx 50rpx rgba(0,0,0,0.2),
+    0 0 0 1rpx rgba(240, 240, 240, 0.8);
+}
+
+.function-card:active {
+  transform: translateY(5rpx) scale(0.98);
+  box-shadow: 
+    0 8rpx 25rpx rgba(0,0,0,0.12),
+    0 0 0 1rpx rgba(240, 240, 240, 0.8);
+}
+
+.function-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10rpx;
+  border-radius: 36rpx 36rpx 0 0;
+  box-shadow: 0 3rpx 10rpx rgba(0,0,0,0.15);
+  transition: all 0.4s ease;
+}
+
+.function-card:hover::before {
+  height: 12rpx;
+  box-shadow: 0 5rpx 15rpx rgba(0,0,0,0.2);
+}
+
+.word-card::before {
+  background: linear-gradient(135deg, #6A11CB 0%, #2575FC 100%);
+}
+
+.sentence-card::before {
+  background: linear-gradient(135deg, #00CDAC 0%, #02AAB0 100%);
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  transform: translateZ(20rpx);
+}
+
+.card-icon {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 45rpx;
+  flex-shrink: 0;
+  box-shadow: 
+    0 10rpx 25rpx rgba(0,0,0,0.15),
+    inset 0 0 25rpx rgba(255, 255, 255, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
+  transform: rotate(30deg);
+}
+
+.function-card:hover .card-icon {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 
+    0 15rpx 30rpx rgba(0,0,0,0.2),
+    inset 0 0 25rpx rgba(255, 255, 255, 0.5);
+}
+
+.function-card:active .card-icon {
+  transform: scale(0.95);
+}
+
+.word-card .card-icon {
+  background: linear-gradient(135deg, #6A11CB 0%, #2575FC 100%);
+}
+
+.sentence-card .card-icon {
+  background: linear-gradient(135deg, #00CDAC 0%, #02AAB0 100%);
+}
+
+.icon {
+  font-size: 72rpx;
+  color: white;
+  text-shadow: 0 3rpx 6rpx rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.function-card:hover .icon {
+  transform: scale(1.1);
+}
+
+.card-text {
+  flex: 1;
+  transform: translateZ(30rpx);
+}
+
+.card-title {
+  font-size: 46rpx;
+  font-weight: 650;
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 15rpx;
+  position: relative;
+  letter-spacing: 0.5rpx;
+}
+
+.card-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8rpx;
+  left: 0;
+  width: 60rpx;
+  height: 4rpx;
+  background: rgba(44, 62, 80, 0.15);
+  border-radius: 4rpx;
+  transition: all 0.4s ease;
+}
+
+.function-card:hover .card-title::after {
+  width: 80rpx;
+  background: rgba(44, 62, 80, 0.25);
+}
+
+.card-desc {
+  font-size: 36rpx;
+  color: #7f8c8d;
+  display: block;
+  margin: 18rpx 0 35rpx;
+  line-height: 1.6;
+  letter-spacing: 0.8rpx;
+  transition: all 0.3s ease;
+}
+
+.function-card:hover .card-desc {
+  color: #5d6d7e;
+}
+
+.card-hint {
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #3498db;
+  font-weight: 550;
+  transition: all 0.3s ease;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.05);
+}
+
+.function-card:hover .card-hint {
+  color: #2980b9;
+  text-shadow: 0 3rpx 6rpx rgba(0,0,0,0.1);
+}
+
+.function-card:active .card-hint {
+  color: #2575fc;
+}
+
+.arrow {
+  font-size: 40rpx;
+  margin-left: 15rpx;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
+
+.function-card:hover .arrow {
+  transform: translateX(10rpx);
+}
+
+.function-card:active .arrow {
+  transform: translateX(15rpx);
+}
+
+/* 底部提示 - 添加更精致的样式 */
+.footer {
+  position: absolute;
+  bottom: 80rpx;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: #7f8c8d;
+  z-index: 2;
+  padding: 12rpx 25rpx;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 35rpx;
+  backdrop-filter: blur(12rpx);
+  box-shadow: 0 3rpx 12rpx rgba(0,0,0,0.08);
+  max-width: 350rpx;
+  margin: 0 auto;
+  animation: fadeIn 0.8s ease-out 0.6s both;
+  transition: all 0.3s ease;
+}
+
+.footer:hover {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 5rpx 15rpx rgba(0,0,0,0.12);
+  transform: translateY(-5rpx);
+}
+
+/* 响应式调整 */
+@media (min-width: 768px) {
+  .card-container {
+    max-width: 720rpx;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    width: 95%;
+    top: -200rpx;
+    gap: 50rpx;
+  }
+  
+  .card-icon {
+    width: 135rpx;
+    height: 135rpx;
+  }
+  
+  .icon {
+    font-size: 62rpx;
+  }
+  
+  .card-title {
+    font-size: 42rpx;
+  }
+  
+  .card-desc {
+    font-size: 32rpx;
+  }
+  
+  .card-hint {
+    font-size: 32rpx;
+  }
+}

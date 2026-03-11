@@ -1,0 +1,213 @@
+/* pages/ArticleDetail/ArticleDetail.wxss */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  padding-top: 0; /* 移除顶部内边距 */
+}
+
+/* 独立书籍标题 - 固定在顶部 */
+.book-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 15rpx 30rpx;
+  background: linear-gradient(to right, #4a6baf, #3a5a9f);
+  box-shadow: 0 4rpx 12rpx rgba(74, 107, 175, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100rpx; /* 适当高度 */
+}
+
+.book-title {
+  font-size: 44rpx; /* 大字体突出 */
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+  letter-spacing: 1rpx;
+}
+
+/* 独立章节标题 - 位于书籍标题下方 */
+.chapter-header {
+  position: sticky;
+  top: 100rpx; /* 紧贴书籍标题下方 */
+  z-index: 95;
+  padding: 15rpx 30rpx;
+  background-color: #f0f5ff;
+  border-bottom: 1rpx solid #e0e8f7;
+  box-shadow: 0 4rpx 8rpx rgba(74, 107, 175, 0.1);
+}
+
+.chapter-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #3a5a9f;
+  text-align: center;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+/* .chapter-title::before { */
+  /* content: ''; */
+  /* position: absolute; */
+  /* left: 30rpx; 左侧装饰线 */
+  /* top: 50%; */
+  /* transform: translateY(-50%); */
+  /* width: 8rpx; */
+  /* height: 36rpx; */
+  /* background-color: #4a6baf; */
+  /* border-radius: 4rpx; */
+/* } */
+
+/* 主内容区域 - 整体上移 */
+.main-content {
+  display: flex;
+  flex: 1;
+  margin-top: 0; /* 移除顶部外边距 */
+}
+
+/* 左侧导航 */
+.nav-container {
+  width: 230rpx;
+  background-color: #ffffff;
+  border-right: 1rpx solid #eee;
+  box-shadow: 2rpx 0 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.nav-tree {
+  padding: 15rpx 0;
+}
+
+.category-title {
+  padding: 12rpx 18rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #3a5a9f;
+}
+
+.chapters-container {
+  padding: 8rpx 0;
+}
+
+.chapter-item {
+  padding: 10rpx 18rpx 10rpx 35rpx;
+  font-size: 26rpx;
+  border-left: 4rpx solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #555;
+}
+
+.chapter-item.active {
+  background-color: #edf2fa;
+  border-left-color: #4a6baf;
+  color: #4a6baf;
+  font-weight: 500;
+}
+
+/* 右侧内容区 */
+.content-container {
+  flex: 1;
+  padding: 0 30rpx;
+}
+
+.content-section, .notes-section {
+  margin-top: 20rpx; /* 减少间距 */
+}
+
+.section-label {
+  display: block;
+  padding-bottom: 15rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #4a6baf;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 30rpx;
+  background-color: #4a6baf;
+  border-radius: 3rpx;
+}
+
+.content-list {
+  line-height: 1.8;
+}
+
+.content-item {
+  margin-bottom: 25rpx;
+  padding: 18rpx;
+  border-radius: 10rpx;
+  background-color: rgba(235, 242, 252, 0.4);
+  box-shadow: 0 2rpx 8rpx rgba(74, 107, 175, 0.1);
+}
+
+.ancient-text {
+  display: block;
+  font-size: 34rpx;
+  margin-bottom: 10rpx;
+  line-height: 1.8;
+  color: #333;
+}
+
+.modern-text {
+  display: block;
+  font-size: 30rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 加载状态和错误状态 */
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 32rpx;
+  color: #888;
+}
+
+.error-container {
+  color: #e74c3c;
+}
+
+.retry-button {
+  margin-top: 25rpx;
+  background: linear-gradient(to right, #4a6baf, #3a5a9f);
+  color: white;
+  border-radius: 40rpx;
+  padding: 12rpx 35rpx;
+  font-size: 28rpx;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(74, 107, 175, 0.3);
+}
+
+/* 美化滚动条 */
+::-webkit-scrollbar {
+  width: 6rpx;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(74, 107, 175, 0.5);
+  border-radius: 3rpx;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(235, 242, 252, 0.3);
+}

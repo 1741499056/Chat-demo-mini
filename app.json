@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/DailyPoem/DailyPoem",
+    "pages/index/index",
+    "pages/login/login",
+    "pages/guwen/guwen",
+    "pages/poem/poem",
+    "pages/home/home",
+    "pages/analysis/index",
+    "pages/logs/logs",
+    "pages/AI/AI",
+    "pages/ME/ME",
+    "pages/三十六计/三十六计",
+    "pages/ArticleDetail/ArticleDetail",
+    "pages/search/classic",
+    "pages/poem/poemdetail",
+    "pages/test-item/test-item",
+    "pages/sentencesegmentation/sentencesegmentation",
+    "pages/sentencetest/sentencetest",
+    "pages/word/word",
+    "pages/wordtest-history/wordtest-history",
+    "pages/localtest/localtest",
+    "pages/ContentSearch/ContentSearch",
+    "pages/ai-chat/ai-chat",
+    "pages/recite/recite",
+    "pages/allbooks/allbooks",
+    "pages/breakingHistory/breakingHistory",
+    "pages/poemRecite/poemRecite",
+    "pages/ReciteRecords/ReciteRecords",
+    "pages/index_gradeselect/index_gradeselect",
+    "pages/index_v1/index_v1",
+    "pages/AIchat-konwledge/AIchat-konwledge",
+    "pages/AIchat-history/AIchat-history",
+    "pages/AI_assistant/AI_assistant",
+    "pages/poetry_library/poetry_library",
+    "pages/my/my",
+    "pages/breakingReport/breakingReport",
+    "pages/check_in/check_in",
+    "pages/check_in_evaluate/check_in_evaluate"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/guwen/guwen",
+        "text": "古诗文"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "文章搜索"
+      },
+      {
+        "pagePath": "pages/poem/poem",
+        "text": "古诗搜索"
+      },
+      {
+        "pagePath": "pages/AI/AI",
+        "text": "ai对话"
+      },
+      {
+        "pagePath": "pages/ME/ME",
+        "text": "我的"
+      }
+    ],
+    "color": "#999999",
+    "selectedColor": "#07C160",
+    "backgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "cloud": true
+}

@@ -1,0 +1,73 @@
+<view class="container">
+  <view class="header">
+    <text class="title">断句报告</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在生成报告...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:if="{{loadError}}" class="error-container">
+    <text class="error-msg">{{errorMsg}}</text>
+    <view class="retry-button" bindtap="retryLoad">重新加载</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <block wx:if="{{!isLoading && !loadError}}">
+    
+    <!-- 暂无数据 -->
+    <view wx:if="{{totalCount === 0}}" class="no-data">
+      <text>📭 暂无答题记录，快去练习吧！</text>
+    </view>
+
+    <block wx:if="{{totalCount > 0}}">
+      
+      <!-- 0. 总体统计 -->
+      <view class="card summary-card">
+        <view class="summary-item">
+          <text class="summary-value">{{totalCount}}</text>
+          <text class="summary-label">总答题数</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-value accent">{{overallAccuracy}}</text>
+          <text class="summary-label">总正确率</text>
+        </view>
+      </view>
+
+      <!-- 1. 题型错误率 -->
+      <view class="card chart-card">
+        <view class="card-title">
+          <text>题型薄弱点分析 (错误率排行)</text>
+        </view>
+        <view class="chart-container">
+          <!-- 如果数组为空，显示提示 -->
+          <view wx:if="{{techniqueErrorRate.length === 0}}" class="chart-empty-placeholder">
+            <text>暂无题型数据，可能原因是记录中缺少题型信息。</text>
+          </view>
+          <block wx:for="{{techniqueErrorRate}}" wx:key="name">
+            <view class="bar-row">
+              <view class="bar-label">
+                <text class="bar-name">{{item.name}}</text>
+                <text class="bar-desc">{{item.label}}</text>
+              </view>
+              <view class="bar-wrapper">
+                <!-- 直接绑定 JS 中计算好的完整样式字符串 -->
+                <view class="bar-fill error" style="{{item.barStyle}}"></view>
+              </view>
+              <text class="bar-value error">{{item.errorRatePercent}}%</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+    </block>
+  </block>
+  <!-- 【新增】固定底部练习按钮 -->
+  <view class="fab-practice" bindtap="gotoSegmentationPage">
+    <text>开始断句练习</text>
+  </view>
+</view>

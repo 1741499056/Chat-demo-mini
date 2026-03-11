@@ -1,0 +1,87 @@
+<!-- pages/ArticleDetail/ArticleDetail.wxml -->
+<view class="container">
+  <!-- 独立书籍标题 -->
+  <view class="book-header">
+    <text class="book-title">{{bookTitle}}</text>
+  </view>
+  
+  <!-- 独立章节标题 - 移除左侧竖线 -->
+  <view class="chapter-header">
+    <text class="chapter-title">{{chapterTitle}}</text>
+  </view>
+  
+  <!-- 主内容区域 -->
+  <view class="main-content">
+    <!-- 左侧目录树导航 -->
+    <scroll-view class="nav-container" scroll-y>
+      <view class="nav-tree">
+        <block wx:for="{{navTreeData}}" wx:key="id">
+          <view class="category-node">
+            <!-- 分类节点 -->
+            <view 
+              class="category-title" 
+              bindtap="toggleExpand" 
+              data-id="{{item.id}}"
+              wx:if="{{item.label}}">
+              <text>{{item.label}}</text>
+              <icon 
+                type="{{item.isExpanded ? 'arrowdown' : 'arrowright'}}" 
+                size="14" 
+                color="#4a6baf" 
+                wx:if="{{item.children && item.children.length}}"/>
+            </view>
+            
+            <!-- 章节节点 -->
+            <view 
+              class="chapters-container" 
+              wx:if="{{!item.label || item.isExpanded}}">
+              <block wx:for="{{item.children}}" wx:key="id" wx:for-item="chapter">
+                <view 
+                  class="chapter-item {{chapter.id == chapterId ? 'active' : ''}}"
+                  bindtap="selectChapter"
+                  data-id="{{chapter.id}}">
+                  <text class="chapter-name">{{chapter.label}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    
+    <!-- 右侧内容区域 -->
+    <scroll-view class="content-container" scroll-y>
+      <!-- 加载状态 -->
+      <view wx:if="{{loading}}" class="loading-container">
+        <text>正在加载内容...</text>
+      </view>
+      
+      <!-- 错误信息 -->
+      <view wx:if="{{error}}" class="error-container">
+        <text>{{error}}</text>
+        <button class="retry-button" bindtap="retryLoad">重试加载</button>
+      </view>
+      
+      <!-- 内容展示 -->
+      <view wx:if="{{!loading && !error}}">
+        <!-- 原文+译文区域 -->
+        <view class="content-section">
+          <view class="content-list">
+            <block wx:for="{{contentList}}" wx:key="index">
+              <view class="content-item">
+                <text class="ancient-text">{{item.ancientContent}}</text>
+                <text class="modern-text">{{item.modernContent}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 注释区域 -->
+        <view class="notes-section">
+          <!-- <text class="section-label">注释</text> -->
+          <!-- <text class="placeholder-text">注释内容加载中...</text> -->
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

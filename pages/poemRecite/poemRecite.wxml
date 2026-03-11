@@ -1,0 +1,214 @@
+<view class="container">
+  <!-- 顶部标题区域 -->
+  <view class="header">
+    <!-- <view class="back-btn" bindtap="goBack"> -->
+      <!-- <image src="/icons/back.png" class="back-icon" /> -->
+    <!-- </view> -->
+    <view class="title">
+      <text class="title-text">背诵练习</text>
+      <view class="title-decoration"></view>
+    </view>
+  </view>
+  
+  <!-- 当前背诵古诗显示 -->
+  <view class="poem-display" wx:if="{{currentPoemName}}">
+    <view class="section-title">
+      <view class="icon">📜</view>
+      <text class="title-text">当前背诵古诗</text>
+      <view class="title-decoration"></view>
+    </view>
+    <view class="poem-name">{{currentPoemName}}</view>
+  </view>
+  
+  <!-- 语音录制区域 -->
+  <view class="recording-section" wx:if="{{!hasUploaded}}">
+    <view class="section-title">
+      <view class="icon">🎤</view>
+      <text class="title-text">语音背诵录音</text>
+      <view class="title-decoration"></view>
+    </view>
+    
+    <view class="recording-status">
+      <view class="recording-icon-container">
+        <view class="recording-icon {{isRecording ? 'pulse' : ''}}">
+          {{isRecording ? '🔴' : '⚪'}}
+        </view>
+        <view class="yin-yang"></view>
+      </view>
+      <view class="recording-text">
+        {{isRecording ? '录音中...' : '点击开始录音'}}
+      </view>
+      <view class="recording-time" wx:if="{{isRecording}}">
+        {{formatTime(recordingTime)}}
+      </view>
+    </view>
+    
+    <!-- 录音控制按钮 -->
+    <view class="recording-controls">
+      <button 
+        class="btn {{isRecording ? 'btn-stop' : 'btn-record'}}" 
+        bindtap="{{isRecording ? 'stopRecording' : 'startRecording'}}"
+        disabled="{{isRecording && recordingTime < 3}}"
+      >
+        <text>{{isRecording ? '停止录音' : '开始录音'}}</text>
+        <view class="btn-icon">{{isRecording ? '⏹️' : '🎤'}}</view>
+        <view class="btn-decoration"></view>
+      </button>
+      
+      <button 
+        class="btn btn-play" 
+        bindtap="playRecording" 
+        disabled="{{!audioFilePath || isRecording}}"
+        wx:if="{{audioFilePath && !isRecording}}"
+      >
+        <text>播放录音</text>
+        <view class="btn-icon">▶️</view>
+        <view class="btn-decoration"></view>
+      </button>
+    </view>
+    
+    <!-- 录音波形显示 -->
+    <view class="waveform" wx:if="{{isRecording}}">
+      <view 
+        class="wave-bar" 
+        wx:for="{{waveformData}}" 
+        wx:key="index"
+        style="height: {{item}}rpx;"
+      ></view>
+    </view>
+    
+    <!-- 录音文件信息 -->
+    <view class="recording-info" wx:if="{{audioFilePath && !isRecording}}">
+      <view class="info-item">
+        <text class="label">录音时长：</text>
+        <text class="value">{{formatTime(recordingTime)}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">文件大小：</text>
+        <text class="value">{{audioFileSize}} KB</text>
+      </view>
+      <view class="info-item">
+        <text class="label">录音时间：</text>
+        <text class="value">{{recordingTimestamp}}</text>
+      </view>
+    </view>
+    
+    <!-- 上传按钮 -->
+    <button class="btn btn-primary upload-btn" bindtap="uploadAndEvaluate" disabled="{{!audioFilePath}}">
+      <text>上传并获取点评</text>
+      <view class="btn-icon">🚀</view>
+      <view class="btn-decoration"></view>
+    </button>
+  </view>
+  
+  <!-- 点评结果展示 -->
+  <view class="evaluation-section" wx:if="{{hasUploaded && !loading && !error}}">
+    <view class="section-title">
+      <view class="icon">📝</view>
+      <text class="title-text">AI点评结果</text>
+      <view class="title-decoration"></view>
+    </view>
+    
+    <view class="evaluation-content">
+      <!-- 总体评分 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">总体评分：</view>
+        <view class="evaluation-text">
+          {{overallScore}}分
+          <view class="score-decoration"></view>
+        </view>
+      </view>
+      
+      <!-- 详细评分 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">详细评分：</view>
+        <view class="detail-scores">
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.content_completeness}}</view>
+            <view class="detail-label">内容完整度</view>
+            <view class="detail-decoration"></view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.structural_correctness}}</view>
+            <view class="detail-label">结构正确性</view>
+            <view class="detail-decoration"></view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-value">{{detailedScores.key_imagery_preservation}}</view>
+            <view class="detail-label">关键意象保留</view>
+            <view class="detail-decoration"></view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 主要错误 -->
+      <view class="evaluation-item" wx:if="{{majorErrors.length > 0}}">
+        <view class="evaluation-label">主要错误：</view>
+        <view class="error-list">
+          <view class="error-item" wx:for="{{majorErrors}}" wx:key="index">
+            <view class="error-header">
+              <view class="error-type">{{item.error_type}}</view>
+              <view class="severity {{item.severity}}">{{item.severity}}</view>
+            </view>
+            <view class="error-detail">
+              <text class="label">位置：</text>
+              <text class="value">{{item.position}}</text>
+            </view>
+            <view class="error-detail">
+              <text class="label">缺失内容：</text>
+              <text class="value">{{item.missing_content}}</text>
+            </view>
+            <view class="error-decoration"></view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 表扬 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">表扬：</view>
+        <view class="evaluation-text">{{feedback.praise}}</view>
+      </view>
+      
+      <!-- 改进建议 -->
+      <view class="evaluation-item">
+        <view class="evaluation-label">改进建议：</view>
+        <view class="evaluation-suggestions">
+          <block wx:for="{{feedback.suggestions}}" wx:key="index">
+            <view class="suggestion-item">
+              <text class="suggestion-index">{{index + 1}}.</text>
+              <text class="suggestion-text">{{item}}</text>
+              <view class="suggestion-decoration"></view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 重新上传按钮 -->
+    <view class="reupload-section">
+      <button class="btn btn-reupload" bindtap="reUpload">
+        <text>重新背诵并上传</text>
+        <view class="btn-icon">🔄</view>
+        <view class="btn-decoration"></view>
+      </button>
+    </view>
+  </view>
+  
+  <!-- 错误提示 -->
+  <view class="error-section" wx:if="{{error}}">
+    <text class="error-text">{{error}}</text>
+    <button class="btn btn-retry" bindtap="retryUpload">
+      <text>重试</text>
+      <view class="btn-decoration"></view>
+    </button>
+  </view>
+  
+  <!-- 新增：挑战按钮 -->
+  <view class="challenge-btn-container">
+    <button class="btn btn-challenge" bindtap="goToChallengePage">
+      <text>背诵记录</text>
+      <view class="btn-icon">🏆</view>
+      <view class="btn-decoration"></view>
+    </button>
+  </view>
+</view>

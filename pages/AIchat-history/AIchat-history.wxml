@@ -1,0 +1,138 @@
+<!-- pages/AIchat-history/AIchat-history.wxml -->
+<view class="history-container">
+  <!-- 头部 -->
+  <view class="header">
+    <text class="title">历史对话</text>
+    <view class="header-actions">
+      <view class="back-btn" bindtap="goBack">
+        <text>返回</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading">
+    <view class="loading-text">加载中...</view>
+    <view class="typing-indicator">
+      <view class="dot"></view>
+      <view class="dot"></view>
+      <view class="dot"></view>
+    </view>
+  </view>
+
+  <!-- 对话列表 -->
+  <scroll-view class="conversation-list" scroll-y>
+    <block wx:for="{{conversations}}" wx:key="id" wx:for-index="index">
+      <view class="conversation-item">
+        <!-- 可点击区域（用于跳转对话详情） -->
+        <view class="clickable-area" bindtap="viewConversationDetail" data-id="{{item.id}}">
+          <view class="conversation-header">
+            <view class="title-section">
+              <text class="conversation-title">{{item.name || '未命名对话'}}</text>
+            </view>
+            <text class="conversation-time">{{formatTime(item.updated_at)}}</text>
+          </view>
+          
+          <view class="conversation-preview">
+            <text>{{item.introduction || '暂无简介'}}</text>
+          </view>
+          <view class="conversation-meta">
+            <text class="conversation-id">ID: {{item.id.slice(0, 8)}}...</text>
+            <text class="conversation-status {{item.status === 'normal' ? 'normal' : 'archived'}}">
+              <!-- {{item.status === 'normal' ? '正常' : '已归档'}} -->
+            </text>
+          </view>
+        </view>
+        
+        <!-- 操作按钮区域 -->
+        <view class="action-buttons">
+          <!-- 重命名按钮 -->
+          <view class="rename-btn" catchtap="startRename" data-index="{{index}}" data-id="{{item.id}}">
+            <text>重命名</text>
+          </view>
+          
+          <!-- 删除按钮 -->
+          <view class="delete-btn" catchtap="deleteConversation" data-index="{{index}}" data-id="{{item.id}}">
+            <text>删除</text>
+          </view>
+        </view>
+        
+        <!-- 重命名输入框 -->
+        <view wx:if="{{item.isRenaming}}" class="rename-input-container">
+          <input 
+            class="rename-input" 
+            value="{{item.editingName}}" 
+            placeholder="输入新名称"
+            bindinput="onRenameInput"
+            data-index="{{index}}"
+          />
+          <view class="rename-actions">
+            <view class="rename-confirm" catchtap="confirmRename" data-index="{{index}}">
+              <text>确认</text>
+            </view>
+            <view class="rename-cancel" catchtap="cancelRename" data-index="{{index}}">
+              <text>取消</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">
+      <text>加载更多</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!isLoading && conversations.length === 0}}" class="empty-state">
+      <text class="empty-text">暂无历史对话</text>
+      <text class="empty-subtext">开始与AI对话后，历史记录将显示在这里</text>
+    </view>
+  </scroll-view>
+
+  <!-- 对话详情模态框 -->
+  <view wx:if="{{showDetail}}" class="detail-modal">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">对话详情</text>
+        <view class="modal-close" bindtap="closeDetail">
+          <text>×</text>
+        </view>
+      </view>
+
+      <scroll-view class="modal-body" scroll-y scroll-top="{{detailScrollTop}}" style="max-height: 60vh;">
+        <block wx:for="{{currentConversation.messages}}" wx:key="id">
+          <!-- 用户消息 -->
+          <view class="message-item user-message" wx:if="{{item.role === 'user'}}">
+            <view class="message-role">
+              <text>用户</text>
+            </view>
+            <view class="message-content">
+              <text>{{item.content}}</text>
+            </view>
+            <view class="message-time">
+              <text>{{formatTime(item.created_at)}}</text>
+            </view>
+          </view>
+
+          <!-- AI回复 -->
+          <view class="message-item assistant-message" wx:if="{{item.role === 'assistant'}}">
+            <view class="message-role">
+              <text>助手</text>
+            </view>
+            <view class="message-content">
+              <text>{{item.content}}</text>
+            </view>
+            <view class="message-time">
+              <text>{{formatTime(item.created_at)}}</text>
+            </view>
+          </view>
+        </block>
+
+        <view wx:if="{{currentConversation.messages.length === 0}}" class="empty-message">
+          <text>该对话暂无消息记录</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

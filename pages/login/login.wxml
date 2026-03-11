@@ -1,0 +1,90 @@
+<view class="container">
+  <image class="background-image" src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png" mode="aspectFill"></image>
+  
+  <!-- 头部Logo -->
+  <view class="header">
+    <text class="app-name">{{title}}</text>
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="form-container">
+    <!-- 切换登录方式 -->
+    <view class="login-type-tabs">
+      <text class="{{activeType === 'phone' ? 'active' : ''}}" bindtap="switchLoginType" data-type="phone">用户名登录</text>
+      <text class="{{activeType === 'code' ? 'active' : ''}}" bindtap="switchLoginType" data-type="code">注册</text>
+    </view>
+
+    <!-- 手机号登录表单 -->
+    <view class="{{activeType === 'phone' ? 'show' : 'hide'}}">
+      <view class="input-group">
+        <text class="label">用户名</text>
+        <input type="string" placeholder="请输入用户名" bindinput="onUsernameInput" />
+      </view>
+      <view class="input-group">
+        <text class="label">密码</text>
+        <input password placeholder="请输入密码" bindinput="onPasswordInput" />
+      </view>
+      <view class="forgot-password">
+        <text bindtap="navigateToForgotPassword">忘记密码？</text>
+      </view>
+    </view>
+
+    <!-- 注册表单 -->
+    <view class="{{activeType === 'code' ? 'show' : 'hide'}}">
+      <view class="input-group">
+        <text class="label">用户名</text>
+        <input type="string" placeholder="请输入用户名" bindinput="onUsernameInput" />
+      </view>
+      <view class="input-group">
+        <text class="label">输入密码</text>
+        <input password placeholder="请输入密码" bindinput="onPasswordInput" />
+      </view>
+      
+      <!-- 年级选择器 -->
+      <view class="input-group grade-picker-group">
+        <text class="label">选择年级</text>
+        <picker 
+          range="{{gradeList}}" 
+          range-key="name" 
+          value="{{gradeIndex}}" 
+          bindchange="onGradeChange"
+          class="grade-picker"
+        >
+          <view class="picker-display">
+            <text class="picker-text {{gradeIndex === -1 ? 'placeholder' : ''}}">
+              {{gradeName}}
+            </text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 登录按钮 -->
+    <button class="{{activeType === 'phone' ? 'login-btn' : 'hide'}}" bindtap="loginRequest">登录</button>
+    <!-- 注册按钮 -->
+    <button class="{{activeType !== 'phone' ? 'register-btn' : 'hide'}}" bindtap="register">注册</button>
+
+    <!-- 其他登录方式 -->
+    <view class="other-login-methods">
+      <text class="divider">其他登录方式</text>
+      <view class="social-buttons">
+        <button class="social-btn" bindtap="loginWithWechat">
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E5%BE%AE%E4%BF%A1.jpg" mode="aspectFit"></image>
+        </button>
+        <button class="social-btn" bindtap="loginWithQQ">
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/QQ.png" mode="aspectFit"></image>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部 -->
+  <view class="footer">
+    <text bindtap="getDailyPoem">获取每日一诗</text>
+    <text class="divider-line">|</text>
+    <text bindtap="getsentence">获取断句知识点</text>
+    <text class="divider-line">|</text>
+    <text bindtap="navigateToPrivacy">隐私政策</text>
+  </view>
+</view>

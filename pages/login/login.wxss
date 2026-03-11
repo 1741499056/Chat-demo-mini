@@ -1,0 +1,306 @@
+/* Pages/login/login.wxss */
+/* .container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 0 30rpx;
+  background-color: #ffffff;
+  background-image: url('/images/980.jpg'); /* 这里假设图片路径不变，若实际路径有调整需同步修改 */
+  /* background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* 让背景容器至少占满视口高度，确保背景完整显示 */
+/* } */ 
+.container {
+  position: relative; /* 新增定位属性 */
+  min-height: 100vh;
+  padding: 0 30rpx;
+  overflow: hidden;
+}
+
+/* .logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 150rpx;
+  margin-bottom: 100rpx;
+} */
+
+/* .logo {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 30rpx;
+} */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 0.5;
+}
+
+.app-name {
+  margin-top: 10rpx;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #000000;
+  white-space: pre-line; /* 关键属性：允许\n换行 */
+  text-align: center;
+  line-height: 1.6;      /* 行高保持1.6倍 */
+  width: 100%;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+  position: relative;
+  top: -10rpx;
+  letter-spacing: 1rpx;
+}
+
+.header {
+  position: relative;
+  z-index: 1; /* 确保内容在背景上方 */
+  padding-top: 80rpx;
+  text-align: center;
+}
+
+/* .header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300rpx;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+  z-index: -1;
+} */
+
+.form-container {
+  flex: 1;
+}
+
+.login-type-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60rpx;
+}
+
+.login-type-tabs text {
+  padding: 20rpx 40rpx;
+  font-size: 36rpx;
+  color: black;
+}
+
+.login-type-tabs text.active {
+  color: #07C160;
+  border-bottom: 4rpx solid #07C160;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  height: 100rpx;
+  padding: 0 20rpx;
+  margin-bottom: 30rpx;
+  border-bottom: 2rpx solid #eeeeee;
+}
+
+.label {
+  width: 160rpx;
+  font-size: 32rpx;
+  color: black;
+}
+
+input {
+  flex: 1;
+  height: 100%;
+  font-size: 32rpx;
+}
+
+.code-group {
+  position: relative;
+}
+
+.get-code-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #07C160;
+  background-color: transparent;
+}
+
+.get-code-btn[disabled] {
+  color: #cccccc;
+}
+
+.forgot-password {
+  text-align: right;
+  margin: 20rpx 0;
+}
+
+.forgot-password text {
+  font-size: 28rpx;
+  color: black;
+}
+
+.login-btn {
+  height: 96rpx;
+  margin: 60rpx 0;
+  font-size: 36rpx;
+  color: #ffffff;
+  background-color: #07C160;
+  border-radius: 48rpx;
+}
+
+.register-btn{
+  height: 96rpx;
+  margin: 60rpx 0;
+  font-size: 36rpx;
+  color: #ffffff;
+  background-color: #07C160;
+  border-radius: 48rpx;
+}
+
+.login-btn[disabled] {
+  background-color: #e0e0e0;
+}
+
+.other-login-methods {
+  margin-top: 60rpx;
+}
+
+.divider {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 28rpx;
+  color: black;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 25%;
+  height: 2rpx;
+  background-color: #eeeeee;
+}
+
+.divider::before {
+  left: 10%;
+}
+
+.divider::after {
+  right: 10%;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 60rpx;
+}
+
+.social-btn {
+  width: 96rpx;
+  height: 96rpx;
+  margin: 0 30rpx;
+  background-color: transparent;
+}
+
+.social-btn image {
+  width: 100%;
+  height: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60rpx;
+}
+
+.footer text {
+  padding: 0 30rpx;
+  font-size: 28rpx;
+  color: #140101;
+}
+
+.divider-line {
+  padding: 0 !important;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}  
+/* 年级选择样式 */
+.grade-value {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.grade-arrow {
+  font-size: 40rpx;
+  color: #999;
+  transform: rotate(90deg);
+}
+
+/* 年级选择器模态框 */
+.grade-picker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grade-picker-content {
+  background: white;
+  width: 80%;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.grade-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.picker-container {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.picker-item {
+  padding: 30rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.picker-item:last-child {
+  border-bottom: none;
+}
+
+/* 防止事件冒泡 */
+.preventDefault {
+  pointer-events: none;
+}

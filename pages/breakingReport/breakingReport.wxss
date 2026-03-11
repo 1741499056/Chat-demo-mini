@@ -1,0 +1,256 @@
+/* 页面背景 */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fa 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  padding: 10rpx; 
+  box-sizing: border-box;
+
+}
+
+/* 头部 */
+.header {
+  padding: 20rpx 0 10rpx 0;
+  text-align: center;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #1f2937;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 20rpx;
+  display: block;
+}
+
+/* --- 状态提示 (Loading, Error, NoData) --- */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid #dbeafe;
+  border-top: 6rpx solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+.loading-text {
+  font-size: 30rpx;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.no-data, .error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200rpx;
+  font-size: 32rpx;
+  color: #9ca3af;
+  border-top: 1rpx dashed #dbeafe;
+  margin-top: 10rpx; /* 略微减少顶部间距 */
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.05);
+  padding: 40rpx;
+}
+.error-container {
+  color: #ef4444;
+}
+.error-msg {
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+.retry-button {
+  padding: 20rpx 40rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: white;
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 2rpx 6rpx rgba(37, 99, 235, 0.4);
+}
+
+
+/* --- 卡片基础样式 --- */
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 100rpx;
+  margin-bottom: 30rpx; /* 减少卡片间距 */
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.08);
+  border: 4rpx  solid #3b82f6; 
+  border-radius: 20rpx;
+}
+
+.card-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1f2937;
+  padding-bottom: 25rpx;
+  margin-bottom: 30rpx;
+  border-bottom: 1rpx solid #e5e7eb;
+}
+
+/* 0. 总体统计卡片  */
+.summary-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  padding: 0 50rpx; 
+}
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx;
+}
+.summary-value {
+  font-size: 58rpx;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.2;
+}
+.summary-value.accent {
+  color: #2563eb;
+}
+.summary-label {
+  font-size: 26rpx; 
+  color: #6b7280;
+  margin-top: 8rpx;
+}
+.summary-divider {
+  width: 2rpx;
+  height: 80rpx; 
+  background-color: #e0e7ff;
+}
+
+/* --- 1. 模拟横向条形图 (题型分析卡片) --- */
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx; /* 略微减小条目间距 */
+}
+
+/* 空数据提示占位符 */
+.chart-empty-placeholder {
+  min-height: 100rpx;
+  font-size: 28rpx;
+  color: #9ca3af;
+  background-color: #f7f7f7;
+  border: 1rpx dashed #dbeafe;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-top: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.bar-label {
+  flex: 0 0 210rpx; 
+  min-width: 0; 
+  display: flex;
+  flex-direction: column;
+  gap: 5rpx;
+}
+
+.bar-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #374151;
+  /* 保持截断，保证布局稳定 */
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.bar-desc {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.bar-wrapper {
+  flex: 1; 
+  height: 20rpx;
+  background-color: #f3f4f6;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 20rpx;
+  transition: width 0.5s ease-out;
+}
+
+.bar-fill.error {
+  background: linear-gradient(90deg, #f8c0c0 0%, #ef4444 100%);
+}
+
+.bar-value {
+  flex-basis: 80rpx; 
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bar-value.error {
+  color: #ef4444;
+}
+/* --- 【新增】悬浮练习按钮样式 --- */
+.fab-practice {
+  position: fixed;
+  bottom: 35rpx;
+  left: 50%;
+  transform: translateX(-50%); 
+  z-index: 99;
+  
+  /* 按钮尺寸与样式 */
+  width: 380rpx; 
+  background: linear-gradient(to right, #1890ff, #40a9ff);
+  color: white;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 24rpx 0; 
+  border-radius: 50rpx;
+  border: none;
+  text-align: center;
+  
+  /* 阴影和过渡效果 */
+  box-shadow: 0 10rpx 25rpx rgba(24, 144, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.fab-practice:active {
+  transform: translateX(-50%) scale(0.95);
+  box-shadow: 0 5rpx 15rpx rgba(24, 144, 255, 0.4);
+}

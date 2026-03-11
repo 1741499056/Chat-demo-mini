@@ -1,0 +1,111 @@
+.main-title {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.category-item {
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  color: #888;
+}
+
+.category-title {
+  font-size: 32rpx;
+}
+
+.category-arrow {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.sub-items {
+  padding-left: 40rpx;
+  background-color: #fafafa;
+}
+
+.sub-item {
+  padding: 20rpx;
+  border-top: 1rpx solid #f5f5f5;
+  color: #666;
+}
+
+.sub-item:active {
+  background-color: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 15rpx;
+}
+
+/* 目录盒子样式 */
+.directory-box {
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  margin-bottom: 20rpx;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.directory-box.collapsed {
+  height: 80rpx !important;
+}
+
+.directory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.toggle-icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.directory-content {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.directory-item {
+  padding: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.directory-item:active {
+  background-color: #f0f0f0;
+}
+
+/* 内容盒子样式 */
+.content-box {
+  flex: 1;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-header {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-bottom: 1rpx solid #eee;
+}
+
+.content-text {
+  flex: 1;
+  padding: 20rpx;
+  font-size: 32rpx;
+  line-height: 1.6;
+}
