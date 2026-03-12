@@ -43,7 +43,7 @@
     "navigationBarTitleText": "Weixin",
     "navigationBarBackgroundColor": "#ffffff"
   },
-  "tabBar": {
+  "_tabBar": {
     "list": [
       {
         "pagePath": "pages/guwen/guwen",
