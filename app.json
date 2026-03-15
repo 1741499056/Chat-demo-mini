@@ -5,7 +5,6 @@
     "pages/login/login",
     "pages/guwen/guwen",
     "pages/poem/poem",
-    "pages/home/home",
     "pages/logs/logs",
     "pages/AI/AI",
     "pages/ArticleDetail/ArticleDetail",
