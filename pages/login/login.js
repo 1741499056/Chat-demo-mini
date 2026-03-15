@@ -13,7 +13,7 @@ Page({
     forceLogin: false,
     registering: false,
     // 年级相关数据
-    gradeList: [], // 年级列表
+    gradeList:[], // 年级列表
     selectedGradeId: null, // 选中的年级ID
     gradeName: '请选择年级', // 显示的年级名称
     gradeIndex: -1, // picker选中的索引
@@ -41,43 +41,39 @@ Page({
   
   // 获取年级列表 - 直接使用接口数据
   getGradeList() {
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/getGradeList`;
-    
     wx.showLoading({
       title: '加载中...',
     });
     
-    wx.request({
-      url: apiUrl,
-      method: 'GET',
-      success: (res) => {
-        wx.hideLoading();
-        console.log('年级列表响应:', res);
-        
-        if (res.data && res.data.code === 1) {
-          // 直接使用接口返回的数据，不进行过滤
-          const gradeList = res.data.data || [];
-          this.setData({
-            gradeList: gradeList
-          });
-          console.log('获取年级列表成功:', gradeList);
-        } else {
-          const errorMsg = res.data?.msg || '获取年级列表失败';
-          console.error('获取年级列表失败:', errorMsg);
-          wx.showToast({
-            title: errorMsg,
-            icon: 'none'
-          });
-        }
-      },
-      fail: (error) => {
-        wx.hideLoading();
-        console.error('获取年级列表网络错误:', error);
+    app.authRequest({
+      url: '/getGradeList',
+      method: 'GET'
+    }).then((res) => {
+      wx.hideLoading();
+      console.log('年级列表响应:', res);
+      
+      if (res.data && res.data.code === 1) {
+        // 直接使用接口返回的数据，不进行过滤
+        const gradeList = res.data.data ||[];
+        this.setData({
+          gradeList: gradeList
+        });
+        console.log('获取年级列表成功:', gradeList);
+      } else {
+        const errorMsg = res.data?.msg || '获取年级列表失败';
+        console.error('获取年级列表失败:', errorMsg);
         wx.showToast({
-          title: '网络连接失败',
+          title: errorMsg,
           icon: 'none'
         });
       }
+    }).catch((error) => {
+      wx.hideLoading();
+      console.error('获取年级列表网络错误:', error);
+      wx.showToast({
+        title: '网络连接失败',
+        icon: 'none'
+      });
     });
   },
 
@@ -189,11 +185,8 @@ Page({
     const startTime = Date.now();
     console.log(`登录请求开始: ${new Date().toLocaleTimeString()}`);
     
-    // 使用全局配置的域名
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/users/login`;
-    
-    wx.request({
-      url: apiUrl,
+    app.authRequest({
+      url: '/users/login',
       method: 'POST',
       header: {
         'Content-Type': 'application/json'
@@ -202,72 +195,69 @@ Page({
         username: this.data.phone,
         password: this.data.password
       },
-      timeout: 10000,
-      success: (res) => {
-        if (typeof res !== 'object' || res === null) {
-          console.error('登录请求返回无效响应', res);
-          return this.showLoginError('服务器返回了空响应');
-        }
-        
-        console.log('完整登录响应:', res);
-        const responseData = res.data || {};
-        
-        console.log(`响应状态码: ${res.statusCode}`);
-        console.log('响应数据:', responseData);
-        
-        if (responseData.code === 1 && responseData.data) {
-          // 存储用户信息 - 根据图片中的新数据格式更新
-          const userInfo = { 
-            username: this.data.phone,
-            phone: this.data.phone,
-            token: responseData.data.token,
-            id: responseData.data.id,
-            gradeId: responseData.data.gradeId,        // 新增字段
-            gradeName: responseData.data.gradeName    // 新增字段
-          };
-          
-          console.log('存储的用户信息:', userInfo);
-          
-          wx.setStorageSync('userInfo', userInfo);
-          wx.setStorageSync('token', responseData.data.token);
-          
-          // 设置全局登录状态
-          app.globalData.isLoggedIn = true;
-          app.globalData.token = responseData.data.token;
-          //保存在全局的用户名
-          app.globalData.userPhone = this.data.phone;
-          //保存在全局的年级id
-          app.globalData.userGradeId = responseData.data.gradeId;
-          //保存在全局的年级全称      
-          app.globalData.userGradeName = responseData.data.gradeName;  
-          
-          // 设置登录状态
-          console.log('调用setLoginStatus');
-          app.setLoginStatus(responseData.data.token);
-          
-          wx.showToast({
-            title: '登录成功',
-            icon:'success'
-          });
-          
-          // 登录成功后重定向
-          this.redirectAfterLogin();
-        } else {
-          const errorMsg = responseData.message || '账号或密码错误';
-          console.error('登录失败:', errorMsg);
-          this.showLoginError(errorMsg);
-        }
-      },
-      fail: (error) => {
-        const endTime = Date.now();
-        console.error(`登录请求失败（耗时${endTime - startTime}ms）:`, error);
-        this.showLoginError('网络连接失败');
-      },
-      complete: () => {
-        wx.hideLoading();
-        const endTime = Date.now();
-        console.log(`登录请求完成（耗时${endTime - startTime}ms）`);
+      timeout: 10000
+    }).then((res) => {
+      if (typeof res !== 'object' || res === null) {
+        console.error('登录请求返回无效响应', res);
+        return this.showLoginError('服务器返回了空响应');
       }
+      
+      console.log('完整登录响应:', res);
+      const responseData = res.data || {};
+      
+      console.log(`响应状态码: ${res.statusCode}`);
+      console.log('响应数据:', responseData);
+      
+      if (responseData.code === 1 && responseData.data) {
+        // 存储用户信息 - 根据图片中的新数据格式更新
+        const userInfo = { 
+          username: this.data.phone,
+          phone: this.data.phone,
+          token: responseData.data.token,
+          id: responseData.data.id,
+          gradeId: responseData.data.gradeId,        // 新增字段
+          gradeName: responseData.data.gradeName    // 新增字段
+        };
+        
+        console.log('存储的用户信息:', userInfo);
+        
+        wx.setStorageSync('userInfo', userInfo);
+        wx.setStorageSync('token', responseData.data.token);
+        
+        // 设置全局登录状态
+        app.globalData.isLoggedIn = true;
+        app.globalData.token = responseData.data.token;
+        //保存在全局的用户名
+        app.globalData.userPhone = this.data.phone;
+        //保存在全局的年级id
+        app.globalData.userGradeId = responseData.data.gradeId;
+        //保存在全局的年级全称      
+        app.globalData.userGradeName = responseData.data.gradeName;  
+        
+        // 设置登录状态
+        console.log('调用setLoginStatus');
+        app.setLoginStatus(responseData.data.token);
+        
+        wx.showToast({
+          title: '登录成功',
+          icon:'success'
+        });
+        
+        // 登录成功后重定向
+        this.redirectAfterLogin();
+      } else {
+        const errorMsg = responseData.message || '账号或密码错误';
+        console.error('登录失败:', errorMsg);
+        this.showLoginError(errorMsg);
+      }
+    }).catch((error) => {
+      const endTime = Date.now();
+      console.error(`登录请求失败（耗时${endTime - startTime}ms）:`, error);
+      this.showLoginError('网络连接失败');
+    }).finally(() => {
+      wx.hideLoading();
+      const endTime = Date.now();
+      console.log(`登录请求完成（耗时${endTime - startTime}ms）`);
     });
   },
   
@@ -311,11 +301,8 @@ Page({
       mask: true
     });
 
-    // 使用全局配置的域名
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/users/register`;
-
-    wx.request({
-      url: apiUrl,
+    app.authRequest({
+      url: '/users/register',
       method: 'POST',
       header: {
         'Content-Type': 'application/json'
@@ -325,56 +312,51 @@ Page({
         password: this.data.password,
         gradeId: this.data.selectedGradeId
       },
-      timeout: 10000,
-      success: (res) => {
-        if (!res || typeof res !== 'object') {
-          console.error('注册请求返回无效响应', res);
-          return this.showRegisterError('服务器返回了空响应');
-        }
+      timeout: 10000
+    }).then((res) => {
+      if (!res || typeof res !== 'object') {
+        console.error('注册请求返回无效响应', res);
+        return this.showRegisterError('服务器返回了空响应');
+      }
 
-        const responseData = res.data || { code: -1, message: '服务器返回的数据格式不正确' };
-        console.log('完整注册响应:', responseData);
+      const responseData = res.data || { code: -1, message: '服务器返回的数据格式不正确' };
+      console.log('完整注册响应:', responseData);
 
-        if (responseData.code === 1) {
-          console.log('注册成功（code === 1），消息:', responseData.msg);
+      if (responseData.code === 1) {
+        console.log('注册成功（code === 1），消息:', responseData.msg);
 
-          // 注册成功后自动设置年级
-          this.setUserGrade(this.data.selectedGradeId, () => {
-            wx.showToast({
-              title: responseData.msg || '注册成功',
-              icon: 'success'
-            });
-
-            setTimeout(() => {
-              this.setData({ registering: false });
-              
-              // 注册成功后重定向
-              this.redirectAfterLogin();
-            }, 1500);
+        // 注册成功后自动设置年级
+        this.setUserGrade(this.data.selectedGradeId, () => {
+          wx.showToast({
+            title: responseData.msg || '注册成功',
+            icon: 'success'
           });
 
-        } else {
-          const errorMsg = responseData.message || '注册失败';
-          console.error('注册失败:', errorMsg);
-          this.showRegisterError(errorMsg);
-        }
-      },
-      fail: (error) => {
-        wx.hideLoading();
-        console.error('注册请求失败:', error);
-        this.showRegisterError('网络连接失败');
-      },
-      complete: () => {
-        this.setData({ registering: false });
-        wx.hideLoading();
+          setTimeout(() => {
+            this.setData({ registering: false });
+            
+            // 注册成功后重定向
+            this.redirectAfterLogin();
+          }, 1500);
+        });
+
+      } else {
+        const errorMsg = responseData.message || '注册失败';
+        console.error('注册失败:', errorMsg);
+        this.showRegisterError(errorMsg);
       }
+    }).catch((error) => {
+      wx.hideLoading();
+      console.error('注册请求失败:', error);
+      this.showRegisterError('网络连接失败');
+    }).finally(() => {
+      this.setData({ registering: false });
+      wx.hideLoading();
     });
   },
 
-  // 设置用户年级 - 根据图片中的接口信息修正URL
+  // 设置用户年级
   setUserGrade(gradeId, callback) {
-    
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/users/grade`;
     const token = app.globalData.token || wx.getStorageSync('userInfo')?.token;
     
     if (!token) {
@@ -383,8 +365,8 @@ Page({
       return;
     }
 
-    wx.request({
-      url: apiUrl,
+    app.authRequest({
+      url: '/users/grade',
       method: 'PUT',
       header: {
         'Content-Type': 'application/json',
@@ -392,25 +374,22 @@ Page({
       },
       data: {
         gradeId: gradeId
-      },
-      success: (res) => {
-        if (res.data && res.data.code === 1) {
-          console.log('年级设置成功');
-          // 更新本地存储的用户信息
-          const userInfo = wx.getStorageSync('userInfo') || {};
-          userInfo.gradeId = gradeId;
-          wx.setStorageSync('userInfo', userInfo);
-          app.globalData.userGradeId = gradeId;
-        } else {
-          console.warn('年级设置接口返回异常:', res.data);
-        }
-      },
-      fail: (error) => {
-        console.error('设置年级网络错误:', error);
-      },
-      complete: () => {
-        callback && callback();
       }
+    }).then((res) => {
+      if (res.data && res.data.code === 1) {
+        console.log('年级设置成功');
+        // 更新本地存储的用户信息
+        const userInfo = wx.getStorageSync('userInfo') || {};
+        userInfo.gradeId = gradeId;
+        wx.setStorageSync('userInfo', userInfo);
+        app.globalData.userGradeId = gradeId;
+      } else {
+        console.warn('年级设置接口返回异常:', res.data);
+      }
+    }).catch((error) => {
+      console.error('设置年级网络错误:', error);
+    }).finally(() => {
+      callback && callback();
     });
   },
   

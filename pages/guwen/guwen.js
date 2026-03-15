@@ -6,14 +6,14 @@ Page({
     // 整合样式页面与主体数据字段
     statusBarHeight: 0,        // 样式页面：状态栏高度
     searchKeyword: "",         // 共用：搜索关键词
-    searchResults: [],         // 共用：文章列表
+    searchResults:[],         // 共用：文章列表
     totalCount: 0,             // 共用：总条数
     totalPages: 1,            // 共用：总页数
     currentPage: 1,            // 共用：当前页
     loading: false,            // 样式页面：加载状态（替换主体loadingArticles）
     gotoPage: "",              // 共用：跳转页码
     hasSearched: false,        // 共用：是否搜索状态
-    booksList: [],            // 样式页面：书籍列表（替换主体ancientTexts）
+    booksList:[],            // 样式页面：书籍列表（替换主体ancientTexts）
     booksLoading: false,       // 样式页面：书籍加载状态
     booksError: null,          // 主体：书籍错误信息（保留文案逻辑）
     currentDotIndex: 0,        // 样式页面：书籍轮播当前索引
@@ -46,70 +46,91 @@ Page({
   },
 
   // 样式页面：加载书籍列表（替换主体fetchAncientTexts，保留主体接口逻辑）
-  fetchBooksData() {
-    this.setData({
-      booksLoading: true,
-      booksError: null // 重置错误信息（主体逻辑）
-    });
+// 样式页面：加载书籍列表（替换主体fetchAncientTexts，保留主体接口逻辑）
+fetchBooksData() {
+  this.setData({
+    booksLoading: true,
+    booksError: null
+  });
 
-    app.authRequest({
-      url: '/api/getbooks', // 主体：接口地址不变
-      method: 'GET'
-    }).then(res => {
-      let bookList = [];
-      
-      // 保留主体数据格式判断逻辑
-      if (res.statusCode === 200) {
-        if (res.data?.code === 1 && Array.isArray(res.data.data)) {
-          bookList = res.data.data;
-        } else if (Array.isArray(res.data)) {
-          bookList = res.data;
-        }
-      } else {
-        console.error('获取书籍数据失败，响应状态异常:', res);
-        this.setData({ booksError: '网络请求失败: 响应状态异常' });
+  app.authRequest({
+    url: '/getbooks', 
+    method: 'GET',
+    data: {
+      initial: '全部' 
+    }
+  }).then(res => {
+    // 【关键调试】：打印后端到底返回了什么数据
+    console.log('获取书籍接口真实返回数据:', res); 
+
+    let bookList =[];
+    
+    // 兼容多种可能的后端返回格式（防止格式对不上导致数据为空）
+    const responseData = res.data || res; // 有的封装器会直接返回data
+
+    if (res.statusCode === 200 || responseData.code === 1 || responseData.code === 200) {
+      if (responseData.code === 1 && Array.isArray(responseData.data)) {
+        bookList = responseData.data;
+      } else if (responseData.code === 200 && Array.isArray(responseData.data)) {
+        bookList = responseData.data;
+      } else if (Array.isArray(responseData.rows)) {
+        bookList = responseData.rows;
+      } else if (Array.isArray(responseData)) {
+        bookList = responseData;
       }
+    }
 
-      if (bookList.length > 0) {
-        // 保留主体书籍数据格式化逻辑，适配样式页面booksList字段
-        const formattedBooks = bookList.map((item, index) => {
-          const filename = `${item.title || 'default'}.jpg`;
-          const safeImage = app.getOSSImagePath ? app.getOSSImagePath(filename) : 
-                           `https://newlan.oss-cn-shanghai.aliyuncs.com/books/${filename}`;
-          
-          return {
-            id: item.id || `book-${index}-${Date.now()}`, // 主体：ID生成逻辑
-            title: item.title || '无标题',
-            author: item.author || '未知作者', // 新增：适配样式页面作者显示
-            chapterFirstId: item.chapterFirstId || '',
-            safeImage: safeImage,
-            localFallback: `/Guwen/books/${filename}`, // 主体：本地备用图
-            imageError: false
-          };
-        });
-
-        this.setData({ 
-          booksList: formattedBooks,
-          booksLoading: false 
-        }, () => {
-          this.startCarousel(); // 样式页面：启动书籍轮播
-        });
-      } else {
-        // 保留主体空数据文案逻辑
-        this.setData({ 
-          booksList: [],
-          booksLoading: false,
-          booksError: bookList.length === 0 && res.statusCode === 200 ? '暂无书籍数据' : '网络请求失败'
-        });
-      }
-    }).catch(err => {
-      // 保留主体错误处理逻辑
-      this.setData({ 
-        booksError: '网络请求失败: ' + (err?.errMsg || '未知错误'),
-        booksLoading: false
+    if (bookList.length > 0) {
+      const formattedBooks = bookList.map((item, index) => {
+        // 【修复图片不显示】：对中文书名进行 URI 编码，防止 OSS 无法识别包含中文/空格的 URL
+        const title = item.title || 'default';
+        const filename = `${encodeURIComponent(title)}.jpg`; 
+        
+        const safeImage = app.getOSSImagePath ? app.getOSSImagePath(`${title}.jpg`) : 
+                         `https://newlan.oss-cn-shanghai.aliyuncs.com/books/${filename}`;
+        
+        return {
+          id: item.id || `book-${index}-${Date.now()}`, 
+          title: item.title || '无标题',
+          author: item.author || '未知作者', 
+          chapterFirstId: item.chapterFirstId || '',
+          safeImage: safeImage,
+          localFallback: `/Guwen/books/${title}.jpg`, // 本地路径最好不要 encode
+          imageError: false
+        };
       });
+
+      this.setData({ 
+        booksList: formattedBooks,
+        booksLoading: false 
+      }, () => {
+        this.startCarousel(); // 启动书籍轮播
+      });
+    } else {
+      // 如果真的是空数据
+      this.setData({ 
+        booksList:[],
+        booksLoading: false,
+        booksError: '暂无书籍数据' 
+      });
+    }
+  }).catch(err => {
+    console.error('获取书籍请求被拦截或出错:', err);
+    
+    // 过滤掉 request:ok 这种容易引起误解的提示
+    let errorMsg = '数据加载异常';
+    if (err && err.errMsg && err.errMsg !== 'request:ok') {
+      errorMsg = err.errMsg;
+    } else if (err && err.msg) {
+      errorMsg = err.msg; 
+    }
+
+    this.setData({ 
+      booksError: '请求失败: ' + errorMsg,
+      booksLoading: false
     });
-  },
+  });
+},
 
   // 样式页面：启动书籍轮播
   startCarousel() {
@@ -183,7 +204,7 @@ Page({
     this.setData({ loading: true }); // 统一为loading状态
 
     app.authRequest({
-      url: '/api/getArticleList', // 主体：接口地址不变
+      url: '/getArticleList', // 清理了多余的 /api 前缀
       method: 'GET',
       data: {
         startIndex: startIndex,
@@ -193,7 +214,7 @@ Page({
       if (res.statusCode === 200 && res.data.code === 1) {
         const data = res.data.data || {};
         const totalCount = data.total || 0;
-        const rows = data.rows || [];
+        const rows = data.rows ||[];
         
         // 保留主体文章数据格式化逻辑
         const validatedRows = rows.map((item, index) => {
@@ -231,13 +252,13 @@ Page({
     this.setData({ loading: true }); // 统一为loading状态
 
     app.authRequest({
-      url: '/api/searchArticles', // 主体：接口地址不变
+      url: '/searchArticles', // 清理了多余的 /api 前缀
       method: 'GET',
       data: { title: keyword }
     }).then(res => {
       if (res.statusCode === 200 && res.data.code === 1) {
         const data = res.data.data || {};
-        const allResults = data.rows || [];
+        const allResults = data.rows ||[];
         
         // 保留主体搜索数据格式化逻辑
         const validatedResults = allResults.map((item, index) => {

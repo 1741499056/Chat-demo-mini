@@ -11,7 +11,7 @@ Page({
     isCalendarExpanded: false,
     currentYear: 2026,
     currentMonth: 2,
-    calendarDays: [],
+    calendarDays:[],
     todayStr: '',
   },
 
@@ -51,88 +51,80 @@ Page({
 
   // 接口1：获取今日古诗
   getDailyPoem(token) {
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/coze/check-in/daily-poem`;
-
-    wx.request({
-      url: apiUrl,
+    app.authRequest({
+      url: '/coze/check-in/daily-poem',
       method: 'GET',
       header: {
         'Content-Type': 'application/json',
         'token': token
-      },
-      success: (res) => {
-        if (res.data && res.data.code === 1) {
-          const result = res.data.data;
-          this.setData({
-            currentPoem: {
-              id: result.id,
-              title: result.name,
-              author: result.author,
-              dynasty: result.dynasty,
-              content: result.fullAncientContent
-            }
-          });
-        }
-      },
-      fail: (err) => {
-        console.error('获取古诗失败', err);
       }
+    }).then((res) => {
+      if (res.data && res.data.code === 1) {
+        const result = res.data.data;
+        this.setData({
+          currentPoem: {
+            id: result.id,
+            title: result.name,
+            author: result.author,
+            dynasty: result.dynasty,
+            content: result.fullAncientContent
+          }
+        });
+      }
+    }).catch((err) => {
+      console.error('获取古诗失败', err);
     });
   },
 
-  // --- 接口2：获取月度打卡统计 (日历数据) [已修复] ---
+  // --- 接口2：获取月度打卡统计 (日历数据)---
   getMonthlyStats(token) {
     // 【修正点1】直接从 data 中获取当前的年和月
     const year = this.data.currentYear;
     const month = this.data.currentMonth;
 
     // 【修正点2】API 是 Path 参数，必须直接拼接在 URL 中
-    // 错误写法：.../calendar/{year}/{month}
-    // 正确写法：.../calendar/${year}/${month} -> 最终变成 .../calendar/2026/2
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/coze/check-in/calendar/${year}/${month}`;
+    const apiUrl = `/coze/check-in/calendar/${year}/${month}`;
   
     console.log('正在请求日历接口:', apiUrl); // 调试日志，确认 URL 是否正确
 
-    wx.request({
+    // 【修正点3】由于参数已经拼接到 URL 路径中，这里不需要再传 data
+    app.authRequest({
       url: apiUrl,
       method: 'GET',
       header: {
         'Content-Type': 'application/json',
         'token': token
-      },
-      // 【修正点3】由于参数已经拼接到 URL 路径中，这里不需要再传 data
-      success: (res) => {
-        console.log('月度数据:', res.data);
-        if (res.data && res.data.code === 1) {
-          const data = res.data.data;
-          
-          this.setData({
-            consecutiveDays: data.consecutiveDays || 0
-          });
-
-          // 渲染日历
-          this.renderCalendar(data.checkedInDates || []);
-        } else {
-          // 业务逻辑失败（如 code!=1），渲染空日历
-          this.renderCalendar([]);
-        }
-      },
-      fail: (err) => {
-        console.error('日历请求网络错误', err);
-        // 网络失败模拟数据
-        this.renderCalendar([
-          { date: "2026-02-15" }, 
-          { date: "2026-02-16" }
-        ]);
-        this.setData({ consecutiveDays: 5 });
       }
+    }).then((res) => {
+      console.log('月度数据:', res.data);
+      if (res.data && res.data.code === 1) {
+        const data = res.data.data;
+        
+        this.setData({
+          consecutiveDays: data.consecutiveDays || 0
+        });
+
+        // 渲染日历
+        this.renderCalendar(data.checkedInDates ||[]);
+      } else {
+        // 业务逻辑失败（如 code!=1），渲染空日历
+        this.renderCalendar([]);
+      }
+    }).catch((err) => {
+      console.error('日历请求网络错误', err);
+      // 网络失败模拟数据
+      this.renderCalendar([
+        { date: "2026-02-15" }, 
+        { date: "2026-02-16" }
+      ]);
+      this.setData({ consecutiveDays: 5 });
     });
   },
 
   // 核心逻辑：渲染日历网格
   renderCalendar(checkedList) {
     const { currentYear, currentMonth, todayStr } = this.data;
-    const daysArr = [];
+    const daysArr =[];
 
     // 1. 获取当月第一天是周几 (0-6, 0是周日)
     const firstDayObj = new Date(currentYear, currentMonth - 1, 1);

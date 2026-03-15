@@ -3,7 +3,7 @@ const app = getApp();
 
 Page({
   data: {
-    sentenceSkills: [],
+    sentenceSkills:[],
     skillCount: 0,
     isLoading: false,
     loadError: false,
@@ -56,9 +56,9 @@ Page({
       return;
     }
 
-    // 使用统一请求方法
+    // 使用统一请求方法，已清理 /api 前缀
     app.authRequest({
-      url: '/api/sentence-breaking/skills',
+      url: '/sentence-breaking/skills',
       method: 'GET'
     }).then(res => {
       if (res.statusCode === 200) {

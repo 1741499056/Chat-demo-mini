@@ -42,14 +42,14 @@ Page({
   },
 
   // =========================================================
-  // 1. 数据获取与处理 (后端接口: /api/poem/:id)
+  // 1. 数据获取与处理
   // =========================================================
   fetchPoemDetail(id) {
     wx.showLoading({ title: '加载中' });
     
-    // 使用 app.authRequest 自动携带 Token 和基础域名
+    // 使用 app.authRequest 自动携带 Token 和基础域名，去除了多余的 /api 前缀
     app.authRequest({
-      url: `/api/poem/${id}`,
+      url: `/poem/${id}`,
       method: 'GET'
     })
       .then(res => {
@@ -295,47 +295,47 @@ Page({
   },
 
   // =========================================================
-  // 3. AI 请求逻辑 (/coze/explain)
+  // 3. AI 请求逻辑 
   // =========================================================
   
   // 生成带标记的上下文，例如 "这里是<<<选中的词>>>的上下文"
- generateMarkedContent() {
-  const { originalContent } = this.data.poemData;
-  const { selectionStart, selectionText } = this.data;
-  
-  if (!originalContent || !selectionText) return "";
-  
-  // 1. 在原文中查找选中文本的真实索引位置
-  let trueStart = originalContent.indexOf(selectionText);
-  
-  // 2. 如果原文中有多个相同的词（例如多处出现"非"），利用 Editor 返回的 selectionStart 辅助寻找距离最近的那一个
-  if (trueStart !== -1) {
-    let currentMatch = trueStart;
-    let minDiff = Math.abs(currentMatch - selectionStart);
+  generateMarkedContent() {
+    const { originalContent } = this.data.poemData;
+    const { selectionStart, selectionText } = this.data;
     
-    let nextMatch = originalContent.indexOf(selectionText, currentMatch + 1);
-    while (nextMatch !== -1) {
-      const diff = Math.abs(nextMatch - selectionStart);
-      if (diff < minDiff) {
-        minDiff = diff;
-        trueStart = nextMatch;
+    if (!originalContent || !selectionText) return "";
+    
+    // 1. 在原文中查找选中文本的真实索引位置
+    let trueStart = originalContent.indexOf(selectionText);
+    
+    // 2. 如果原文中有多个相同的词（例如多处出现"非"），利用 Editor 返回的 selectionStart 辅助寻找距离最近的那一个
+    if (trueStart !== -1) {
+      let currentMatch = trueStart;
+      let minDiff = Math.abs(currentMatch - selectionStart);
+      
+      let nextMatch = originalContent.indexOf(selectionText, currentMatch + 1);
+      while (nextMatch !== -1) {
+        const diff = Math.abs(nextMatch - selectionStart);
+        if (diff < minDiff) {
+          minDiff = diff;
+          trueStart = nextMatch;
+        }
+        nextMatch = originalContent.indexOf(selectionText, nextMatch + 1);
       }
-      nextMatch = originalContent.indexOf(selectionText, nextMatch + 1);
+    } else {
+      // 兜底：如果没匹配到（例如选中区域跨段落导致带了特殊换行符），直接返回选中的词以防工作流报错
+      return `...<<<${selectionText}>>>...`;
     }
-  } else {
-    // 兜底：如果没匹配到（例如选中区域跨段落导致带了特殊换行符），直接返回选中的词以防工作流报错
-    return `...<<<${selectionText}>>>...`;
-  }
-  
-  // 3. 使用对齐后的真实索引计算前后文
-  const trueEnd = trueStart + selectionText.length;
-  const contextRange = 10; 
-  
-  const slimBefore = originalContent.slice(Math.max(0, trueStart - contextRange), trueStart);
-  const slimAfter = originalContent.slice(trueEnd, trueEnd + contextRange);
-  
-  return `...${slimBefore}<<<${selectionText}>>>${slimAfter}...`;
-},
+    
+    // 3. 使用对齐后的真实索引计算前后文
+    const trueEnd = trueStart + selectionText.length;
+    const contextRange = 10; 
+    
+    const slimBefore = originalContent.slice(Math.max(0, trueStart - contextRange), trueStart);
+    const slimAfter = originalContent.slice(trueEnd, trueEnd + contextRange);
+    
+    return `...${slimBefore}<<<${selectionText}>>>${slimAfter}...`;
+  },
 
   onAiAsk() {
     if (!this.data.selectionText) return;
@@ -360,7 +360,7 @@ Page({
     if (this.editorCtx) this.editorCtx.clearSelection();
   },
 
-  // 调用/coze/explain
+  // 调用解析接口
   requestCozeAi(markedContent) {
     const that = this;
     const postData = {
@@ -369,9 +369,9 @@ Page({
       marked_content: markedContent
     };
 
-    // 使用 app.authRequest 自动拼接域名: https://zhixunshiyun.yezhiqiu.cn/api/coze/explain
+    // 使用 app.authRequest，去除了多余的 /api 前缀
     app.authRequest({
-      url: '/api/coze/explain', // 只需要写路径
+      url: '/coze/explain', 
       method: 'POST',
       data: postData
     })

@@ -4,17 +4,16 @@ Component({
   properties: {},
 
   data: {
-    // 轮播图数据
+    // 轮播图数据：移除了 isTabBar 字段，因为已不再需要判断
     functions: [
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%8F%A4%E7%B1%8D%E5%A4%A7%E5%85%A8.png', text: '古籍大全', url: '/pages/guwen/guwen', isTabBar: true },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%8F%A4%E8%AF%97%E6%9F%A5%E8%AF%A2.png', text: '古诗查询', url: '/pages/poem/poem', isTabBar: true },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E8%AF%8D%E8%AF%AD%E6%9F%A5%E8%AF%A2.png', text: '词语查询', url: '/pages/AI/AI', isTabBar: true },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E8%AF%8D%E8%AF%AD%E7%BB%83%E4%B9%A0.png', text: '词语练习', url: '/pages/word/word', isTabBar: false },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%96%AD%E5%8F%A5%E4%B8%80%E8%A7%88.png', text: '断句一览', url: '/pages/sentencesegmentation/sentencesegmentation', isTabBar: false },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%96%AD%E5%8F%A5%E7%BB%83%E4%B9%A0.png', text: '断句练习', url: '/pages/sentencetest/sentencetest', isTabBar: false },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AF%97.png', text: '每日一诗', url: '/pages/DailyPoem/DailyPoem', isTabBar: false },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%86%85%E5%AE%B9%E6%9F%A5%E8%AF%A2.png', text: '内容查询', url: '/pages/ContentSearch/ContentSearch', isTabBar: false },
-      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/AI%E5%AF%B9%E8%AF%9D.png', text: 'AI对话', url: '/pages/AIchat-konwledge/AIchat-konwledge', isTabBar: false }
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%8F%A4%E7%B1%8D%E5%A4%A7%E5%85%A8.png', text: '古籍大全', url: '/pages/guwen/guwen' },
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%8F%A4%E8%AF%97%E6%9F%A5%E8%AF%A2.png', text: '古诗查询', url: '/pages/poem/poem' },
+    //  { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E8%AF%8D%E8%AF%AD%E6%9F%A5%E8%AF%A2.png', text: '词语查询', url: '/pages/AI/AI' }, 
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E8%AF%8D%E8%AF%AD%E7%BB%83%E4%B9%A0.png', text: '词语练习', url: '/pages/word/word' },
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%96%AD%E5%8F%A5%E4%B8%80%E8%A7%88.png', text: '断句一览', url: '/pages/sentencesegmentation/sentencesegmentation' },
+      // { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%96%AD%E5%8F%A5%E7%BB%83%E4%B9%A0.png', text: '断句练习', url: '/pages/sentencetest/sentencetest' },
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AF%97.png', text: '每日一诗', url: '/pages/DailyPoem/DailyPoem' },
+      { icon: 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/v1-gnt/%E5%86%85%E5%AE%B9%E6%9F%A5%E8%AF%A2.png', text: '内容查询', url: '/pages/ContentSearch/ContentSearch' },
     ],
     functionPages: [], 
 
@@ -50,9 +49,9 @@ Component({
     hasMore: true,
     showHistoryPanel: false,
 
-    // === 新增：快捷功能输入弹窗状态 ===
+    // 快捷功能输入弹窗状态
     showActionModal: false,
-    currentActionType: 'word', // 'word' 或 'sentence'
+    currentActionType: 'word', 
     actionInputValue: ''
   },
 
@@ -91,12 +90,21 @@ Component({
       this.setData({ functionPages: pages });
     },
 
+    // 修改后的跳转逻辑：取消 switchTab
     handleNavigate(e) {
       const func = e.currentTarget.dataset.func;
       if(!func) return;
+
+      // 检查登录状态
       if(app.globalData.isLoggedIn || this.data.hasToken){
-        if(func.isTabBar) wx.switchTab({ url: func.url });
-        else wx.navigateTo({ url: func.url });
+        // 既然没有了 TabBar，统一使用 wx.navigateTo 即可
+        // 如果该页面是“首页”，也可以考虑使用 wx.reLaunch
+        wx.navigateTo({ 
+          url: func.url,
+          fail: (err) => {
+            console.error("跳转失败，请检查路径是否正确:", err);
+          }
+        });
       } else {
         wx.navigateTo({ url: '/pages/login/login?forceLogin=true' });
       }
@@ -147,7 +155,6 @@ Component({
       this.setData({ inputMessage: fullMessage }, () => this.sendAiMessage());
     },
 
-    // === 新增：胶囊按钮与弹窗逻辑 ===
     openActionModal(e) {
       const type = e.currentTarget.dataset.type;
       this.setData({
@@ -172,7 +179,6 @@ Component({
         return;
       }
 
-      // 根据类型构建高级提示词
       let prompt = '';
       if (currentActionType === 'word') {
         prompt = `请详细解释古诗词中的“${actionInputValue}”。\n要求：\n1. 给出详细的字词释义；\n2. 列举2-3个包含该词的著名诗句作为例证；\n3. 解析该词在古诗文中通常象征的意象或情感（拓展延伸）。`;
@@ -180,17 +186,12 @@ Component({
         prompt = `请翻译并赏析诗句“${actionInputValue}”。\n要求：\n1. 给出通俗易懂的白话文翻译；\n2. 重点字词解释；\n3. 赏析句子的修辞手法及表达的情感；\n4. 拓展介绍该诗句的出处背景。`;
       }
 
-      // 关闭弹窗
       this.setData({ showActionModal: false });
-
-      // 将构建好的 prompt 设置为 inputMessage 并发送
       this.setData({ inputMessage: prompt }, () => {
         this.sendAiMessage();
       });
     },
-    // =================================
 
-    // WebSocket 连接
     connect() {
       if (this.data.isConnecting || this.data.activeConnection) return;
       
@@ -254,8 +255,6 @@ Component({
       if (chatIsLoading) return;
       
       const msgContent = inputMessage.trim();
-      
-      // 添加用户消息
       this.addMessage('user', msgContent);
       
       this.setData({
@@ -375,7 +374,7 @@ Component({
 
     toggleHistoryPanel() {
       this.setData({ showHistoryPanel: !this.data.showHistoryPanel });
-      if (!this.data.showHistoryPanel && this.data.conversations.length === 0) {
+      if (this.data.showHistoryPanel && this.data.conversations.length === 0) {
         this.loadConversations();
       }
     },

@@ -22,15 +22,16 @@
     <!-- 搜索栏 -->
     <view class="compact-search-bar">
       <view class="search-container">
-        <input 
-          class="search-input" 
-          placeholder="输入关键词搜索..." 
-          bindinput="onAncientInput" 
-          value="{{ancientSearchKeyword}}"
-          bindconfirm="doAncientSearch"
-        />
-        <view class="search-btn" bindtap="doAncientSearch">搜索</view>
-      </view>
+      <input 
+        class="search-input" 
+        placeholder="输入关键词搜索..." 
+        bindinput="onAncientInput" 
+        value="{{ancientSearchKeyword}}"
+        bindconfirm="doAncientSearch"
+        confirm-type="search" 
+      />
+      <view class="search-btn" catchtouchstart="doAncientSearch">搜索</view>
+    </view>
     </view>
     
     <scroll-view 

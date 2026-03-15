@@ -5,7 +5,7 @@ Page({
     searchWord: '',
     wordData: null,
     wordList: [],
-    wordClasses: [],
+    wordClasses:[],
     selectedWordClass: null,
     sessionId: Date.now().toString(),
     error: null,
@@ -31,7 +31,7 @@ Page({
     this.setData({ loading: true });
     
     app.authRequest({
-      url: '/api/word/searchWordClass',
+      url: '/word/searchWordClass',
       method: 'GET'
     }).then(res => {
       if (res.statusCode === 200 && res.data) {
@@ -73,7 +73,7 @@ Page({
     this.setData({ 
       loading: true,
       wordData: null,
-      wordList: []
+      wordList:[]
     });
     
     if (params.priority) {
@@ -85,20 +85,20 @@ Page({
     }
     
     app.authRequest({
-      url: '/api/word/searchWord',
+      url: '/word/searchWord',
       method: 'GET',
       data: params
     }).then(res => {
       if (res.statusCode === 200 && res.data) {
         if (res.data.code === 1 && Array.isArray(res.data.data)) {
           this.setData({ 
-            wordList: res.data.data || [],
+            wordList: res.data.data ||[],
             loading: false
           });
         } else {
           if (res.data.code === 1) {
             this.setData({ 
-              wordList: [],
+              wordList:[],
               loading: false
             });
           } else {
@@ -126,13 +126,13 @@ Page({
     this.setData({ 
       loading: true,
       error: null,
-      wordList: [],
+      wordList:[],
       selectedWordClass: null,
       activeTab: 'search'
     });
     
     app.authRequest({
-      url: '/api/word/searchWord',
+      url: '/word/searchWord',
       method: 'GET',
       data: { word }
     }).then(res => {
@@ -181,7 +181,7 @@ Page({
     };
     
     app.authRequest({
-      url: '/api/ai/generate-questions',
+      url: '/ai/generate-questions',
       method: 'POST',
       data: requestData
     }).then(res => {

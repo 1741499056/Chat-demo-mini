@@ -1,40 +1,42 @@
 // app.js
+//oss 路径
+//域名配置
+//云开发环境
+//其余函数
 App({
   onLaunch() {
     // 初始化云开发环境
     if (wx.cloud) {
       wx.cloud.init({
-        env: 'cloud1-2gosjb1o2ccd896a', // 你的云开发环境ID
-        traceUser: true, // 可选，记录用户访问
+        env: 'cloud1-2gosjb1o2ccd896a', // 云开发环境ID
+        traceUser: true, 
       });
       console.log('云开发初始化完成');
     } else {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力');
     }
 
-    // 每次启动小程序时重置登录状态
+  // 登录token相关设置
     this.globalData.token = '';
     this.globalData.isLoggedIn = false;
     this.globalData.targetRoute = null;
-    
-    // 清除存储的用户信息
     wx.removeStorageSync('userInfo');
     
-    // 初始化OSS配置
+    // OSS配置
     this.globalData.ossConfig = {
       baseUrl: 'https://newlan.oss-cn-shanghai.aliyuncs.com',
       bookPath: 'books'
     };
     
-    // 设置API基础域名
-    this.globalData.apiBaseUrl = 'https://zhixunshiyun.yezhiqiu.cn';
+    // 设置API全局域名 子页面js统一用authRequest方法来做
+    this.globalData.apiBaseUrl = 'https://zhixunshiyun.yezhiqiu.cn/api';
 
     wx.showShareMenu({
       menus: ['shareAppMessage', 'shareTimeline']
     });
   },
   
-  // 获取OSS图片路径
+ 
   getOSSImagePath(filename) {
     const { baseUrl, bookPath } = this.globalData.ossConfig;
     const encodedFilename = encodeURIComponent(filename);
@@ -97,10 +99,7 @@ App({
     this.globalData.token = '';
     this.globalData.isLoggedIn = false;
     this.globalData.targetRoute = null;
-    
-    // 清除存储的用户信息
     wx.removeStorageSync('userInfo');
-    
     // 返回首页
     wx.switchTab({ url: '/pages/index_v1/index_v1' });
   },
@@ -108,11 +107,9 @@ App({
   globalData: {
     token: '',
     isLoggedIn: false,
-    targetRoute: null,   // 存储{ path, type }对象
-    // apiBaseUrl: 'https://zhixunshiyun.yezhiqiu.cn/api', // 全局API基础域名
-    ossConfig: null // 会在onLaunch中初始化
+    targetRoute: null,  
+    ossConfig: null 
   },
-
   // 全局默认分享配置
   onShareAppMessage() {
     return {

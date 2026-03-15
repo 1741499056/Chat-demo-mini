@@ -4,7 +4,7 @@ const app = getApp();
 Page({
   data: {
     searchKeyword: "",
-    searchResults: [],
+    searchResults:[],
     totalCount: 0,
     totalPages: 1,
     currentPage: 1,
@@ -78,40 +78,38 @@ Page({
     const token = wx.getStorageSync('token') || app.globalData.token;
     if (!token) return;
     
-    wx.request({
-      url: 'https://zhixunshiyun.yezhiqiu.cn/api/users/info',
+    app.authRequest({
+      url: '/users/info', // 清理了完整域名和 /api 前缀
       method: 'GET',
       header: {
         'content-type': 'application/json',
         'token': token
-      },
-      success: (res) => {
-        if (res.data.code === 1 && res.data.data) {
-          const gradeName = res.data.data.gradeName;
-          const oldGrade = this.data.currentGrade;
-          
-          this.setData({ currentGrade: gradeName });
-          
-          // 保存到全局数据和本地存储
-          app.globalData.userGradeName = gradeName;
-          const userInfo = wx.getStorageSync('userInfo') || {};
-          userInfo.gradeName = gradeName;
-          wx.setStorageSync('userInfo', userInfo);
-          
-          // 关键：如果年级发生变化，重新加载诗词数据
-          if (oldGrade !== gradeName && gradeName) {
-            console.log('从服务器获取到新年级，重新加载诗词数据', { oldGrade, newGrade: gradeName });
-            this.setData({ 
-              currentPage: 1,
-              loading: true 
-            });
-            this.loadPoems(1);
-          }
-        }
-      },
-      fail: (error) => {
-        console.error('获取用户信息失败:', error);
       }
+    }).then((res) => {
+      if (res.data.code === 1 && res.data.data) {
+        const gradeName = res.data.data.gradeName;
+        const oldGrade = this.data.currentGrade;
+        
+        this.setData({ currentGrade: gradeName });
+        
+        // 保存到全局数据和本地存储
+        app.globalData.userGradeName = gradeName;
+        const userInfo = wx.getStorageSync('userInfo') || {};
+        userInfo.gradeName = gradeName;
+        wx.setStorageSync('userInfo', userInfo);
+        
+        // 关键：如果年级发生变化，重新加载诗词数据
+        if (oldGrade !== gradeName && gradeName) {
+          console.log('从服务器获取到新年级，重新加载诗词数据', { oldGrade, newGrade: gradeName });
+          this.setData({ 
+            currentPage: 1,
+            loading: true 
+          });
+          this.loadPoems(1);
+        }
+      }
+    }).catch((error) => {
+      console.error('获取用户信息失败:', error);
     });
   },
 
@@ -222,7 +220,7 @@ Page({
     wx.showLoading({ title: '加载中...', mask: true });
     
     app.authRequest({
-      url: `/api/poemsByGrade?${queryString}`,
+      url: `/poemsByGrade?${queryString}`, // 清理了多余的 /api 前缀
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -252,7 +250,7 @@ Page({
     wx.showLoading({ title: '搜索中...', mask: true });
     
     app.authRequest({
-      url: `/api/poemsByGrade?${queryString}`,
+      url: `/poemsByGrade?${queryString}`, // 清理了多余的 /api 前缀
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -276,7 +274,7 @@ Page({
     // 确保数据存在
     if (!data || !data.rows) {
       this.setData({
-        searchResults: [],
+        searchResults:[],
         totalCount: 0,
         totalPages: 1,
         loading: false

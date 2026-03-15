@@ -126,16 +126,9 @@ Page({
 
   // 从服务器获取用户年级
   fetchUserGrade() {
-    const token = wx.getStorageSync('token') || app.globalData.token;
-    if (!token) return;
-    
-    wx.request({
-      url: 'https://zhixunshiyun.yezhiqiu.cn/api/users/info',
+    app.authRequest({
+      url: '/users/info',
       method: 'GET',
-      header: {
-        'content-type': 'application/json',
-        'token': token
-      },
       success: (res) => {
         if (res.data.code === 1 && res.data.data) {
           const gradeName = res.data.data.gradeName;

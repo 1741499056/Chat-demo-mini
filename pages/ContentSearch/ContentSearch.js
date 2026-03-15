@@ -4,7 +4,7 @@ const app = getApp();
 Page({
   data: {
     searchKeyword: "",
-    searchResults: [],
+    searchResults:[],
     totalCount: 0,
     totalPages: 1,
     currentPage: 1,
@@ -16,7 +16,7 @@ Page({
     pageSize: 12,
     
     // 朝代筛选相关
-    dynastyList: [],           // 朝代列表
+    dynastyList:[],           // 朝代列表
     selectedDynastyId: null,   // 当前选中的朝代ID
     dynastyIndex: 0            // 朝代选择器的当前索引
   },
@@ -29,12 +29,12 @@ Page({
   // 获取朝代列表 - 使用统一请求方法
   loadDynastyList() {
     app.authRequest({
-      url: '/api/search/dynastiesCount',
+      url: '/search/dynastiesCount',
       method: 'GET'
     }).then(res => {
       if (res.statusCode === 200 && res.data.code === 1) {
         // 添加"全部"选项
-        const dynastyList = [
+        const dynastyList =[
           { dynastyId: null, dynasty: '全部', count: 0 },
           ...res.data.data
         ];
@@ -165,7 +165,7 @@ Page({
     wx.showLoading({ title: '加载中...', mask: true });
     
     app.authRequest({
-      url: `/api/search/keyword?${queryString}`,
+      url: `/search/keyword?${queryString}`,
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -203,7 +203,7 @@ Page({
     wx.showLoading({ title: '搜索中...', mask: true });
     
     app.authRequest({
-      url: `/api/search/keyword?${queryString}`,
+      url: `/search/keyword?${queryString}`,
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -238,7 +238,7 @@ Page({
     wx.showLoading({ title: '加载中...', mask: true });
     
     app.authRequest({
-      url: `/api/search/keyword?${queryString}`,
+      url: `/search/keyword?${queryString}`,
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -265,7 +265,7 @@ Page({
           .trim() : '';
     };
     
-    const contents = (data.rows || []).map(item => {
+    const contents = (data.rows ||[]).map(item => {
       return {
         id: item.id,
         name: cleanText(item.name) || '无标题',

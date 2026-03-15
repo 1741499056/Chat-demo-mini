@@ -1,6 +1,6 @@
 const app = getApp();
 
-// 1. ALL_SKILL_TYPES 现在是唯一的“数据字典”，用于将 techniqueId 映射为名称
+// 1. ALL_SKILL_TYPES 数据字典
 const ALL_SKILL_TYPES = [
     { id: 1, name: "虚词定位法" },
     { id: 2, name: "对话标志法" },
@@ -13,7 +13,6 @@ const ALL_SKILL_TYPES = [
     { id: 9, name: "专有名词保护法" },
 ];
 
-// 2. 筛选器列表
 const INITIAL_SKILL_TYPES_DISPLAY = ['全部', ...ALL_SKILL_TYPES.map(s => s.name)];
 
 // 3. 辅助函数：难度映射
@@ -49,13 +48,11 @@ Page({
         
         diffArr: ['全部', '初级', '中级', '高级'],
         resArr: ['全部', '正确', '错误'],
-        skillArr: INITIAL_SKILL_TYPES_DISPLAY, // 使用固定列表
+        skillArr: INITIAL_SKILL_TYPES_DISPLAY,
         
         filteredList: [], 
     },
 
-    // 5. onLoad【已优化】
-    // 移除了 fetchAllQuestionDetails，只调用 fetchUserAnswers
     onLoad() {
         this.setData({ isLoading: true });
         this.fetchUserAnswers()
@@ -78,7 +75,6 @@ Page({
             }
             console.error('解析 userAnswer 失败:', e);
             return `${content} [断句位置解析失败]`;
-
         }
         
         if (!breaks || breaks.length === 0) return content;
@@ -95,14 +91,11 @@ Page({
         return result;
     },
 
-    // 7. 【已移除】
-    // fetchAllQuestionDetails() 和全局 questionDetailsMap 已被完全移除
-
-    // 8. 【核心优化】fetchUserAnswers
-    // 移除了对 questionDetailsMap 的依赖和 ai/manual 的区分逻辑
+    // 8. 核心重构：fetchUserAnswers
     fetchUserAnswers() {
+        // 路径已重构：移除了多余的 /api 前缀
         return app.authRequest({
-            url: '/api/sentence-breaking/getuseranswers',
+            url: '/sentence-breaking/getuseranswers',
             method: 'GET',
         })
         .then(res => {
@@ -110,23 +103,16 @@ Page({
                 
                 const rawList = res.data.data;
                 const processedList = rawList.map(item => {
-
-                    // 统一从 item 获取所有数据
                     const content = item.content || '题目内容缺失';
                     const answer = item.answer || '正确答案缺失';
                     const analysis = item.analysis || '解析缺失';
                     
-                    // 统一使用 techniqueId 获取题型
                     const skillId = item.techniqueId || null;
                     const skillName = this.getSkillNameById(skillId);
-                    
-                    // 统一获取难度
                     const difficulty = getDifficultyName(item.difficulty || '未知'); 
 
                     return {
-                        ...item, // 保留 id, questionId, userId, userAnswer, isCorrect, createdAt
-                        
-                        // 统一赋值
+                        ...item,
                         formattedTime: formatTime(item.createdAt),
                         content,
                         answer,
@@ -134,13 +120,11 @@ Page({
                         difficulty,
                         skillId,
                         skillName,
-                        
                         userAnswerText: this.getTextFromBreaks(content, item.userAnswer), 
                         isCorrectBool: item.isCorrect === 1,
                         questionTypeDisplay: this.getQuestionTypeName(item.questionType),
                     };
                 }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
                 
                 this.setData({
                     historyList: processedList,
@@ -158,7 +142,6 @@ Page({
         });
     },
         
-    // 9. 辅助函数
     getQuestionTypeName(type) {
         if (type === 'manual') return '本地题库';
         if (type === 'ai') return 'AI题库';
@@ -204,20 +187,10 @@ Page({
         });
     },
 
-    onDiffTap(e) {
-        const val = e.currentTarget.dataset.val;
-        this.updateFilter('filterDiff', val);
-    },
-    onResTap(e) {
-        const val = e.currentTarget.dataset.val;
-        this.updateFilter('filterRes', val);
-    },
-    onSkillTap(e) {
-        const val = e.currentTarget.dataset.val;
-        this.updateFilter('filterSkill', val);
-    },
+    onDiffTap(e) { this.updateFilter('filterDiff', e.currentTarget.dataset.val); },
+    onResTap(e) { this.updateFilter('filterRes', e.currentTarget.dataset.val); },
+    onSkillTap(e) { this.updateFilter('filterSkill', e.currentTarget.dataset.val); },
 
-    // 11. 错误处理
     showError(message) {
         this.setData({
             isLoading: false,
@@ -232,15 +205,11 @@ Page({
             .catch(error => this.showError('重试失败: ' + error.message));
     },
 
-    goBack() {
-        wx.navigateBack();
-
-    },
-    // --- 【新增】跳转到报告页面 ---
+    goBack() { wx.navigateBack(); },
+    
     gotoReportPage() {
-      wx.navigateTo({
-          url: '/pages/breakingReport/breakingReport',
-      });
-  }
-
+        wx.navigateTo({
+            url: '/pages/breakingReport/breakingReport',
+        });
+    }
 });

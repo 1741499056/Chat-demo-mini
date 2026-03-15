@@ -15,7 +15,10 @@ Page({
     this.loadData();
   },
 
-  // 加载历史数据
+  /**
+   * 加载历史数据
+   * 路径已清理：'/api/ai/questions-history' -> '/ai/questions-history'
+   */
   loadData() {
     if (this.data.loading || !this.data.hasMore) return;
     
@@ -24,13 +27,14 @@ Page({
     wx.showLoading({ title: '加载中' });
     
     app.authRequest({
-      url: '/api/ai/questions-history',
+      url: '/ai/questions-history', // 清理冗余 /api
       method: 'GET',
       data: {
         page: this.data.page,
         pageSize: this.data.pageSize
       }
     }).then(res => {
+      // 无损保留原业务逻辑
       if (res.statusCode === 200 && res.data && res.data.code === 1) {
         const data = res.data.data;
         
@@ -55,7 +59,10 @@ Page({
     });
   },
 
-  // 修改后的删除方法 - 使用sessionId
+  /**
+   * 删除记录
+   * 路径已清理：'/api/ai/deleteQuestions' -> '/ai/deleteQuestions'
+   */
   deleteRecord(e) {
     const sessionId = e.currentTarget.dataset.sessionid;
     
@@ -72,9 +79,8 @@ Page({
         if (res.confirm) {
           this.setData({ deleting: true });
           
-          // 关键修改：使用 sessionId 参数
           app.authRequest({
-            url: `/api/ai/deleteQuestions?sessionId=${sessionId}`, // 图片要求使用 sessionId
+            url: `/ai/deleteQuestions?sessionId=${sessionId}`, // 清理冗余 /api
             method: 'DELETE',
           }).then(res => {
             console.log('删除接口响应:', res);
@@ -86,12 +92,10 @@ Page({
                 duration: 2000
               });
               
-              // 从列表中移除相同 sessionId 的所有记录
               const newHistoryList = this.data.historyList.filter(
                 item => item.sessionId !== sessionId
               );
               
-              // 更新总数
               const removedCount = this.data.historyList.length - newHistoryList.length;
               
               this.setData({
@@ -123,7 +127,7 @@ Page({
     }
   },
 
-  // 查看题目详情
+  // 查看题目详情 (注：此处为页面跳转，未做 app.authRequest 改动)
   viewQuestions(e) {
     const sessionId = e.currentTarget.dataset.sessionid;
     wx.navigateTo({
@@ -134,7 +138,6 @@ Page({
   // 格式化时间函数
   formatTime(timeStr) {
     if (!timeStr) return '';
-    // 格式为：2025-08-21 17:18:51 -> 08-21 17:18
     return timeStr.slice(5, 16);
   },
 
@@ -154,9 +157,8 @@ Page({
       page: 1,
       hasMore: true
     }, () => {
-      this.loadData().finally(() => {
-        wx.stopPullDownRefresh();
-      });
+      this.loadData(); // 内部有 finally 会处理 hideLoading，此处只需停止下拉动作
+      wx.stopPullDownRefresh();
     });
   },
 

@@ -15,10 +15,13 @@ Page({
   fetchAncientTexts: function() {
     this.setData({ loading: true, error: null });
     
-    // 使用全局的统一请求方法
+    // 使用全局的统一请求方法，并已清理多余的 /api 路径前缀
     app.authRequest({
-      url: '/api/getbooks', // 使用相对路径
-      method: 'GET'
+      url: '/getbooks', 
+      method: 'GET',
+      data: {
+        initial: '全部' 
+      }
     }).then(res => {
       let bookList = [];
       

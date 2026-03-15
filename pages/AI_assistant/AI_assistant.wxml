@@ -74,7 +74,7 @@
           <view class="avatar-container">
             <image 
               class="avatar-img" 
-              src="{{item.type === 'user' ? 'https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F.jpg' : 'https://newlan.oss-cn-shanghai.aliyuncs.com/icons/AI%E5%A4%B4%E5%83%8F.jpg'}}" 
+              src="{{item.type === 'user' ? 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9D%E7%94%A8%E6%88%B7.png' : 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9Dai%E5%A4%B4%E5%83%8F.png'}}" 
               mode="aspectFit"
             ></image>
           </view>
@@ -100,7 +100,7 @@
       <!-- 流式输出 (保持原样) -->
       <view wx:if="{{chatIsLoading}}" class="message-row row-left">
         <view class="avatar-container">
-          <image class="avatar-img" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/AI%E5%A4%B4%E5%83%8F.jpg" mode="aspectFit"></image>
+          <image class="avatar-img" src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9Dai%E5%A4%B4%E5%83%8F.png" mode="aspectFit"></image>
         </view>
         <view class="bubble-container assistant streaming">
           <view wx:if="{{streamingHasThink}}" class="think-widget">
@@ -154,7 +154,7 @@
         class="send-btn {{chatIsLoading || !inputMessage.trim() || !activeConnection || !hasToken ? 'disabled' : ''}}" 
         bindtap="sendAiMessage"
       >
-        <image class="send-icon" src="/icons/AI发送按钮.png" mode="aspectFit"></image>
+        <image class="send-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9D%E5%8F%91%E9%80%81%E5%9B%BE%E6%A0%87.png" mode="aspectFit"></image>
       </view>
     </view>
     <view class="input-tips">

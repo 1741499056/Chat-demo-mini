@@ -154,7 +154,7 @@ Page({
     }
 
     wx.uploadFile({
-      url: `${app.globalData.apiBaseUrl}/api/coze/check-in/evaluate`,
+      url: `${app.globalData.apiBaseUrl}/coze/check-in/evaluate`,
       filePath: targetPath,
       name: 'file',
       header: {

@@ -24,11 +24,67 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/ReciteRecords/ReciteRecords",
+          "pathName": "pages/ReciteRecords/ReciteRecords",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/poemRecite/poemRecite",
+          "pathName": "pages/poemRecite/poemRecite",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/logs/logs",
+          "pathName": "pages/logs/logs",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/home/home",
+          "pathName": "pages/home/home",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/breakingReport/breakingReport",
+          "pathName": "pages/breakingReport/breakingReport",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/analysis/index",
+          "pathName": "pages/analysis/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/AI/AI",
+          "pathName": "pages/AI/AI",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/三十六计/三十六计",
+          "pathName": "pages/三十六计/三十六计",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/recite/recite",
           "pathName": "pages/recite/recite",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/check_in_evaluate/check_in_evaluate",

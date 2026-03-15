@@ -5,7 +5,7 @@ Page({
     bookTitle: '',
     chapterTitle: '',
     navTreeData: [],
-    contentList: [],
+    contentList:[],
     fontSize: 30,
     nightMode: false,
     loading: true,
@@ -59,9 +59,9 @@ Page({
     
     wx.showLoading({ title: '加载中...', mask: true });
     
-    // 使用全局的统一请求方法
+    // 统一规范：使用 app.authRequest 并清理 /api 前缀
     app.authRequest({
-      url: '/api/getArticleDetail', // 使用相对路径
+      url: '/getArticleDetail',
       method: 'GET',
       data: { id } // 接口要求参数名为id
     }).then(res => {
@@ -84,7 +84,7 @@ Page({
     try {
       const data = apiData.data || {};
       const result = data.result || {};
-      const navTree = data.navTreeData || [];
+      const navTree = data.navTreeData ||[];
       
       // 提取书籍和章节标题
       const bookTitle = this.getBookTitleFromNav(navTree);
@@ -94,7 +94,7 @@ Page({
       const processedNavTree = this.processNavTree(navTree);
       
       // 解析内容
-      const contentList = this.parseContent(result.contentList || []);
+      const contentList = this.parseContent(result.contentList ||[]);
       
       console.log('处理后的详情数据:', {
         bookTitle,
@@ -122,7 +122,7 @@ Page({
   },
 
   processNavTree(navTree) {
-    if (!navTree || navTree.length === 0) return [];
+    if (!navTree || navTree.length === 0) return[];
     
     const rootNode = navTree[0];
     const currentId = this.data.id;
@@ -131,7 +131,7 @@ Page({
                              rootNode.children.length > 0 && 
                              !rootNode.children[0].children;
     
-    const categories = hasDirectChapters ? [{
+    const categories = hasDirectChapters ?[{
         ...rootNode, 
         id: rootNode.id + '-virtual-category',
         children: []
@@ -141,7 +141,7 @@ Page({
       const chapters = hasDirectChapters ? rootNode.children : category.children;
       
       // 检查当前章节是否在此分类下
-      const hasActiveChapter = (chapters || []).some(
+      const hasActiveChapter = (chapters ||[]).some(
         chapter => parseInt(chapter.id) === currentId
       );
       
@@ -149,7 +149,7 @@ Page({
         id: category.id,
         label: hasDirectChapters ? '' : category.label,
         isExpanded: hasActiveChapter,
-        children: (chapters || []).map(chapter => ({
+        children: (chapters ||[]).map(chapter => ({
           id: chapter.id,
           label: chapter.label,
           isActive: parseInt(chapter.id) === currentId

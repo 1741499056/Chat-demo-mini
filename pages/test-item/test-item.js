@@ -5,11 +5,11 @@ Page({
   data: {
     sessionId: '',
     questionDetail: {
-      choiceQuestionsList: [],
+      choiceQuestionsList:[],
       blankQuestionsList: []
     },
     activeTab: 'choice',
-    optionLetters: ['A', 'B', 'C', 'D'],
+    optionLetters:['A', 'B', 'C', 'D'],
     loading: false,
     error: null
   },
@@ -23,6 +23,7 @@ Page({
 
   fetchQuestionDetail() {
     const { sessionId } = this.data;
+    console.log("正在请求详情，当前的 sessionId 是:", sessionId);
     if (!sessionId) {
       this.handleError('缺少sessionId');
       return;
@@ -38,13 +39,14 @@ Page({
       return;
     }
     
-    // 使用统一请求方法
+    // 使用统一请求方法，并已清理多余的 /api 路径前缀
     app.authRequest({
-      url: '/api/ai/questionDetail',
+      url: '/ai/questionDetail',
       method: 'GET',
       data: { sessionId },
       header: {
-        'X-Session-ID': this.data.sessionId
+        'X-Session-ID': this.data.sessionId,
+        'Authorization': `Bearer ${token}`
       }
     }).then(res => {
       if (res.statusCode !== 200) {
@@ -66,7 +68,7 @@ Page({
   processQuestionData(apiData) {
     const result = {
       choiceQuestionsList: [],
-      blankQuestionsList: []
+      blankQuestionsList:[]
     };
     
     if (!apiData) {
@@ -81,7 +83,7 @@ Page({
     if (apiData.choiceQuestionsList?.length > 0) {
       result.choiceQuestionsList = apiData.choiceQuestionsList.map(q => {
         // 确保选项数组存在 (空值检查)
-        const safeOptions = (q.options || []).map(opt => {
+        const safeOptions = (q.options ||[]).map(opt => {
           // 将选项转换为安全的字符串
           const text = opt == null ? '' : typeof opt === 'string' ? opt : String(opt);
           

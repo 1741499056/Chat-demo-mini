@@ -4,7 +4,7 @@ Page({
   data: {
     selected: '', // 当前选中的年级名称
     redirectUrl: '',
-    gradeList: [] // 新增：页面本地存储年级列表（用于回显校验）
+    gradeList:[] // 新增：页面本地存储年级列表（用于回显校验）
   },
 
   onLoad(options) {
@@ -28,32 +28,29 @@ Page({
 
   // 新增：主动获取后端年级列表，初始化全局和页面数据
   getGradeList() {
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/getGradeList`;
     wx.showLoading({ title: '加载年级列表...' });
 
-    wx.request({
-      url: apiUrl,
-      method: 'GET',
-      success: (res) => {
-        wx.hideLoading();
-        if (res.data && res.data.code === 1 && Array.isArray(res.data.data)) {
-          const gradeList = res.data.data;
-          // 存储到页面数据和全局变量（供后续匹配ID使用）
-          this.setData({ gradeList });
-          app.globalData.gradeList = gradeList;
-          console.log('年级列表加载成功:', gradeList);
-        } else {
-          wx.showToast({
-            title: res.data?.msg || '加载年级失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: (error) => {
-        wx.hideLoading();
-        console.error('获取年级列表失败:', error);
-        wx.showToast({ title: '网络错误，无法加载年级', icon: 'none' });
+    app.authRequest({
+      url: '/getGradeList',
+      method: 'GET'
+    }).then((res) => {
+      wx.hideLoading();
+      if (res.data && res.data.code === 1 && Array.isArray(res.data.data)) {
+        const gradeList = res.data.data;
+        // 存储到页面数据和全局变量（供后续匹配ID使用）
+        this.setData({ gradeList });
+        app.globalData.gradeList = gradeList;
+        console.log('年级列表加载成功:', gradeList);
+      } else {
+        wx.showToast({
+          title: res.data?.msg || '加载年级失败',
+          icon: 'none'
+        });
       }
+    }).catch((error) => {
+      wx.hideLoading();
+      console.error('获取年级列表失败:', error);
+      wx.showToast({ title: '网络错误，无法加载年级', icon: 'none' });
     });
   },
 
@@ -89,12 +86,12 @@ Page({
     }
 
     // 1. 从全局年级列表中匹配对应的ID（基于后端返回的data结构）
-    const gradeList = app.globalData.gradeList || [];
+    const gradeList = app.globalData.gradeList ||[];
     // 精确匹配name（后端返回的name与前端选择的名称必须完全一致）
     const selectedGrade = gradeList.find(item => item.name === selectedGradeName);
 
     // 2. 校验：确保找到有效年级ID，且排除特殊项（0和18）
-    if (!selectedGrade || [0, 18].includes(selectedGrade.id)) {
+    if (!selectedGrade ||[0, 18].includes(selectedGrade.id)) {
       wx.showToast({ title: '选择的年级无效，请重新选择', icon: 'none' });
       return;
     }
@@ -114,7 +111,6 @@ Page({
 
   // 调用后端接口更新年级（确保参数正确）
   setUserGrade(gradeId) {
-    const apiUrl = `${app.globalData.apiBaseUrl}/api/users/grade`;
     const token = app.globalData.token || wx.getStorageSync('userInfo')?.token;
 
     if (!token) {
@@ -124,32 +120,31 @@ Page({
     }
 
     wx.showLoading({ title: '保存中...' });
-    wx.request({
-      url: apiUrl,
+    
+    app.authRequest({
+      url: '/users/grade',
       method: 'PUT',
       header: {
         'Content-Type': 'application/json',
         'token': token
       },
-      data: { gradeId: gradeId }, // 传递数字类型的ID（与后端匹配）
-      success: (res) => {
-        if (res.data && res.data.code === 1) {
-          wx.showToast({ title: '年级保存成功' });
-        } else {
-          wx.showToast({
-            title: res.data?.msg || '保存失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: (error) => {
-        console.error('保存年级失败:', error);
-        wx.showToast({ title: '网络连接失败', icon: 'none' });
-      },
-      complete: () => {
-        wx.hideLoading();
-        this.redirectToTarget();
+      data: { gradeId: gradeId }
+    }).then((res) => {
+      if (res.data && res.data.code === 1) {
+        wx.showToast({ title: '年级保存成功' });
+      } else {
+        wx.showToast({
+          title: res.data?.msg || '保存失败',
+          icon: 'none'
+        });
       }
+    }).catch((error) => {
+      console.error('保存年级失败:', error);
+      wx.showToast({ title: '网络连接失败', icon: 'none' });
+    }).finally(() => {
+      // 原 complete 回调逻辑移至 finally 中
+      wx.hideLoading();
+      this.redirectToTarget();
     });
   },
 

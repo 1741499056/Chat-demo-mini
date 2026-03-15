@@ -2,7 +2,6 @@ const app = getApp();
 
 Component({
   properties: {
-    // 从父组件传递的属性
     isLoggedIn: {
       type: Boolean,
       value: false
@@ -18,9 +17,7 @@ Component({
   },
 
   data: {
-    poetryType: 'ancient', // 默认显示古籍页面
-    
-    // 古籍相关数据
+    poetryType: 'ancient',
     ancientSearchKeyword: "",
     ancientSearchResults: [],
     ancientTotalCount: 0,
@@ -34,8 +31,6 @@ Component({
     booksError: null,
     currentDotIndex: 0,
     carouselTimer: null,
-    
-    // 古诗相关数据
     poemSearchKeyword: "",
     poemSearchResults: [],
     poemTotalCount: 0,
@@ -63,7 +58,6 @@ Component({
   },
 
   methods: {
-    // 初始化页面
     initPage() {
       this.getSystemInfo();
       this.setData({ 
@@ -75,7 +69,6 @@ Component({
       this.checkGradeStatus();
     },
 
-    // 页面显示时的处理
     onPageShow() {
       this.checkGradeStatus();
       if (this.data.poetryType === 'ancient' && this.data.booksList.length === 0) {
@@ -83,40 +76,33 @@ Component({
       }
     },
 
-    // 清理资源
     cleanup() {
       if (this.data.carouselTimer) {
         clearInterval(this.data.carouselTimer);
       }
     },
 
-    // 切换古籍/古诗页面
     switchPoetryType(e) {
       const type = e.currentTarget.dataset.type;
       this.setData({ poetryType: type });
       
-      // 如果切换到古籍且未加载数据，则加载
       if (type === 'ancient' && this.data.booksList.length === 0) {
         this.fetchBooksData();
       }
       
-      // 切换到古诗时，检查是否需要显示设置年级提示
       if (type === 'poem') {
         this.checkGradeStatus();
       }
     },
 
-    // 检查年级状态
     checkGradeStatus() {
       const { isLoggedIn, currentGrade } = this.data;
-      // 未登录或已登录但未设置年级时显示提示
       const showTip = !isLoggedIn || (isLoggedIn && !currentGrade);
       
       this.setData({ 
         showSetGradeTip: showTip 
       });
       
-      // 如果不需要显示提示，且是首次加载，则加载古诗数据
       if (!showTip && this.data.poetryType === 'poem' && this.data.poemSearchResults.length === 0) {
         this.setData({ 
           poemLoading: true,
@@ -127,7 +113,6 @@ Component({
       }
     },
 
-    // 获取系统信息
     getSystemInfo() {
       let systemInfo;
       if (wx.getSystemInfoSync) { 
@@ -139,7 +124,6 @@ Component({
 
     // ========== 古籍相关方法 ==========
 
-    // 获取书籍数据
     fetchBooksData() {
       this.setData({
         booksLoading: true,
@@ -147,11 +131,13 @@ Component({
       });
 
       app.authRequest({
-        url: '/api/getbooks',
-        method: 'GET'
+        url: '/getbooks',
+        method: 'GET',
+        data:{
+          initial:'全部'
+        }
       }).then(res => {
         let bookList = [];
-        
         if (res.statusCode === 200) {
           if (res.data?.code === 1 && Array.isArray(res.data.data)) {
             bookList = res.data.data;
@@ -167,7 +153,7 @@ Component({
           const formattedBooks = bookList.map((item, index) => {
             const filename = `${item.title || 'default'}.jpg`;
             const safeImage = app.getOSSImagePath ? app.getOSSImagePath(filename) : 
-                             `https://newlan.oss-cn-shanghai.aliyuncs.com/books/${filename}`;
+                                  `https://newlan.oss-cn-shanghai.aliyuncs.com/books/${filename}`;
             
             return {
               id: item.id || `book-${index}-${Date.now()}`,
@@ -201,19 +187,16 @@ Component({
       });
     },
 
-    // 启动轮播
     startCarousel() {
       if (this.data.carouselTimer) {
         clearInterval(this.data.carouselTimer);
       }
-
       const booksCount = this.data.booksList.length;
       if (booksCount <= 1) return; 
       const interval = 5000;
       const carouselTimer = setInterval(() => {
         this.nextSlide();
       }, interval);
-
       this.setData({ carouselTimer });
     },
 
@@ -264,18 +247,16 @@ Component({
     handleBookImgError(e) {
       const { index } = e.currentTarget.dataset;
       if (!this.data.booksList[index]) return;
-
       this.setData({
         [`booksList[${index}].imageError`]: true
       });
     },
 
-    // 加载古籍列表数据
     loadAncientListData(startIndex, pageSize) {
       this.setData({ ancientLoading: true });
 
       app.authRequest({
-        url: '/api/getArticleList',
+        url: '/getArticleList',
         method: 'GET',
         data: {
           startIndex: startIndex,
@@ -317,12 +298,11 @@ Component({
       });
     },
 
-    // 搜索古籍数据
     searchAncientData(keyword) {
       this.setData({ ancientLoading: true });
 
       app.authRequest({
-        url: '/api/searchArticles',
+        url: '/searchArticles',
         method: 'GET',
         data: { title: keyword }
       }).then(res => {
@@ -453,17 +433,14 @@ Component({
     
     navigateToDetail(e) {
       let item = null;
-      
       try {
         if (e.currentTarget.dataset.item) {
           item = e.currentTarget.dataset.item;
         }
-        
         if (!item && e.currentTarget.dataset.id) {
           const id = e.currentTarget.dataset.id;
           item = this.data.ancientSearchResults.find(i => i.id == id);
         }
-        
         if (!item) {
           throw new Error('无法获取项目数据');
         }
@@ -478,7 +455,6 @@ Component({
       }
       
       const id = parseInt(item.id, 10) || Math.floor(Math.random() * 1000);
-      
       wx.navigateTo({
         url: `/pages/ArticleDetail/ArticleDetail?id=${id}`,
         fail: (err) => {
@@ -523,9 +499,7 @@ Component({
     },
 
     doPoemSearch() {
-      // 如果需要显示设置年级提示，则不执行搜索
       if (this.data.showSetGradeTip) return;
-      
       const keyword = this.data.poemSearchKeyword.trim();
       const { poemLastSearch } = this.data;
       
@@ -537,7 +511,7 @@ Component({
           poemGotoPage: "",
           poemError: null
         });
-        this.loadPoems(1); // 无关键词时加载全年级数据
+        this.loadPoems(1); 
         return;
       }
       
@@ -564,11 +538,8 @@ Component({
       this.setData({ poemGotoPage: e.detail.value });
     },
 
-    // 统一分页跳转方法
     goToPoemPage(page) {
-      // 如果需要显示设置年级提示，则不执行分页操作
       if (this.data.showSetGradeTip) return;
-      
       if (page < 1 || page > this.data.poemTotalPages) return;
       
       this.setData({ 
@@ -609,7 +580,6 @@ Component({
       this.goToPoemPage(page);
     },
 
-    // 加载古诗列表
     loadPoems(page) {
       const params = {
         page: page.toString(),
@@ -625,7 +595,7 @@ Component({
       wx.showLoading({ title: '加载中...', mask: true });
       
       app.authRequest({
-        url: `/api/poemsByGrade?${queryString}`,
+        url: `/poemsByGrade?${queryString}`,
         method: 'GET'
       }).then(res => {
         wx.hideLoading();
@@ -640,7 +610,6 @@ Component({
       });
     },
 
-    // 搜索古诗
     searchPoems(keyword, page) {
       const params = {
         page: page.toString(),
@@ -656,7 +625,7 @@ Component({
       wx.showLoading({ title: '搜索中...', mask: true });
       
       app.authRequest({
-        url: `/api/poemsByGrade?${queryString}`,
+        url: `/poemsByGrade?${queryString}`,
         method: 'GET'
       }).then(res => {
         wx.hideLoading();
@@ -675,7 +644,6 @@ Component({
       });
     },
 
-    // 处理古诗数据
     processPoemData(data, isSearch = false) {
       if (!data || !data.rows) {
         this.setData({
@@ -725,7 +693,6 @@ Component({
       });
     },
 
-    // 古诗错误处理
     handlePoemError(msg) {
       console.error('古诗页面错误:', msg);
       this.setData({ 
@@ -739,11 +706,8 @@ Component({
       });
     },
 
-    // 重试请求
     retryPoemRequest() {
-      // 如果需要显示设置年级提示，则不执行重试
       if (this.data.showSetGradeTip) return;
-      
       const keyword = this.data.poemSearchKeyword.trim();
       if (keyword) {
         this.searchPoems(keyword, this.data.poemCurrentPage);
@@ -752,14 +716,12 @@ Component({
       }
     },
 
-    // 跳转到古诗详情页
     navigateToPoemDetail(e) {
       const { id } = e.currentTarget.dataset;
       if (!id) {
         wx.showToast({ title: '数据获取失败', icon: 'none' });
         return;
       }
-
       wx.navigateTo({
         url: `/pages/poem/poemdetail?id=${id}`
       });

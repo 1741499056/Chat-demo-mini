@@ -43,7 +43,7 @@ Page({
     wx.showLoading({ title: '刷新中...', mask: true });
 
     app.authRequest({
-      url: '/api/poem/daily',
+      url: 'poem/daily',
       method: "GET"
     }).then(res => {
       wx.hideLoading();
