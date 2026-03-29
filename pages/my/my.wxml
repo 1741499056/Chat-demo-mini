@@ -1,4 +1,9 @@
 <view class="me-container">
+  <view class="agent-mask" wx:if="{{isSearching}}">
+  <view class="agent-dialog">
+    <view class="loading-spinner"></view> <text class="agent-text">{{agentStatusText}}</text>
+  </view>
+</view>
   <view class="content-card user-card">
     <view class="avatar-section">
       <image class="user-avatar" src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png"></image>
@@ -19,9 +24,23 @@
     <block wx:else>
       <view class="button-group">
         <button class="grade-setting-btn" bindtap="goToGradeSelect">设置年级</button>
-        <button class="bg-setting-btn">设置背景</button>
+        <!-- <button class="bg-setting-btn">设置背景</button> -->
       <!-- 临时测试打卡 -->
       <button bindtap="goTodaka">打卡</button>
+      <!-- 临时测试搜索 -->
+      <view class="search-box">
+        <input 
+          type="text" 
+          class="openclaw" 
+          placeholder="请输入古诗名" 
+          bindinput="onInput" 
+          bindconfirm="doSearch"
+          confirm-type="search" 
+        />
+        <button class="search-btn" bindtap="doSearch">直达古诗</button>
+      </view>
+
+
       </view>
     </block>
   </view>

@@ -4,7 +4,7 @@ Page({
   data: {
     selected: '', // 当前选中的年级名称
     redirectUrl: '',
-    gradeList:[] // 新增：页面本地存储年级列表（用于回显校验）
+    gradeList:[] //页面本地存储年级列表
   },
 
   onLoad(options) {
@@ -15,7 +15,7 @@ Page({
       });
     }
 
-    // 2. 主动获取年级列表（关键：不再依赖注册页的全局数据）
+    // 2. 主动获取年级列表
     this.getGradeList();
 
     // 3. 回显已选中的年级（若有）
@@ -26,7 +26,7 @@ Page({
     }
   },
 
-  // 新增：主动获取后端年级列表，初始化全局和页面数据
+  // 主动获取后端年级列表，初始化全局和页面数据
   getGradeList() {
     wx.showLoading({ title: '加载年级列表...' });
 
@@ -57,12 +57,6 @@ Page({
   // 选择年级：确保选中的名称与后端name完全匹配
   selectGrade(e) {
     const gradeName = e.currentTarget.dataset.grade;
-    // 校验：排除"全部"和"全年级"（后端特殊项，不允许选择）
-    const isInvalid = ['全部', '全年级'].includes(gradeName);
-    if (isInvalid) {
-      wx.showToast({ title: '请选择具体年级', icon: 'none' });
-      return;
-    }
     this.setData({ selected: gradeName });
   },
 
@@ -90,12 +84,12 @@ Page({
     // 精确匹配name（后端返回的name与前端选择的名称必须完全一致）
     const selectedGrade = gradeList.find(item => item.name === selectedGradeName);
 
-    // 2. 校验：确保找到有效年级ID，且排除特殊项（0和18）
-    if (!selectedGrade ||[0, 18].includes(selectedGrade.id)) {
+    // 2. 校验：确保找到有效年级ID
+    if (!selectedGrade ||[0].includes(selectedGrade.id)) {
       wx.showToast({ title: '选择的年级无效，请重新选择', icon: 'none' });
       return;
     }
-    const selectedGradeId = selectedGrade.id; // 此时ID一定是有效数字（1-17）
+    const selectedGradeId = selectedGrade.id; 
 
     // 3. 更新全局变量和本地存储
     app.globalData.userGradeName = selectedGradeName;

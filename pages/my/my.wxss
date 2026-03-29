@@ -244,3 +244,35 @@ page {
   border: 1rpx solid #e0e0e0 !important;
   cursor: not-allowed;
 }
+
+/* 搜索框 */
+.openclaw {
+  border: 1px solid red;
+  z-index:1;
+}
+
+.agent-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.agent-dialog {
+  background: #fff;
+  padding: 40rpx;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 80%;
+}
+.agent-text {
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  color: #333;
+  text-align: center;
+  word-wrap: break-word; /* 允许换行 */
+}

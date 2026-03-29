@@ -1,4 +1,3 @@
-// 在顶部添加全局 app 引用
 const app = getApp();
 
 Page({
@@ -28,7 +27,8 @@ Page({
     // 每次页面显示时重新加载年级数据，并检测年级变化
     this.loadGradeData();
   },
-
+//获取年级函数  本地+服务器
+// 本地获取
   loadGradeData() {
     // 检查登录状态
     const isLoggedIn = app.globalData.isLoggedIn || wx.getStorageSync('token');
@@ -73,13 +73,13 @@ Page({
     }
   },
 
-  // 从服务器获取用户年级
+//服务器获取
   fetchUserGrade() {
     const token = wx.getStorageSync('token') || app.globalData.token;
     if (!token) return;
     
     app.authRequest({
-      url: '/users/info', // 清理了完整域名和 /api 前缀
+      url: '/users/info', 
       method: 'GET',
       header: {
         'content-type': 'application/json',
@@ -220,7 +220,7 @@ Page({
     wx.showLoading({ title: '加载中...', mask: true });
     
     app.authRequest({
-      url: `/poemsByGrade?${queryString}`, // 清理了多余的 /api 前缀
+      url: `/poemsByGrade?${queryString}`, 
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -250,7 +250,7 @@ Page({
     wx.showLoading({ title: '搜索中...', mask: true });
     
     app.authRequest({
-      url: `/poemsByGrade?${queryString}`, // 清理了多余的 /api 前缀
+      url: `/poemsByGrade?${queryString}`, 
       method: 'GET'
     }).then(res => {
       wx.hideLoading();
@@ -298,7 +298,6 @@ Page({
         cleanText(item.fullModernContent) || 
         '暂无内容';
       
-      // ====== 修改开始：添加三个新字段 ======
       return {
         id: item.id,
         title: cleanText(item.name) || '无标题',
@@ -310,7 +309,6 @@ Page({
         grade: item.grade || '',          // 年级名称
         page: item.page || ''             // 页码
       };
-      // ====== 修改结束 ======
     });
 
     // 计算总页数
@@ -335,7 +333,7 @@ Page({
     this.loadPoems(1);
   },
 
-  // 导航到详情页
+  // 跳转到古诗的具体页面
   navigateToDetail(e) {
     const { id } = e.currentTarget.dataset;
     if (!id) {

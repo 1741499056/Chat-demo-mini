@@ -45,8 +45,11 @@
     </view>
   </view>
 
-    <!-- 暂不设置 -->
-    <!-- <view class="not-set" bindtap="skipSet">暂不设置</view> -->
+    <!-- 全年级-->
+    <view class="section">
+      <view class="section-title">其他</view>
+      <view class="grade-item {{selected === '全年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="全年级">全年级</view>
+    </view>
 
     <!-- 保存按钮 -->
     <button class="save-btn" bindtap="saveGrade">保存</button>
