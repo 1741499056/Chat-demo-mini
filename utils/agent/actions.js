@@ -29,18 +29,29 @@ export const AtomicActions = {
    * 2. 更新/修改年级
    */
   async updateGrade({ gradeId }) {
+    console.log("🚀 开始提权请求，目标 gradeId:", gradeId); // 确认函数进来了
     try {
       const res = await app.authRequest({
         url: '/users/grade',
         method: 'PUT',
         data: { gradeId }
       });
+      
+      console.log("📡 后端原始返回:", res.data);
+
       if (res.data.code === 1) {
         app.globalData.userGradeId = gradeId;
+
+        if (res.data.data && res.data.data.token) {
+          console.log("🔑 拿到新权限 Token:", res.data.data.token);
+          wx.setStorageSync('token', res.data.data.token);
+          app.globalData.token = res.data.data.token;
+        }
         return { success: true, data: gradeId };
       }
-      return { success: false, error: '更新失败' };
+      return { success: false, error: '后端返回 Code 错误' };
     } catch (e) {
+      console.error("❌ 请求崩了:", e);
       return { success: false, error: e };
     }
   },
@@ -66,5 +77,5 @@ export const AtomicActions = {
       // 等待提示框展示完毕再执行下一步
       setTimeout(() => resolve({ success: true }), duration);
     });
-  }
+  },
 };

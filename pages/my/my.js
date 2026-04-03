@@ -1,7 +1,8 @@
 // my.js
 const app = getApp();
-// 引入执行器
-import { runPlanner } from '../../utils/agent/executor.js'; 
+
+// 🌟 引入全新的递归执行器 (注意这里的导入名变了)
+import { runAgentLoop } from '../../utils/agent/executor.js'; 
 
 Component({
   properties: {
@@ -15,7 +16,7 @@ Component({
   data: {
     searchKeyword: "", 
     isSearching: false, 
-    agentStatusText: "" // 🌟 新增：用于存放 Agent 当前执行的动作文案
+    agentStatusText: "" // 用于存放 Agent 当前执行的动作文案
   },
 
   methods: {
@@ -32,16 +33,17 @@ Component({
       this.autoSearchAndJump(keyword);
     },
 
-    //Agent ---
+    // 🌟 Agent 核心接管逻辑 (彻底抛弃静态数组)
     autoSearchAndJump: async function(poemName) {
       if (this.data.isSearching) return;
       
-      // 🌟 开启自定义遮罩，初始化文案
+      // 开启自定义遮罩，初始化文案
       this.setData({ 
         isSearching: true,
-        agentStatusText: 'Agent接管中...' 
+        agentStatusText: 'Agent 大脑连接中...' 
       });
 
+      // 1. 获取用户的原始年级（极其重要，大模型后续要用来恢复权限）
       const originalGradeId = app.globalData.userGradeId || wx.getStorageSync('userInfo')?.gradeId;
       if (!originalGradeId) {
         wx.showToast({ title: '请先登录并设置年级', icon: 'none' });
@@ -49,64 +51,45 @@ Component({
         return;
       }
 
-      // 注意：这里删除了原有的 wx.showLoading
-
       try {
-        /**
-         * 模拟大模型返回的 JSON Plan
-         */
-        const mockPlan = [
-          {
-            action: 'SET_GRADE',
-            params: { gradeId: 18 },
-            comment: '🔐 正在开启全库访问权限...' 
-          },
-          {
-            action: 'QUERY_DATA',
-            params: {
-              url: `/poemsByGrade?page=1&pageSize=1&name=${encodeURIComponent(poemName)}`,
-              method: 'GET'
-            },
-            outputKey: 'searchRes',
-            comment: `🔍 正在库中搜寻《${poemName}》...` // 动态显示书名
-          },
-          {
-            action: 'SET_GRADE',
-            params: { gradeId: '{{originalGradeId}}' },
-            comment: '♻️ 正在恢复您的年级设置...'
-          },
-          {
-            action: 'NAVIGATE',
-            params: {
-              url: `/pages/poem/poemdetail?id={{searchRes.data.rows.0.id}}`
-            },
-            comment: '🚀 正在为您直达详情页...'
+        // 2. 构造发给大模型的第一句话，悄悄把上下文信息塞进去
+        const initialMessages = [
+          { 
+            role: 'user', 
+            // 明确告诉大模型用户的需求，以及系统隐式的环境变量
+            content: `帮我找古诗《${poemName}》。(系统隐式上下文：当前用户的 originalGradeId 为 ${originalGradeId})` 
           }
         ];
 
-        // 🌟 将任务丢给执行器跑，传入回调函数实时更新 agentStatusText
-        const finalContext = await runPlanner(mockPlan, (comment) => {
+        // 3. 将任务丢给 Agent 引擎跑，传入回调函数实时更新文案
+        const finalResult = await runAgentLoop(initialMessages, (comment) => {
           this.setData({ agentStatusText: comment });
         });
 
-        const foundId = finalContext?.searchRes?.data?.rows?.[0]?.id;
-        if (foundId) {
-          this.setData({ searchKeyword: "" }); // 搜到了，清空输入框
+        // 4. Agent 执行结束的处理
+        if (finalResult && finalResult.success) {
+          // 任务圆满完成（比如已经跳转或已经弹窗），清空输入框
+          this.setData({ searchKeyword: "" }); 
         } else {
-          wx.showToast({ title: `全库未找到"${poemName}"`, icon: 'none' });
+          // 出现异常（网络断开或代码报错）
+          wx.showToast({ title: 'Agent 执行被打断', icon: 'none' });
         }
 
       } catch (error) {
-        console.error('Agent 测试链路异常:', error);
+        console.error('Agent 链路异常:', error);
         wx.showToast({ title: 'Agent调度崩溃', icon: 'none' });
       } finally {
-        // 🌟 无论成功失败，重置搜索状态和文案，关闭遮罩
+        // 无论成功失败，重置搜索状态和文案，关闭遮罩
         this.setData({ 
           isSearching: false,
           agentStatusText: '' 
         });
       }
     },
+
+    // --------------------------------------------------
+    // 👇 以下所有的基础页面跳转和方法保持原样完全不动 👇
+    // --------------------------------------------------
 
     goToGradeSelect() {
       if (!this.data.isLoggedIn) {
