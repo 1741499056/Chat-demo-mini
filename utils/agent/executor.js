@@ -1,108 +1,104 @@
 // utils/agent/executor.js
-
 import { AtomicActions } from './actions.js';
 
-export async function runPlanner(plan, onProgress) { // 🌟 新增 onProgress 回调参数
-  const context = {
-    originalGradeId: getApp().globalData.userGradeId || wx.getStorageSync('userInfo')?.gradeId,
-    lastResult: null,
-    timestamp: Date.now() 
-  };
+/**
+ * 核心引擎：与 Agent 后端进行递归交互 (Ping-Pong 架构)
+ * @param {Array} messages - 对话历史上下文
+ * @param {Function} onProgress - 用于更新 UI 状态的回调
+ */
+// ... 前面引入省略
+export async function runAgentLoop(messages, onProgress) {
+  try {
+    const res = await new Promise((resolve, reject) => {
+      wx.request({
+        url: 'http://localhost:3000/api/agent/chat', 
+        method: 'POST',
+        data: { messages: messages },
+        success: resolve,
+        fail: reject
+      });
+    });
 
-  console.log('--- Agent 规划开始执行 ---', plan);
+    const aiResponse = res.data;
 
-  for (let i = 0; i < plan.length; i++) {
-    const step = plan[i];
-    const { action, params, outputKey, comment } = step;
+    if (aiResponse.type === 'tool_call') {
+      // 🌟 修复：这里的变量名必须和后端 res.json 保持一致
+      const { toolName, params, toolCallId } = aiResponse;
+      let finalParams = params;
+      if (params && params.input) {
+        finalParams = typeof params.input === 'string' ? JSON.parse(params.input) : params.input;
+      }
+      
+      console.log(`[前端执行器] 修正后的参数:`, finalParams);
+      if (typeof onProgress === 'function') {
+        const actionTextMap = {
+          'SET_GRADE': '🔐 正在切换权限环境...',
+          'QUERY_DATA': '🔍 正在全库搜寻...',
+          'NAVIGATE': '🚀 正在为您规划路线...',
+          'SHOW_MSG': '💬 正在生成提示...'
+        };
+        onProgress(actionTextMap[toolName] || `⚙️ 执行: ${toolName}...`);
+      }
 
-    // --- 核心优化点：UI 实时反馈 ---
-    // 通过回调函数将状态推给页面组件，彻底摆脱 wx.showLoading 的字数限制
-    if (comment && typeof onProgress === 'function') {
-      onProgress(comment);
-    }
+      console.log(`[前端执行器] 收到指令: ${toolName}`, params);
 
-    const processedParams = parseParams(params, context);
-    let result = null;
+      // 执行动作...
+      let actionResult = null;
+      // 注意：确保 params 是对象，如果是字符串则 parse 掉
+      const cleanParams = typeof params === 'string' ? JSON.parse(params) : params;
 
-    try {
-      switch (action) {
+      switch (toolName) {
         case 'SET_GRADE':
-          result = await AtomicActions.updateGrade(processedParams);
+          actionResult = await AtomicActions.updateGrade(cleanParams);
+          //增加等待时间
+          if (cleanParams.gradeId === 18) {
+            console.log("[前端执行器] 提权操作，等待权限同步...");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
           break;
         case 'QUERY_DATA':
-          result = await AtomicActions.fetchData(processedParams);
+          actionResult = await AtomicActions.fetchData(cleanParams);
           break;
         case 'NAVIGATE':
-          // 统一走自定义回调更新状态，跳转前给个反馈
-          if (typeof onProgress === 'function') {
-            onProgress('🚀 准备为您跳转页面...');
-          }
-          result = await AtomicActions.navigateTo(processedParams);
+          actionResult = await AtomicActions.navigateTo(cleanParams);
           break;
         case 'SHOW_MSG':
-          result = await AtomicActions.showToast(processedParams);
+          actionResult = await AtomicActions.showToast(cleanParams);
           break;
         default:
-          result = { success: false, error: 'UNKNOWN_ACTION' };
+          actionResult = { success: false, error: '未知的工具名称' };
       }
-    } catch (err) {
-      result = { success: false, error: err };
-    }
 
-    if (result && result.success === false) {
-      return { ...context, _error: result.error };
-    }
+      // 🌟 修复：构造标准的 OpenAI 历史记录格式发送回后端
+      // 1. Assistant 消息必须包含对应的 tool_calls
+      messages.push({
+        role: 'assistant',
+        tool_calls: [{
+          id: toolCallId,
+          type: 'function',
+          function: { 
+            name: toolName, 
+            arguments: JSON.stringify(cleanParams) 
+          }
+        }]
+      });
 
-    const stepData = result ? result.data : null;
-    if (outputKey && stepData !== undefined) {
-      context[outputKey] = stepData;
-    }
-    context.lastResult = stepData;
+      // 2. Tool 消息必须带有对应的 tool_call_id
+      messages.push({
+        role: 'tool',
+        tool_call_id: toolCallId,
+        name: toolName,
+        content: JSON.stringify(actionResult)
+      });
 
-    // 每步之间留 300ms 间隙，防止 UI 闪烁太快用户看不清“思考过程”
-    await new Promise(r => setTimeout(r, 1200));
+      await new Promise(r => setTimeout(r, 600));
+      return await runAgentLoop(messages, onProgress); // 递归进入下一轮 Ping-Pong
+    } 
+    else if (aiResponse.type === 'message') {
+      return { success: true, message: aiResponse.content };
+    }
+  } catch (error) {
+    console.error('Agent 交互中断:', error);
+    return { success: false, error: error };
   }
-
-  return context;
-}
-
-/**
- * 安全的参数解析器：递归遍历对象，只替换字符串类型中的变量
- */
-function parseParams(params, context) {
-  if (!params) return params;
-
-  // 处理字符串类型
-  if (typeof params === 'string') {
-    // 匹配完全等于 "{{xxx}}" 的情况，这样可以保持原类型（比如数字、对象）
-    const exactMatch = params.match(/^\{\{([\w.]+)\}\}$/);
-    if (exactMatch) {
-      const key = exactMatch[1];
-      const val = key.split('.').reduce((o, i) => o?.[i], context);
-      return val !== undefined ? val : '';
-    }
-
-    // 匹配包含在字符串中间的 "{{xxx}}"（比如 "id={{poemId}}&type=1"）
-    return params.replace(/\{\{([\w.]+)\}\}/g, (match, key) => {
-      const val = key.split('.').reduce((o, i) => o?.[i], context);
-      return val !== undefined && val !== null ? val : '';
-    });
-  }
-
-  // 处理数组类型
-  if (Array.isArray(params)) {
-    return params.map(item => parseParams(item, context));
-  }
-
-  // 处理对象类型
-  if (typeof params === 'object' && params !== null) {
-    const result = {};
-    for (const key in params) {
-      result[key] = parseParams(params[key], context);
-    }
-    return result;
-  }
-
-  // 其他类型（数字、布尔等）直接返回
-  return params;
 }
