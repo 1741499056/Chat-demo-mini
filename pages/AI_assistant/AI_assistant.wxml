@@ -1,0 +1,237 @@
+<view class="ai-page-container">
+  <view class="functions-static-container">
+    
+    <view class="focus-grid">
+      <view class="focus-item" wx:for="{{focusFunctions}}" wx:key="name" bindtap="handleNavigate" data-func="{{item}}">
+        <image src="{{item.icon}}" mode="aspectFill" class="focus-banner"/>
+      </view>
+    </view>
+
+    <view class="minor-row">
+      <view class="minor-item" wx:for="{{minorFunctions}}" wx:key="name" bindtap="handleNavigate" data-func="{{item}}">
+        <view class="minor-icon-wrapper">
+          <image src="{{item.icon}}" mode="aspectFit" class="minor-icon"/>
+        </view>
+        <text class="minor-name">{{item.name}}</text>
+      </view>
+    </view>
+    
+  </view>
+
+  <!-- AI对话区域 -->
+  <view class="ai-chat-section">
+    <!-- 头部 -->
+    <view class="chat-header">
+      <view class="header-left">
+        <text class="chat-title">倾盖晤言，尺素传心</text>
+        <view class="connection-status">
+          <view class="status-dot {{activeConnection ? 'connected' : 'disconnected'}}"></view>
+          <text class="status-text">{{activeConnection ? '已连接' : '未连接'}}</text>
+        </view>
+      </view>
+      <view class="header-right">
+        <view class="history-btn" bindtap="toggleHistoryPanel">
+          <image class="history-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.jpg" mode="aspectFit"></image>
+          <text>历史对话</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 消息列表区域 -->
+    <view class="messages-container">
+      <scroll-view 
+        class="chat-messages" 
+        scroll-y 
+        scroll-with-animation
+        scroll-top="{{scrollTop}}"
+        bindscroll="onChatScroll"
+        enable-back-to-top="true"
+        bindtap="forceScrollToBottom"
+        style="height: 100%;"
+      >
+        <!-- 欢迎页 -->
+        <view wx:if="{{messages.length === 0 && !chatIsLoading}}" class="gemini-welcome-container">
+            <view class="welcome-header">
+              <view class="greeting-line">
+                <text class="user-name-gradient">{{userName || '同学'}}</text>
+                <text class="greeting-text">，你好</text>
+              </view>
+              <view class="sub-greeting">我们一起开始学习吧！</view>
+            </view>
+            <view class="suggestion-chips-area">
+              <block wx:for="{{suggestionPrompts}}" wx:key="index">
+                  <view class="suggestion-chip" bindtap="handleSuggestionClick" data-prompt="{{item.text}}">
+                    <view class="chip-icon-box">
+                      <text class="chip-emoji">{{item.icon}}</text>
+                    </view>
+                    <text class="chip-text">{{item.text}}</text>
+                  </view>
+              </block>
+            </view>
+        </view>
+
+        <!-- 消息列表 -->
+        <block wx:for="{{messages}}" wx:key="id">
+          <view class="message-row {{item.type === 'user' ? 'row-reverse' : 'row-left'}}">
+            
+            <view class="avatar-container">
+              <image 
+                class="avatar-img" 
+                src="{{item.type === 'user' ? 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9D%E7%94%A8%E6%88%B7.png' : 'https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9Dai%E5%A4%B4%E5%83%8F.png'}}" 
+                mode="aspectFit"
+              ></image>
+            </view>
+
+            <view class="bubble-container {{item.type}}">
+              <view wx:if="{{item.hasThink}}" class="think-widget">
+                <view class="think-header" bindtap="toggleThink" data-index="{{index}}">
+                  <text class="think-label">深度思考</text>
+                  <text class="think-icon">{{item.showThink ? '▲' : '▼'}}</text>
+                </view>
+                <view wx:if="{{item.showThink}}" class="think-body">
+                  <text user-select>{{item.thinkContent}}</text>
+                </view>
+              </view>
+
+              <text class="content-text" user-select>{{item.content}}</text>
+              <text class="time-text">{{item.time}}</text>
+            </view>
+
+          </view>
+        </block>
+
+        <!-- 流式输出 -->
+        <view wx:if="{{chatIsLoading}}" class="message-row row-left">
+          <view class="avatar-container">
+            <image class="avatar-img" src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9Dai%E5%A4%B4%E5%83%8F.png" mode="aspectFit"></image>
+          </view>
+          <view class="bubble-container assistant streaming">
+            <view wx:if="{{streamingHasThink}}" class="think-widget">
+              <view class="think-header" bindtap="toggleStreamingThink">
+                <text class="think-label">正在思考...</text>
+                <text class="think-icon">{{showStreamingThink ? '▲' : '▼'}}</text>
+              </view>
+              <view wx:if="{{showStreamingThink}}" class="think-body">
+                <text user-select>{{streamingThinkContent}}</text>
+              </view>
+            </view>
+
+            <text class="content-text" user-select>{{streamingMainContent || streamingContent}}</text>
+            
+            <view class="typing-indicator">
+              <view class="dot"></view><view class="dot"></view><view class="dot"></view>
+            </view>
+          </view>
+        </view>
+
+        <view class="scroll-bottom-spacer" id="bottomSpacer"></view>
+      </scroll-view>
+    </view>
+
+    <!-- 输入区域 -->
+    <view class="chat-input-area">
+      
+      <!-- 功能胶囊按钮 -->
+      <view class="quick-actions">
+        <view class="action-chip" bindtap="openActionModal" data-type="word" hover-class="chip-hover">
+          <text class="action-icon">📖</text>
+          <text>字词翻译</text>
+        </view>
+        <view class="action-chip" bindtap="openActionModal" data-type="sentence" hover-class="chip-hover">
+          <text class="action-icon">📜</text>
+          <text>句子精译</text>
+        </view>
+      </view>
+
+      <view class="input-container">
+        <input 
+          class="chat-input" 
+          value="{{inputMessage}}" 
+          bindinput="onAiInput" 
+          bindconfirm="sendAiMessage"
+          placeholder="输入您的问题..." 
+          disabled="{{!activeConnection || chatIsLoading || !hasToken}}"
+          adjust-position="{{true}}"
+        />
+        <view 
+          class="send-btn {{chatIsLoading || !inputMessage.trim() || !activeConnection || !hasToken ? 'disabled' : ''}}" 
+          bindtap="sendAiMessage"
+        >
+          <image class="send-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/icon/ai%E5%AF%B9%E8%AF%9D%E5%8F%91%E9%80%81%E5%9B%BE%E6%A0%87.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="input-tips">
+        <text wx:if="{{!hasToken}}">请先登录后使用AI对话</text>
+        <text wx:elif="{{!activeConnection && !isConnecting}}">连接中断，尝试重连中...</text>
+        <text wx:elif="{{isConnecting}}">连接中...</text>
+        <text wx:elif="{{chatIsLoading}}">AI正在思考中...</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录面板 -->
+  <view wx:if="{{showHistoryPanel}}" class="history-panel-overlay" bindtap="toggleHistoryPanel">
+    <view class="history-panel" catchtap="stopPropagation">
+      <view class="panel-header">
+        <text class="panel-title">历史对话</text>
+        <view class="close-btn" bindtap="handleClosePanel">
+          <image src="/icons/返回上一级.png" mode="scaleToFill"></image>
+        </view>
+      </view>
+      <scroll-view class="history-list" scroll-y bindscrolltolower="loadMoreHistory">
+        <block wx:for="{{conversations}}" wx:key="id">
+          <view class="history-item" bindtap="viewConversationDetail" data-id="{{item.id}}">
+            <view class="history-content">
+              <text class="history-title">{{item.name || '未命名对话'}}</text>
+              <text class="history-time">{{item.updated_at ? formatTime(item.updated_at) : ''}}</text>
+            </view>
+            <view class="delete-btn" catchtap="deleteConversation" data-index="{{index}}" data-id="{{item.id}}">
+              <image src="/icons/关闭.png" mode="aspectFit"></image>
+            </view>
+          </view>
+        </block>
+        <view wx:if="{{!hasMore && conversations.length > 0}}" class="no-more-history">没有更多了</view>
+        <view wx:if="{{conversations.length === 0 && !historyIsLoading}}" class="no-more-history">暂无历史记录</view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 登录提示 -->
+  <view wx:if="{{showLoginPrompt}}" class="login-prompt-overlay" bindtap="closeLoginPrompt">
+    <view class="login-prompt" catchtap="stopPropagation">
+      <text class="prompt-title">登录提示</text>
+      <text class="prompt-text">使用AI对话功能需要先登录账号</text>
+      <view class="btn-group">
+        <button class="login-btn" bindtap="goToLogin">去登录</button>
+        <button class="cancel-btn" bindtap="closeLoginPrompt">取消</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能输入专用弹窗 -->
+  <view wx:if="{{showActionModal}}" class="action-modal-overlay" bindtap="closeActionModal">
+    <view class="action-modal" catchtap="stopPropagation">
+      <view class="action-header">
+        <text class="action-title">{{currentActionType === 'word' ? '字词深度解析' : '句子翻译赏析'}}</text>
+        <view class="close-icon" bindtap="closeActionModal">×</view>
+      </view>
+      <view class="action-body">
+        <textarea 
+          class="action-textarea" 
+          placeholder="{{currentActionType === 'word' ? '请输入您想查询的字或词（如：明月）...' : '请输入您想翻译的诗句（如：举头望明月）...'}}" 
+          value="{{actionInputValue}}"
+          bindinput="onActionInput"
+          fixed="true"
+          show-confirm-bar="{{false}}"
+          maxlength="200"
+        ></textarea>
+        <view class="action-tips">AI将提供：翻译 + 举例 + 拓展延伸</view>
+      </view>
+      <view class="action-footer">
+        <button class="action-btn cancel" bindtap="closeActionModal">取消</button>
+        <button class="action-btn confirm" bindtap="confirmActionSearch">开始解析</button>
+      </view>
+    </view>
+  </view>
+
+</view>

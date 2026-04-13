@@ -1,0 +1,109 @@
+<view class="container">
+  <!-- 背景图 -->
+  <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E9%B1%BC.jpg" class="bg-image"></image>
+  
+  <!-- 顶部标题 -->
+  <view class="header">
+    <text class="title">诵诗雅集</text>
+    <text class="subtitle">诗韵留痕·墨香永存</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在加载背诵记录...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view wx:elif="{{hasError}}" class="error-container">
+    <text class="error-text">加载失败，请重试</text>
+    <button class="retry-button" bindtap="retryLoad" style="position: relative; left: 0rpx; top: -4rpx">重新加载</button>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{reciteRecords.length === 0 && !isLoading}}" class="empty-container">
+    <text class="empty-text">暂无背诵记录</text>
+    <button class="start-recite-button" bindtap="navigateToRecite">开始背诵</button>
+  </view>
+  
+  <!-- 记录列表 -->
+  <scroll-view wx:else class="records-container" scroll-y>
+    <block wx:for="{{reciteRecords}}" wx:key="id">
+      <view class="record-card" bindtap="toggleRecordDetail" data-id="{{item.id}}">
+        <!-- 诗名和分数 -->
+        <view class="poem-header">
+          <text class="poem-name">{{item.poemName}}</text>
+          <view class="score-container">
+            <text class="score-label">总分</text>
+            <text class="score-value">{{item.overallScore}}</text>
+          </view>
+        </view>
+        
+        <!-- 日期和展开指示器 -->
+        <view class="date-indicator-container">
+          <text class="record-date">{{item.formattedDate}}</text>
+          <view class="expand-indicator">
+            <text class="iconfont" wx:if="{{expandedRecordId === item.id}}">▼</text>
+            <text class="iconfont" wx:else>▶</text>
+          </view>
+        </view>
+        
+        <!-- 详情部分 - 仅当记录被展开时显示 -->
+        <view wx:if="{{expandedRecordId === item.id}}" class="record-detail">
+          <!-- 背诵录音播放器 -->
+          <view wx:if="{{item.recordingUrl}}" class="recording-section">
+            <view class="section-title">
+              <text class="section-title-text">背诵录音</text>
+            </view>
+            <view class="audio-player">
+              <view class="audio-controls">
+                <button class="play-button" bindtap="toggleAudioPlayback" data-url="{{item.recordingUrl}}" data-id="{{item.id}}">
+                  <text wx:if="{{currentPlayingId === item.id && isPlaying}}" class="iconfont">❚❚</text>
+                  <text wx:else class="iconfont">▶</text>
+                </button>
+                <text class="audio-time">{{item.currentTime || '0:00'}} / {{item.duration || '0:00'}}</text>
+              </view>
+              <view class="progress-bar">
+                <view class="progress" style="width: {{item.progress || 0}}"></view>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 表扬反馈 -->
+          <view class="praise-section">
+            <text class="quote">「</text>
+            <text class="praise-text">{{item.praiseFeedback}}</text>
+            <text class="quote">」</text>
+          </view>
+          
+          <!-- 错误分析 -->
+          <view class="section">
+            <view class="section-title">
+              <text class="section-title-text">主要问题</text>
+            </view>
+            <block wx:for="{{item.majorErrors}}" wx:key="position">
+              <view class="error-item">
+                <text class="error-type">{{item.error_type}} · {{item.severity}}</text>
+                <text class="error-position">位置: {{item.position}}</text>
+                <text class="error-content">{{item.missing_content}}</text>
+              </view>
+            </block>
+          </view>
+          
+          <!-- 学习建议 -->
+          <view class="section">
+            <view class="section-title">
+              <text class="section-title-text">学习建议</text>
+            </view>
+            <block wx:for="{{item.suggestions}}" wx:key="*this">
+              <view class="suggestion-item">
+                <text class="bullet">·</text>
+                <text class="suggestion-text">{{item}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

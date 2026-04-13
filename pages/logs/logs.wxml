@@ -1,0 +1,119 @@
+<!-- index.wxml -->
+<view class="container">
+  <!-- 固定在顶部的搜索栏 -->
+  <view class="search-bar">
+    <input 
+      class="search-input" 
+      placeholder="输入古诗文关键词..." 
+      bindinput="onInput" 
+      value="{{searchKeyword}}"
+      bindconfirm="doSearch"
+    />
+    <button class="search-btn" bindtap="doSearch">搜索</button>
+  </view>
+  
+  <!-- 内容区域 - 紧贴搜索栏 -->
+  <scroll-view 
+    class="result-list" 
+    scroll-y="true"
+    scroll-with-animation="true"
+    enable-back-to-top="true"
+  >
+    <!-- 顶部占位符 - 确保内容从搜索栏下方开始 -->
+    <view class="top-spacer"></view>
+    
+    <block wx:if="{{!loading}}">
+      <block wx:if="{{totalCount === 0}}">
+        <view class="empty-result">
+          <view class="empty-text">
+            {{hasSearched ? '没有找到匹配的古诗文' : '暂无古诗文数据'}}
+          </view>
+          <view class="empty-tip">
+            {{hasSearched ? '请尝试不同的关键词' : ''}}
+          </view>
+        </view>
+      </block>
+      
+      <block wx:else>
+        <view class="search-header">
+          <view class="result-count">
+            {{hasSearched ? '找到 ' + totalCount + ' 条匹配结果' : '共 ' + totalCount + ' 条'}}
+          </view>
+        </view>
+        
+        <block wx:for="{{searchResults}}" wx:key="id">
+          <view 
+            class="result-card" 
+            bindtap="navigateToDetail"
+            data-item="{{item}}"  
+            data-id="{{item.id}}" 
+            data-index="{{index}}" 
+          >
+            <text class="title">{{item.title}}</text>
+            <view class="info-row">
+              <text class="author">作者: {{item.author || '未知'}}</text>
+              <text class="dynasty">{{item.dynasty || '不详'}}</text>
+            </view>
+            <text class="content">{{item.content || item.description}}</text>
+          </view>
+        </block>
+      </block>
+    </block>
+    
+    <!-- 加载状态 -->
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+    
+    <!-- 底部占位符 - 确保内容不被分页栏遮挡 -->
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+  
+  <!-- 固定在底部的分页栏 -->
+  <view class="pagination-container" wx:if="{{totalCount > 0}}">
+    <text class="total-count">总计 {{totalCount}}</text>
+    
+    <view class="pagination-controls">
+      <!-- 左箭头 -->
+      <view 
+        class="pagination-arrow {{currentPage === 1 ? 'disabled' : ''}}" 
+        bindtap="goToPrevPage"
+      >
+        <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%B7%A6%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+      </view>
+      
+      <!-- 当前页码显示 -->
+      <view class="page-current-container">
+        <text>{{currentPage}}</text>
+      </view>
+      
+      <!-- 右箭头 -->
+      <view 
+        class="pagination-arrow {{currentPage === totalPages ? 'disabled' : ''}}" 
+        bindtap="goToNextPage"
+      >
+        <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+      </view>
+      
+      <!-- 转到区域 -->
+      <view class="goto-group">
+        <text class="goto-label">转到</text>
+        <input 
+          class="goto-input" 
+          type="number" 
+          placeholder="页码" 
+          value="{{gotoPage}}"
+          bindinput="onGotoInput"
+        />
+      </view>
+      
+      <!-- 跳转按钮 -->
+      <button class="goto-button" bindtap="goToSpecifiedPage">跳转</button>
+    </view>
+  </view>
+</view>
+
+<!-- 在文件底部添加 -->
+<view class="float-nav-tool" bindtap="navigateToIndex">
+  <text class="float-nav-icon">🏠</text>
+</view>

@@ -1,0 +1,131 @@
+<!-- 搜索筛选区域 -->
+<view class="search-container">
+  <view class="search-box">
+    <input 
+      class="search-input"
+      placeholder="输入文章名" 
+      bindinput="handleArticleInput" 
+      value="{{articleInput}}"
+    />
+    <!-- 指定显示cn字段 -->
+    <picker 
+      class="type-picker"
+      mode="selector" 
+      range="{{questionTypes}}" 
+      range-key="cn"     
+      value="{{typeIndex}}"
+      bindchange="bindTypeChange"
+    >
+    <view class="picker-text">{{questionTypes[typeIndex] ? questionTypes[typeIndex].cn : questionTypes[0].cn}}</view>
+    </picker>
+    <button class="search-btn" bindtap="fetchData">查询</button>
+  </view>
+</view>
+<!-- 题目内容展示区域 -->
+<!-- 根据题型显示不同内容结构 -->
+<view wx:if="{{questionList.length>0}}">
+
+<block wx:for="{{questionList}}" wx:for-index="qIndex" wx:key="qIndex">
+  <view wx:if="{{currentType === 'choice'}}" class=" question-item choice-question">
+
+<view class="question-header ">
+    <text class="q-id">{{qIndex + 1}}.{{item.knowledge_point}}</text>
+  <text>{{item.question_content}}</text>
+</view>
+  <view class="options-container">
+    <!-- 选项循环 -->
+    <view 
+      wx:for="{{choiceContents[qIndex]}}" 
+      wx:for-index="oIndex"
+      wx:key="oIndex"
+      class="option-item {{item.isChoose ? 'option-selected' : ''}}"
+      bindtap="handleOptionTap"
+      data-q-index="{{qIndex}}"
+      data-o-index="{{oIndex}}"
+    >
+      <text class="option-text">{{item.text}}</text>
+    </view>
+  </view>
+  
+  <!-- 显示提交后的答案正确性 -->
+  <view wx:if="{{submitted}}" class="page-container">
+    <text wx:if="{{questionStates[qIndex].isTrue}}" class="correct-answer">恭喜你！回答正确</text>
+    <text wx:else class="wrong-answer"> 回答错误，正确答案是：{{questionStates[qIndex].correctAnswer}}</text>
+  </view>
+
+</view>
+
+  <!-- 填空题样式 -->
+  <view wx:elif="{{currentType === 'fill_blank'}}" class="question-item fill-question">
+    <view class="question-header">
+      <view class="q-id">{{qIndex + 1}}.{{item.knowledge_point}}</view>
+     <text class="q-content">{{item.question_content}}</text>
+    </view>
+    <input placeholder="请填写答案" class="answer-input" />
+  </view>
+
+  <!-- 判断题样式 -->
+  <view wx:elif="{{currentType === 'comprehension'}}" class="question-item judge-question">
+  <view class="question-header">
+    <view class="q-id">{{qIndex + 1}}.{{item.knowledge_point}}</view>
+    <text class="q-content">{{item.question_content}}</text>
+  </view>
+  <view class="radio-group">
+    <view 
+      class="radio-option" 
+      bindtap="handleJudgeSelect" 
+      data-qindex="{{qIndex}}" 
+      data-value="√"
+    >
+      <view class="custom-radio {{judgeAnswers[qIndex] === '√' ? 'checked' : ''}}"></view>
+      <text>正确</text>
+
+    </view>
+    <view 
+      class="radio-option" 
+      bindtap="handleJudgeSelect" 
+      data-qindex="{{qIndex}}" 
+      data-value="×"
+    >
+      <view class="custom-radio {{judgeAnswers[qIndex] === '×' ? 'checked' : ''}}"></view>
+      <text>错误</text>
+    </view>
+    <!-- 错误选项同理 --> 
+  </view>
+   <!-- 判断结果 -->
+<!-- 修改结果显示逻辑 -->
+  <view wx:if="{{submitted}}" class="page-container">
+    <view class="result-container">
+      <text wx:if="{{questionStates[qIndex].isTrue}}" class='correct-answer'>恭喜你！回答正确</text>
+      <text wx:else class='wrong-answer'>回答错误，正确答案是：{{questionStates[qIndex].correctAnswer}}</text>
+    </view>
+  </view>
+ 
+ 
+</view>
+ 
+
+  <!-- 翻译题 -->
+  <view wx:elif="{{currentType === 'translation'}}" class="question-item translation-question">
+    <view class="question-header">
+      <view class="q-id">{{qIndex + 1}}.{{item.knowledge_point}}</view>
+     <text class="q-content">{{item.question_content}}</text>
+    </view>
+    <input placeholder="请填写答案" class="answer-input" />
+    <!-- <button bindtap='simiScore'>查询得分</button> -->
+  </view>
+
+</block>
+<!-- <view class="submit-container">
+  <button class="submit-btn" bindtap="submitAnswers">提交</button>
+</view> -->
+<view class="submit-container">
+  <button class="submit-btn" bindtap="handleButtonClick">{{isSubmitted ? '重新作答' : '提交'}}</button>
+</view>
+
+
+</view>
+<!-- 无内容时展示区域 -->
+<view wx:else class="empty-tip">
+  <text class="empty-text">暂无内容，请试着探索一下吧！</text>
+</view>

@@ -1,0 +1,132 @@
+/* 延续上一页的背景和容器 */
+.container {
+  padding: 2%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #fdfbf7 0%, #f5f1e9 100%);
+  overflow: hidden;
+}
+
+.header {
+  flex-shrink: 0;
+  padding: 40rpx;
+  background: rgba(252, 250, 242, 0.95);
+  border-bottom: 2rpx solid #e3dec9;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #3e2723;
+  letter-spacing: 2rpx;
+}
+
+.progress-info {
+  font-size: 24rpx;
+  color: #a8a29e;
+  margin-top: 10rpx;
+}
+
+/* 题目卡片 */
+.content-scroll {
+  flex: 1;
+  height: 0;
+  overflow-y: auto;
+  padding: 30rpx;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.question-card, .result-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 35rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 20rpx rgba(62, 39, 35, 0.03);
+  border: 1rpx solid #e2e8f0;
+}
+
+.q-content {
+  font-size: 32rpx;
+  color: #1a1a1a;
+  line-height: 1.6;
+  margin-bottom: 25rpx;
+}
+
+/* 输入框 */
+.answer-input {
+  width: 100%;
+  background: #f8f6f2;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+  min-height: 120rpx;
+  border: 1rpx solid #dcd9c8;
+}
+
+/* 结果展示样式 */
+.user-answer-box, .correct-answer-box {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  position: relative;
+}
+
+.user-answer-box { background: #fcfaf2; border: 1rpx dashed #dcd9c8; }
+.correct-answer-box { background: #f0fdf4; border: 1rpx solid #bbf7d0; }
+
+.label { font-size: 24rpx; color: #a8a29e; display: block; margin-bottom: 8rpx; }
+.text { font-size: 30rpx; line-height: 1.5; }
+.text.wrong { color: #ef4444; text-decoration: line-through; }
+.text.correct { color: #10b981; }
+
+/* 居中对齐的标签 (核心修正) */
+.status-tag {
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15rpx;
+  height: 44rpx;
+  font-size: 20rpx;
+  border-radius: 4rpx;
+  box-sizing: border-box;
+}
+
+.tag-error {
+  color: #f5222d;
+  background-color: #fff1f0;
+  border: 1rpx solid #ffa39e;
+}
+
+.tag-correct {
+  color: #52c41a;
+  background-color: #f6ffed;
+  border: 1rpx solid #b7eb8f;
+}
+
+/* 底部按钮 */
+.footer {
+
+  padding: 30rpx 50rpx 40rpx;
+  border-top: 1rpx solid #e8e2d6;
+}
+
+.submit-btn, .retry-btn {
+  background: #3e2723;
+  color: white;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  box-shadow: 0 6rpx 20rpx rgba(62, 39, 35, 0.2);
+}
+
+.retry-btn {
+  background: #b45309;
+}

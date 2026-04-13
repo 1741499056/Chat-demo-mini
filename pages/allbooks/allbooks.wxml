@@ -1,0 +1,62 @@
+<!-- 加载状态 -->
+<view wx:if="{{loading}}" class="loading-container">
+  <text>加载中...</text>
+</view>
+
+<!-- 错误提示 -->
+<view wx:if="{{error}}" class="error-container">
+  <text>{{error}}</text>
+</view>
+
+<!-- 书籍列表 -->
+<scroll-view scroll-y enable-flex style="height: 100vh;" bindscrolltolower="onReachBottom">
+  <view 
+    wx:for="{{ancientTexts}}" 
+    wx:key="id" 
+    class="book-item"
+    bindtap="navigateToDetail" 
+    data-index="{{index}}"
+  >
+    <!-- 图片区域 -->
+    <view class="image-container">
+      <image 
+        src="{{item.safeImage}}" 
+        mode="aspectFill" 
+        class="book-image"
+        data-index="{{index}}"
+        binderror="handleImageError"
+        bindload="handleImageLoad"
+      />
+      
+      <!-- 图片加载状态 -->
+      <view wx:if="{{!item.imageLoaded && !item.imageError}}" class="image-loading">
+        <text>加载中...</text>
+      </view>
+      
+      <!-- 错误提示 -->
+      <view wx:if="{{item.imageError}}" class="image-error">
+        <text>图片加载失败</text>
+      </view>
+    </view>
+    
+    <!-- 文字内容区域 -->
+    <view class="book-content">
+      <view class="title">{{item.title}}</view>
+      <view class="meta">
+        <text class="author">{{item.author}}</text>
+        <text class="dynasty">[{{item.dynasty}}]</text>
+      </view>
+      <view class="description">{{item.description}}</view>
+    </view>
+  </view>
+  
+  <!-- 列表底部提示 -->
+  <view wx:if="{{!loading && ancientTexts.length > 0}}" class="list-end">
+    <text>—— 已加载全部书籍 ——</text>
+  </view>
+</scroll-view>
+
+<!-- 在文件底部添加 -->
+<view class="float-nav-tool" bindtap="navigateToIndex">
+  <text class="float-nav-icon">🏠</text>
+</view>

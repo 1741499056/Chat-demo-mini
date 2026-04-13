@@ -1,0 +1,99 @@
+<scroll-view scroll-y style="height: 100vh; background-color: #f8f9fa;">
+  <!-- 顶部区域 -->
+  <view class="header">
+    <view class="app-title">文言文词语学习助手</view>
+    <view class="app-subtitle">查词语 · 学考点 · 练题目</view>
+  </view>
+
+  <!-- 搜索区域 -->
+  <view class="search-section">
+    <view class="search-box">
+      <input placeholder="输入要查询的词语" value="{{searchWord}}" bindinput="handleInput" data-field="searchWord" class="search-input" placeholder-class="placeholder" />
+      <button bindtap="searchWord" class="search-btn">查询</button>
+    </view>
+
+    <!-- 只修改了分类部分，其余保持不变 -->
+    <view class="frequency-controls">
+      <text class="frequency-label">词语分类:</text>
+      <view class="frequency-tags">
+        <block wx:for="{{wordClasses}}" wx:key="initial">
+          <!-- 关键修改：使用displayName进行选中判断 -->
+          <view class="frequency-tag {{selectedWordClass === item.displayName ? 'active' : ''}}" bindtap="selectClass" data-initial="{{item.initial}}" data-displayname="{{item.displayName}}">
+            {{item.displayName}}
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 生成按钮区域 -->
+    <view class="generate-section">
+      <button class="generate-btn" bindtap="generateQuestion" disabled="{{!wordData || isGenerating}}">
+        <block wx:if="{{!isGenerating}}">
+          生成测试题
+        </block>
+        <block wx:else>
+          生成中...{{countdown}}秒
+        </block>
+      </button>
+
+      <!-- 修改后的跳转按钮 -->
+      <button class="view-btn" bindtap="navigateToHistory">查看历史测试</button>
+    </view>
+  </view>
+
+  <!-- 词语列表区域 -->
+  <view wx:if="{{!searchWord && selectedWordClass !== null}}" class="word-list-section">
+    <view class="list-title">词语列表</view>
+    <view class="word-list">
+      <block wx:for="{{wordList}}" wx:key="id">
+        <view class="word-item" bindtap="selectWordItem" data-word="{{item.word}}">
+          <text class="item-word">{{item.word}}</text>
+          <text class="item-pinyin">[{{item.phoneticize}}]</text>
+          <text class="item-priority">{{item.priority}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 词语详情区域 -->
+  <view wx:if="{{wordData}}" class="word-section">
+    <view class="word-header">
+      <text class="word-text">{{wordData.word}}</text>
+      <text class="word-pinyin">[{{wordData.phoneticize}}]</text>
+      <text class="priority-tag">{{wordData.priority}}</text>
+    </view>
+
+    <view class="meaning-section">
+      <view class="section-title">
+        <text class="iconfont icon-meaning"></text>
+        <text>词语释义</text>
+      </view>
+
+      <view class="meaning-grid">
+        <block wx:for="{{wordData.meaningsPoemsList}}" wx:key="id">
+          <view class="meaning-card">
+            <view class="meaning-card-header">
+              <text class="meaning-text">{{item.meaning}}</text>
+              <text class="meaning-type">{{item.type}}·{{item.subtype}}</text>
+            </view>
+
+            <view class="examples-container">
+              <block wx:for="{{item.examplesPoemsList}}" wx:key="id">
+                <view class="example-item">
+                  <text class="example-text">{{item.example}}</text>
+                  <text class="example-source">—— {{item.source}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!wordData && !wordList.length}}" class="empty-state">
+    <text class="empty-title">开始词语学习之旅</text>
+    <text class="empty-text">输入词语或选择分类开始查询</text>
+  </view>
+</scroll-view>

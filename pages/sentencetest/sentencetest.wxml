@@ -1,0 +1,120 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">{{currentSkill.name}}</text>
+    <text class="tips">难度：{{currentSkill.difficulty}}</text>
+  </view>
+
+  <!-- 技巧卡片 -->
+  <view class="skill-card">
+    <view class="skill-desc">
+      <text>{{currentSkill.description}}</text>
+    </view>
+  </view>
+
+  <!-- 题目列表 -->
+  <view class="exercise-list">
+    <!-- 空状态提示 -->
+    <view wx:if="{{exerciseList.length === 0 && !isLoading}}" class="empty-guide">
+      <text class="empty-icon">📝</text>
+      <text class="empty-title">暂无题目数据</text>
+      <text class="empty-text">当前没有可用的题目数据，请尝试重新加载</text>
+      <view class="guide-buttons">
+        <button class="guide-button primary" bindtap="retryGenerate">重新加载题目</button>
+        <button class="guide-button secondary" bindtap="goBack">返回</button>
+      </view>
+    </view>
+    
+    <!-- 题目卡片 -->
+    <block wx:for="{{exerciseList}}" wx:key="id">
+      <view class="exercise-card">
+        <view class="exercise-header">
+          <text class="index">题目{{index + 1}}</text>
+          <view class="exercise-info">
+            <view class="difficulty-badge difficulty-{{item.difficulty === '初级' ? 'primary' : item.difficulty === '中级' ? 'intermediate' : 'advanced'}}">
+              {{item.difficulty || '初级'}}
+            </view>
+            <text class="source" wx:if="{{item.source_text}}">来源: {{item.source_text}}</text>
+          </view>
+        </view>
+        <view class="content">
+          <text>{{item.content}}</text>
+        </view>
+        
+        <!-- 开始答题按钮 -->
+        <view class="answer-button" bindtap="startAnswer" data-index="{{index}}" wx:if="{{!item.hasStarted}}">
+          <text>开始答题</text>
+        </view>
+
+        <!-- 断句操作区 -->
+        <view class="answer-section" wx:if="{{item.hasStarted && !item.hasSubmitted}}">
+          <text class="answer-instruction">请点击文字后面的空格进行断句：</text>
+
+          <!-- 合并原题展示和断句操作的容器 -->
+          <view class="break-container">
+            <block wx:for="{{item.originalChars}}" wx:key="index" wx:for-item="char" wx:for-index="charIndex">
+              <view class="char-container">
+                <!-- 原题字符 -->
+                <text class="char-text">{{char}}</text>
+                <!-- 断句空格 -->
+                <view class="break-space {{item.breakChars[charIndex] ? 'break-selected' : ''}} {{item.breakAnimating[charIndex] ? 'break-animating' : ''}}" 
+                      bindtap="toggleBreak" data-exerciseindex="{{index}}" data-charindex="{{charIndex}}">
+                  <text class="slash-icon" wx:if="{{item.breakChars[charIndex]}}">/</text>
+                  <text class="space-indicator" wx:else>␣</text>
+                </view>
+              </view>
+            </block>
+          </view>
+
+          <view class="submit-button" bindtap="submitAnswer" data-index="{{index}}">
+            <text>提交答案</text>
+          </view>
+        </view>
+
+        <!-- 答案解析区域 -->
+        <view class="answer-container" wx:if="{{item.hasSubmitted}}">
+          <view class="result-indicator {{item.isCorrect ? 'correct' : 'incorrect'}}">
+            <text>{{item.isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}</text>
+          </view>
+
+          <view class="answer-section">
+            <text class="answer-label">正确答案:</text>
+            <view class="sentence-break-result">
+              <text class="sentence-text">{{item.answer}}</text>
+            </view>
+          </view>
+
+          <view class="analysis-section">
+            <text class="analysis-label">解析说明:</text>
+            <view class="analysis-text">
+              <text>{{item.analysis}}</text>
+            </view>
+          </view>
+
+          <!-- 收起全部按钮 -->
+          <view class="toggle-button" bindtap="toggleAllAnswers" data-index="{{index}}">
+            <text>收起全部</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">题目生成中，请稍候...</text>
+  </view>
+  
+  <!-- 错误提示 -->
+  <view wx:if="{{loadError}}" class="error-container">
+    <view class="error-card">
+      <text class="error-icon">❌</text>
+      <text class="error-message">题目生成失败: {{errorMsg}}</text>
+      <view class="action-buttons">
+        <button class="retry-button" bindtap="retryGenerate">重试</button>
+        <button class="back-button" bindtap="goBack">返回</button>
+      </view>
+    </view>
+  </view>
+</view>

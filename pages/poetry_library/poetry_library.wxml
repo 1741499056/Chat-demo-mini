@@ -1,0 +1,314 @@
+<view class="page-content">
+  <!-- 页面选择器 -->
+  <view class="page-selector">
+    <view 
+      class="selector-btn {{poetryType === 'ancient' ? 'selector-active' : ''}}"
+      bindtap="switchPoetryType"
+      data-type="ancient"
+    >
+      <text>古籍</text>
+    </view>
+    <view 
+      class="selector-btn {{poetryType === 'poem' ? 'selector-active' : ''}}"
+      bindtap="switchPoetryType"
+      data-type="poem"
+    >
+      <text>古诗</text>
+    </view>
+  </view>
+
+  <!-- 古籍页面内容 -->
+  <view wx:if="{{poetryType === 'ancient'}}" class="ancient-content">
+    <!-- 搜索栏 -->
+    <view class="compact-search-bar">
+      <view class="search-container">
+      <input 
+        class="search-input" 
+        placeholder="输入关键词搜索..." 
+        bindinput="onAncientInput" 
+        value="{{ancientSearchKeyword}}"
+        bindconfirm="doAncientSearch"
+        confirm-type="search" 
+      />
+      <view class="search-btn" catchtouchstart="doAncientSearch">搜索</view>
+    </view>
+    </view>
+    
+    <scroll-view 
+      class="ancient-result-list" 
+      scroll-y="true"
+      scroll-with-animation="true"
+      enable-back-to-top="true"
+      
+    >
+      <view class="ancient-top-spacer"></view>
+      
+      <block wx:if="{{!ancientLoading}}">
+        <block wx:if="{{ancientTotalCount === 0}}">
+          <view class="empty-result">
+            <view class="empty-text">
+              {{ancientHasSearched ? '没有找到匹配的内容' : '暂无数据'}}
+            </view>
+            <view class="empty-tip">
+              {{ancientHasSearched ? '请尝试不同的关键词' : ''}}
+            </view>
+          </view>
+        </block>
+      
+        <block wx:else>
+          <view class="qunjicangshi-section">
+            <view class="qunjicangshi-header" bindtap="navigateToAllBooks">
+              <view class="qunjicangshi-title-wrap">
+                <view class="qunjicangshi-decorator"></view>
+                <text class="qunjicangshi-title">群籍藏识</text>
+              </view>
+              <image class="qunjicangshi-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg" mode="aspectFit"></image>
+            </view>          
+            
+            <view class="books-carousel-container">
+              <view wx:if="{{booksLoading}}" class="books-loading">
+                <text>加载书籍中...</text>
+              </view>
+              <view wx:if="{{booksError}}" class="books-error">
+                <text>{{booksError}}</text>
+              </view>
+              
+              <block wx:if="{{booksList.length > 0}}">
+                <scroll-view 
+                  class="books-scroll"
+                  scroll-x="true"
+                  scroll-with-animation="true"
+                  enable-flex="true"
+                  bindscroll="onCarouselScroll"
+                  id="booksCarousel"
+                >
+                  <view class="books-list">
+                    <block wx:for="{{booksList}}" wx:key="id" wx:for-item="book">
+                      <view class="book-card" bindtap="navigateToBookDetail" data-book="{{book}}">
+                        <view class="book-img-wrap">
+                          <image 
+                            class="book-img" 
+                            src="{{book.imageError ? book.localFallback : book.safeImage}}" 
+                            mode="scaleToFill"
+                            binderror="handleBookImgError"
+                            data-index="{{index}}"
+                            lazy-load="true"
+                          ></image>
+                        </view>
+                        <view class="book-info">
+                          <text class="book-title">{{book.title}}</text>
+                          <text class="book-author">{{book.author || '未知作者'}}</text>
+                        </view>
+                      </view>
+                    </block>
+                  </view>
+                </scroll-view>
+              </block>
+            </view>
+          </view>
+
+          <view class="jianduwenshi-section">
+            <view class="jianduwenshi-title-wrap">
+              <view class="jianduwenshi-decorator"></view>
+              <text class="jianduwenshi-title">简牍文识</text>
+            </view>
+            <view class="jianduwenshi-count">
+              {{ancientHasSearched ? '找到 ' + ancientTotalCount + ' 条匹配结果' : '共 ' + ancientTotalCount + ' 条'}}
+            </view>
+          </view>
+          
+          <block wx:for="{{ancientSearchResults}}" wx:key="id">
+            <view 
+              class="article-card" 
+              bindtap="navigateToDetail"
+              data-item="{{item}}"  
+              data-id="{{item.id}}" 
+              data-index="{{index}}" 
+            >
+              <text class="article-title">{{item.title}}</text>
+              <view class="article-info">
+                <text class="article-author">{{item.author || '未知'}}</text>
+                <text class="article-dynasty">{{item.dynasty || '不详'}}</text>
+              </view>
+              <text class="article-content">{{item.content || item.description}}</text>
+            </view>
+          </block>
+        </block>
+      </block>
+      
+      <view class="loading" wx:if="{{ancientLoading}}">
+        <text>加载中...</text>
+      </view>
+      
+      <view class="bottom-spacer"></view>
+    </scroll-view>
+    
+    <view class="pagination-container" wx:if="{{ancientTotalCount > 0 && ancientSearchResults.length > 0}}">
+      <text class="total-count">总计 {{ancientTotalCount}}</text>
+      <view class="pagination-controls">
+        <view 
+          class="pagination-arrow {{ancientCurrentPage === 1 ? 'disabled' : ''}}" 
+          bindtap="goToAncientPrevPage"
+        >
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%B7%A6%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+        </view>
+        <view class="page-current-container">
+          <text>{{ancientCurrentPage}}</text>
+        </view>
+        <view 
+          class="pagination-arrow {{ancientCurrentPage === ancientTotalPages ? 'disabled' : ''}}" 
+          bindtap="goToAncientNextPage"
+        >
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+        </view>
+        <view class="goto-group">
+          <text class="goto-label">转到</text>
+          <input 
+            class="goto-input" 
+            type="number" 
+            placeholder="页码" 
+            value="{{ancientGotoPage}}"
+            bindinput="onAncientGotoInput"
+          />
+        </view>
+        <button class="goto-button" bindtap="goToAncientSpecifiedPage">跳转</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 古诗页面内容 -->
+  <view wx:if="{{poetryType === 'poem'}}" class="poem-content">
+    <view class="compact-search-bar">
+      <view class="search-container">
+        <input 
+          class="search-input" 
+          placeholder="输入古诗文关键词..." 
+          bindinput="onPoemInput" 
+          value="{{poemSearchKeyword}}"
+          bindconfirm="doPoemSearch"
+        />
+        <view class="search-btn" bindtap="doPoemSearch">搜索</view>
+      </view>
+    </view>
+
+    <!-- 年级显示区域 -->
+    <view class="grade-container" wx:if="{{isLoggedIn}}">
+      <text class="grade-label">当前年级:</text>
+      <view class="grade-display">
+        <text class="grade-value">{{currentGrade || '全年级'}}</text>
+      </view>
+    </view>
+
+    <!-- 内容区域 -->
+    <scroll-view 
+      class="ancient-result-list" 
+      scroll-y="true"
+      scroll-with-animation="true"
+      enable-back-to-top="true"
+    >
+      <view class="ancient-top-spacer"></view>
+      
+      <!-- 未登录且未设置年级时显示提示 -->
+      <view wx:if="{{showSetGradeTip}}" class="grade-tip">
+        <text>请先前往"我的"界面设置年级</text>
+      </view>
+      
+      <!-- 原有状态（仅在不显示提示时展示） -->
+      <block wx:if="{{!showSetGradeTip}}">
+        <block wx:if="{{!poemLoading}}">
+          <!-- 空状态 -->
+          <block wx:if="{{poemTotalCount === 0}}">
+            <view class="empty-result">
+              <view class="empty-text">
+                {{poemHasSearched ? '没有找到匹配的古诗' : '暂无古诗数据'}}
+              </view>
+              <view class="empty-tip" wx:if="{{poemHasSearched}}">
+                请尝试不同的关键词
+              </view>
+              <view class="empty-tip" wx:else>
+                <text class="link" bindtap="doPoemSearch">点击加载古诗</text>
+              </view>
+            </view>
+          </block>
+        
+          <!-- 有数据状态 -->
+          <block wx:else>
+            <view class="jianduwenshi-section">
+              <view class="jianduwenshi-title-wrap">
+                <view class="jianduwenshi-decorator"></view>
+                <text class="jianduwenshi-title">诗词精选</text>
+              </view>
+              <view class="jianduwenshi-count">
+                {{poemHasSearched ? '找到 ' + poemTotalCount + ' 条匹配结果' : '共 ' + poemTotalCount + ' 条'}}
+              </view>
+            </view>
+            
+            <!-- 古诗列表卡片 -->
+            <block wx:for="{{poemSearchResults}}" wx:key="id">
+              <view 
+                class="article-card"  
+                bindtap="navigateToPoemDetail"
+                data-id="{{item.id}}" 
+                data-index="{{index}}"
+                data-item="{{item}}"
+              >
+                <text class="article-title">{{item.title}}</text>
+                <view class="article-info">
+                  <text class="article-author">{{item.author || '未知'}}</text>
+                  <text class="article-dynasty">{{item.dynasty || '不详'}}</text>
+                </view>
+                <text class="article-content">{{item.content}}</text>
+              </view>
+            </block>
+          </block>
+        </block>
+        
+        <!-- 加载状态 -->
+        <view class="loading" wx:if="{{poemLoading}}">
+          <text>加载中...</text>
+        </view>
+        
+        <!-- 错误重试区域 -->
+        <view class="error-retry" wx:if="{{poemError}}">
+          <text class="error-text">{{poemError}}</text>
+          <button class="retry-btn" bindtap="retryPoemRequest">重试</button>
+        </view>
+      </block>
+      
+      <view class="bottom-spacer"></view>
+    </scroll-view>
+    
+    <!-- 古诗分页栏 -->
+    <view class="pagination-container" wx:if="{{!showSetGradeTip && poemTotalCount > 0 && poemSearchResults.length > 0}}">
+      <text class="total-count">总计 {{poemTotalCount}}</text>
+      <view class="pagination-controls">
+        <view 
+          class="pagination-arrow {{poemCurrentPage === 1 ? 'disabled' : ''}}" 
+          bindtap="goToPoemPrevPage"
+        >
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%B7%A6%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+        </view>
+        <view class="page-current-container">
+          <text>{{poemCurrentPage}}</text>
+        </view>
+        <view 
+          class="pagination-arrow {{poemCurrentPage === poemTotalPages ? 'disabled' : ''}}" 
+          bindtap="goToPoemNextPage"
+        >
+          <image src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg" class="arrow-icon" mode="aspectFit" />
+        </view>
+        <view class="goto-group">
+          <text class="goto-label">转到</text>
+          <input 
+            class="goto-input" 
+            type="number" 
+            placeholder="页码" 
+            value="{{poemGotoPage}}"
+            bindinput="onPoemGotoInput"
+          />
+        </view>
+        <button class="goto-button" bindtap="goToPoemSpecifiedPage">跳转</button>
+      </view>
+    </view>
+  </view>
+</view>

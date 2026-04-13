@@ -1,0 +1,98 @@
+<view class="page-bg">
+  <image class="bg-img" src="https://newlan.oss-cn-shanghai.aliyuncs.com/v1%E5%8A%9F%E8%83%BD%E8%BD%AE%E6%92%AD%E5%9B%BE/ui/check_in_bg.jpg" mode="aspectFill"></image>
+</view>
+
+<!-- 打卡日历 -->
+<view class="calendar-section">
+  <!-- 顶部触发条 -->
+  <view class="calendar-toggle-bar" bindtap="toggleCalendar">
+    <view class="toggle-content">
+      <text class="toggle-text">已连续打卡 <text class="highlight-num">{{consecutiveDays}}</text> 天 🔥 继续加油！</text>
+    </view>
+    <!-- 箭头图标，根据状态旋转 -->
+    <view class="arrow-icon {{isCalendarExpanded ? 'rotate' : ''}}"></view>
+  </view>
+
+  <!-- 日历主体（动画容器） -->
+  <view class="calendar-body {{isCalendarExpanded ? 'expanded' : ''}}">
+    <view class="calendar-inner">
+      <!-- 月份切换/显示 -->
+      <view class="calendar-header">
+        <view class="month-title">{{currentYear}}年 {{currentMonth}}月</view>
+      </view>
+
+      <!-- 星期表头 -->
+      <view class="week-row">
+        <text wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this">{{item}}</text>
+      </view>
+
+      <!-- 日期网格 -->
+      <view class="days-grid">
+        <block wx:for="{{calendarDays}}" wx:key="fullDate">
+          <!-- 空白占位格 -->
+          <view wx:if="{{item.isEmpty}}" class="day-cell empty"></view>
+          
+          <!-- 有日期的格子 -->
+          <view wx:else class="day-cell {{item.isToday ? 'today' : ''}}">
+            <view class="day-circle {{item.isSigned ? 'signed' : ''}}">
+              <text>{{item.day}}</text>
+            </view>
+            <!-- 打卡成功的小标记 -->
+            <view wx:if="{{item.isSigned}}" class="signed-dot"></view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>
+
+<scroll-view class="scroller" scroll-y="true">
+  <view class="content-wrapper">
+    
+    <!-- <view class="stats-container">
+      <view class="stat-box">
+        <text class="stat-num">{{consecutiveDays}}</text>
+        <text class="stat-label">连续打卡(天)</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-box">
+        <text class="stat-num">{{totalDays}}</text>
+        <text class="stat-label">总共打卡(天)</text>
+      </view>
+    </view> -->
+
+    <view class="completed-card" wx:if="{{isCompleted}}">
+      <view class="success-icon"></view>
+      <text class="completed-title">今日打卡已完成</text>
+      <text class="completed-desc">温故而知新，明天请继续努力哦！</text>
+    </view>
+
+    <view class="poem-card" wx:if="{{!isCompleted && currentPoem}}">
+      <view class="poem-header">
+        <view class="header-line"></view>
+        <text class="header-title">今日背诵</text>
+        <view class="header-line"></view>
+      </view>
+      
+      <view class="poem-content">
+        <text class="poem-title">{{currentPoem.title}}</text>
+        <text class="poem-author">[{{currentPoem.dynasty}}] {{currentPoem.author}}</text>
+        <rich-text class="poem-body" nodes="{{currentPoem.content}}"></rich-text>
+      </view>
+    </view>
+
+    <view class="action-group" wx:if="{{!isCompleted && currentPoem}}">
+      <button class="btn btn-secondary" bindtap="onAlreadyKnown">我已会背</button>
+      <button class="btn btn-primary" bindtap="onRecite">开始背诵</button>
+    </view>
+
+    <!-- <view class="test-actions" wx:if="{{!isCompleted && currentPoem}}">
+      <text style="color: #666; font-size: 24rpx; margin-bottom: 10rpx;">👇 模拟评分回调测试按钮</text>
+      <view style="display: flex; gap: 20rpx;">
+        <button size="mini" bindtap="simulateScore" data-score="90">模拟得90分(成功)</button>
+        <button size="mini" bindtap="simulateScore" data-score="60">模拟得60分(失败)</button>
+      </view>
+    </view> -->
+
+  </view>
+</scroll-view>

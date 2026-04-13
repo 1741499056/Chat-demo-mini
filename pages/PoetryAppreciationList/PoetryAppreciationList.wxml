@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="header">
+    <text class="main-title">古诗鉴赏</text>
+    <text class="tips">共 {{totalCount}} 篇真题，每页 {{pageSize}} 篇</text>
+  </view>
+
+  <view class="question-list">
+    <block wx:for="{{gaokaoQuestions}}" wx:key="id">
+      <view 
+        class="skill-card question-card" 
+        bindtap="goToQuestionDetail" 
+        data-id="{{item.id}}"
+        data-title="{{item.title}}"
+      >
+        <view class="question-header">
+          <text class="question-title">{{index + 1 + (currentPage - 1) * pageSize}}.</text>
+          <view class="title-and-author">
+            <text class="question-content">{{item.title}}</text>
+            <text class="question-author" wx:if="{{item.author}}"> {{item.author}}</text>
+          </view>
+        </view>
+        <text class="view-detail-btn">点击查看</text>
+      </view>
+    </block>
+    
+    <view wx:if="{{!isLoading && !loadError && gaokaoQuestions.length === 0}}" class="empty-data">
+        <text class="empty-icon">📂</text>
+        <text>暂无高考真题数据</text>
+    </view>
+  </view>
+
+  <view class="pagination" wx:if="{{!isLoading && !loadError && gaokaoQuestions.length > 0}}">
+      <button 
+        class="page-btn {{currentPage === 1 ? 'disabled-btn' : ''}}" 
+        bindtap="prevPage" 
+        disabled="{{currentPage === 1}}"
+      >上一页</button>
+      <text class="page-info">{{currentPage}} / {{totalPages}}</text>
+      <button 
+        class="page-btn {{currentPage === totalPages ? 'disabled-btn' : ''}}" 
+        bindtap="nextPage" 
+        disabled="{{currentPage === totalPages}}"
+      >下一页</button>
+  </view>
+
+
+  
+  <view wx:if="{{loadError}}" class="error">
+    <text class="error-icon">❌</text>
+    <text class="error-message">加载失败: {{errorMsg}}</text>
+    <button bindtap="retryFetch" class="retry-btn">重试</button>
+  </view>
+</view>

@@ -1,0 +1,40 @@
+/* components/chapter-tree/index.wxss */
+.chapter-tree {
+  font-size: 14px;
+  line-height: 1.5;
+  padding-left: 0;
+}
+
+.tree-node {
+  padding: 8rpx 0;
+  margin-bottom: 4rpx;
+  border-left: 1px solid #eee;
+  margin-left: 20rpx;
+  padding-left: 10rpx;
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+}
+
+.expand-icon {
+  margin-right: 10rpx;
+  font-size: 12px;
+  width: 20rpx;
+  display: inline-block;
+}
+
+.node-label {
+  flex: 1;
+}
+
+.children-nodes {
+  margin-left: 30rpx;
+}
+
+.selected .node-label {
+  color: #07c160;
+  font-weight: bold;
+}

@@ -1,0 +1,44 @@
+<view class="container">
+  <view class="header">
+    <text class="main-title">古诗名篇默写</text>
+    <view class="search-bar">
+      <input 
+        class="search-input" 
+        placeholder="搜索诗人或诗名..." 
+        value="{{keyword}}" 
+        bindinput="onSearchInput"
+        bindconfirm="doSearch"
+      />
+      <view class="search-btn" bindtap="doSearch">🔍</view>
+    </view>
+  </view>
+
+  <scroll-view class="poem-list-scroll" scroll-y="true">
+    <view wx:if="{{isLoading}}" class="status-box">加载中...</view>
+    
+    <block wx:for="{{poemList}}" wx:key="poemId">
+      <view class="poem-card" bindtap="goToDictation" data-id="{{item.poemId}}" data-name="{{item.poemName}}">
+        <view class="poem-info">
+          <text class="poem-name">{{item.poemName}}</text>
+          <view class="poem-meta">
+            <text class="dynasty">[{{item.dynastyName}}]</text>
+            <text class="author">{{item.authorName}}</text>
+          </view>
+        </view>
+        <view class="poem-stats">
+          <text class="count-num">{{item.recitationCount}}</text>
+          <text class="count-label">题</text>
+          <view class="arrow">〉</view>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{!isLoading && poemList.length === 0}}" class="status-box">暂无相关诗文</view>
+  </scroll-view>
+
+  <view class="pagination" wx:if="{{poemList.length > 0}}">
+    <button class="page-btn {{currentPage === 1 ? 'disabled' : ''}}" bindtap="prevPage">上一页</button>
+    <text class="page-info">{{currentPage}}/{{totalPages}}</text>
+    <button class="page-btn {{currentPage === totalPages ? 'disabled' : ''}}" bindtap="nextPage">下一页</button>
+  </view>
+</view>

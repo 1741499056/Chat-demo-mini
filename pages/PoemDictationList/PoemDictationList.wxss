@@ -1,0 +1,195 @@
+/* 1. 容器样式：引入丝绸质感的微渐变背景 */
+.container {
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 使用微渐变模拟宣纸质感 */
+  background: linear-gradient(180deg, #fdfbf7 0%, #f5f1e9 100%); 
+  overflow: hidden;
+  font-family: 'PingFang SC', -apple-system, sans-serif;
+}
+
+/* 2. 搜索栏：增加磨砂玻璃效果和底部装饰线 */
+.header {
+  flex-shrink: 0;
+  padding: 30rpx 150rpx;
+  background-color: #F6DEAD;
+  border-radius: 16rpx;
+  backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
+  box-shadow: 0 4rpx 30rpx rgba(62, 39, 35, 0.05);
+  border-bottom: 2rpx solid #e8e2d6;
+  z-index: 100;
+}
+
+.main-title {
+  font-size: 42rpx;
+  font-weight: 800;
+  color: #3e2723;
+  margin-bottom: 25rpx;
+  display: block;
+  text-align: center;
+  letter-spacing: 4rpx;
+  /* 文字下方增加一个小装饰点 */
+  position: relative;
+}
+
+.main-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: #b45309;
+  border-radius: 2rpx;
+}
+
+.search-bar {
+  display: flex;
+  background: #f8f6f2;
+  border-radius: 12rpx; /* 改为更有棱角的圆角 */
+  padding: 15rpx 30rpx;
+  align-items: center;
+  border: 1rpx solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+  border-color: #b45309;
+  background: #fff;
+  box-shadow: 0 0 0 4rpx rgba(180, 83, 9, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #334155;
+}
+
+/* 3. 列表区域：增加呼吸感 */
+.poem-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 4. 题目卡片：增加侧边色块和悬浮动效 */
+.poem-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 35rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  /* 侧边点缀 */
+  border-left: 8rpx solid #3e2723; 
+  box-shadow: 0 8rpx 20rpx rgba(62, 39, 35, 0.03);
+  transition: all 0.2s active;
+}
+
+/* 点击反馈效果 */
+.poem-card:active {
+  transform: scale(0.98);
+  background: #fafaf9;
+}
+
+.poem-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.poem-meta {
+  font-size: 26rpx;
+  color: #78716c;
+  display: flex;
+  align-items: center;
+}
+
+.dynasty {
+  background: #f5f5f4;
+  padding: 2rpx 12rpx;
+  border-radius: 4rpx;
+  margin-right: 15rpx;
+  font-size: 22rpx;
+  color: #a8a29e;
+}
+
+/* 5. 统计数字：增加精致感 */
+.poem-stats {
+  display: flex;
+  flex-direction: row;    /* 核心修改：强制横向排列 */
+  align-items: center;    /* 垂直居中对齐 */
+  justify-content: flex-end; /* 整体靠右 */
+}
+
+.count-wrapper {
+  display: flex;
+  align-items: baseline;
+  color: #b45309;
+}
+
+.count-num {
+  font-size: 32rpx;
+  color: #b45309;
+  margin-right: 8rpx;     /* 数字和“题”之间的间距 */
+ 
+}
+
+.count-label {
+  font-size: 24rpx;
+  color: #a8a29e;
+  margin-right: 16rpx;    /* “题”和箭头之间的间距 */
+  line-height: 1;
+}
+
+.arrow {
+  color: #d6d3d1;
+  font-size: 28rpx;
+  font-weight: bold;
+  line-height: 1;         /* 确保箭头和文字在一条水平线上 */
+}
+
+/* 6. 分页样式：改为圆润而有分量的设计 */
+.pagination {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 50rpx 60rpx;
+  background: white;
+  border-top: 1rpx solid #e8e2d6;
+  box-shadow: 0 -10rpx 30rpx rgba(0,0,0,0.02);
+}
+
+.page-btn {
+  background: #3e2723;
+  color: #fff;
+  font-size: 26rpx;
+  border-radius: 40rpx;
+  padding: 0 45rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  box-shadow: 0 4rpx 15rpx rgba(62, 39, 35, 0.2);
+  transition: all 0.3s ease;
+}
+
+.page-btn.disabled {
+  background: #f5f5f4 !important;
+  color: #d6d3d1 !important;
+  box-shadow: none;
+}
+
+.page-info {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #78716c;
+  font-family: 'Courier New', Courier, monospace;
+}

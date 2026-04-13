@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="header">
+    <text class="main-title">{{title}}</text>
+    <view class="progress-info" wx:if="{{!isSubmitted}}">
+      共 {{questions.length}} 题 · 请准确填写诗句
+    </view>
+    <view class="result-summary" wx:else>
+      得分：<text class="score">{{resultData.correctCount}}/{{resultData.totalQuestions}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="content-scroll" scroll-y="true">
+    
+    <block wx:if="{{!isSubmitted}}">
+      <view class="question-card" wx:for="{{questions}}" wx:key="questionId">
+        <view class="q-content">{{index + 1}}. {{item.content}}</view>
+        <textarea 
+          class="answer-input" 
+          placeholder="在此输入默写内容..." 
+          bindinput="onInputAnswer" 
+          data-id="{{item.questionId}}"
+          auto-height
+        />
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="result-card" wx:for="{{resultData.results}}" wx:key="questionId">
+        <view class="q-content">{{item.content}}</view>
+        
+        <view class="user-answer-box">
+          <text class="label">你的答案：</text>
+          <text class="text {{item.isCorrect ? 'correct' : 'wrong'}}">{{item.userAnswer}}</text>
+          <view class="status-tag {{item.isCorrect ? 'tag-correct' : 'tag-error'}}">
+            {{item.isCorrect ? '回答正确' : '回答错误'}}
+          </view>
+        </view>
+
+        <view class="correct-answer-box" wx:if="{{!item.isCorrect}}">
+          <text class="label">正确答案：</text>
+          <text class="text">{{item.correctAnswer}}</text>
+        </view>
+      </view>
+    </block>
+
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+
+  <view class="footer">
+    <button wx:if="{{!isSubmitted}}" class="submit-btn" bindtap="submitAnswers"> 提交默写 </button>
+    <button wx:else class="retry-btn" bindtap="retry"> 重新练习 </button>
+  </view>
+</view>

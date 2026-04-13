@@ -1,0 +1,57 @@
+<view class="page-container">
+  <view class="title">请选择你所在的年级</view>
+
+  <!-- 小学学段 -->
+  <view class="section">
+    <view class="section-title">小学</view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '一年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="一年级">一年级</view>
+      <view class="grade-item {{selected === '二年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="二年级">二年级</view>
+      <view class="grade-item {{selected === '三年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="三年级">三年级</view>
+    </view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '四年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="四年级">四年级</view>
+      <view class="grade-item {{selected === '五年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="五年级">五年级</view>
+      <view class="grade-item {{selected === '六年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="六年级">六年级</view>
+    </view>
+  </view>
+
+  <!-- 初中学段 -->
+  <view class="section">
+    <view class="section-title">初中</view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '初中七年级上' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中七年级上">七年级上</view>
+      <view class="grade-item {{selected === '初中七年级下' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中七年级下">七年级下</view>
+      <view class="grade-item {{selected === '初中八年级上' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中八年级上">八年级上</view>
+    </view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '初中八年级下' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中八年级下">八年级下</view>
+      <view class="grade-item {{selected === '初中九年级上' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中九年级上">九年级上</view>
+      <view class="grade-item {{selected === '初中九年级下' ? 'active' : ''}}" bindtap="selectGrade" data-grade="初中九年级下">九年级下</view>
+    </view>
+  </view>
+
+  <!-- 高中学段 -->
+  <view class="section">
+    <view class="section-title">高中</view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '高中必修上' ? 'active' : ''}}" bindtap="selectGrade" data-grade="高中必修上">必修上</view>
+      <view class="grade-item {{selected === '高中必修下' ? 'active' : ''}}" bindtap="selectGrade" data-grade="高中必修下">必修下</view>
+      <view class="grade-item {{selected === '高中选修上' ? 'active' : ''}}" bindtap="selectGrade" data-grade="高中选修上">选修上</view>
+    </view>
+    <view class="grade-row">
+      <view class="grade-item {{selected === '高中选修中' ? 'active' : ''}}" bindtap="selectGrade" data-grade="高中选修中">选修中</view>
+      <view class="grade-item {{selected === '高中选修下' ? 'active' : ''}}" bindtap="selectGrade" data-grade="高中选修下">选修下</view>
+    </view>
+  </view>
+
+    <!-- 全年级-->
+    <view class="section">
+      <view class="section-title">其他</view>
+      <view class="grade-item {{selected === '全年级' ? 'active' : ''}}" bindtap="selectGrade" data-grade="全年级">全年级</view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <button class="save-btn" bindtap="saveGrade">保存</button>
+
+</view>

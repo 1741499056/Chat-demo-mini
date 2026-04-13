@@ -1,0 +1,56 @@
+<view class="container">
+  <scroll-view scroll-y class="content-scroll-view">
+    
+    <view class="text-card" wx:if="{{materialInfo}}">
+        <view class="card-header">
+            <text class="article-title">{{materialInfo.title}}</text>
+            <text class="article-author">{{materialInfo.author}}</text>
+        </view>
+        <view class="article-content"><text>{{materialInfo.content}}</text></view>
+    </view>
+
+    <view class="questions-section">
+      <block wx:for="{{questions}}" wx:key="id" wx:for-item="question">
+        <view class="question-card">
+          <view class="question-content">
+            <text class="q-index">{{index + 1}}.</text>
+            <text>{{question.questionContent}}</text>
+          </view>
+          
+          <view class="options-list">
+            <block wx:for="{{question.options}}" wx:key="key" wx:for-item="option">
+              <view 
+                class="option-item {{userAnswer[question.id] === option.key ? (results[question.id].isCorrect ? 'selected-correct' : 'selected-wrong') : (results[question.id] && option.key === results[question.id].correctAnswer ? 'highlight-correct' : '')}}"
+                bindtap="selectOption"
+                data-id="{{question.id}}"
+                data-key="{{option.key}}"
+              >
+                <text class="option-key">{{option.key}}.</text>
+                <text class="option-text">{{option.content}}</text>
+              </view>
+            </block>
+          </view>
+
+          <view class="answer-area" wx:if="{{results[question.id]}}">
+            <view class="show-answer-btn {{showAnswer[question.id] ? 'expanded' : ''}}" 
+                  bindtap="toggleAnswer" data-id="{{question.id}}">
+              {{showAnswer[question.id] ? '隐藏解析' : '查看解析'}}
+            </view>
+            
+            <view class="analysis-box" wx:if="{{showAnswer[question.id]}}">
+              <view class="answer-row">
+                <text class="label">【正确答案】</text>
+                <text class="result correct">{{results[question.id].correctAnswer}}</text>
+                
+              </view>
+              <view class="analysis-row">
+                <text class="label">【解析】</text>
+                <text class="analysis-content">{{results[question.id].answerAnalysis}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+</view>

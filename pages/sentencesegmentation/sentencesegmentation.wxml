@@ -1,0 +1,72 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="main-title">断句知识点库</text>
+    <text class="tips">共 {{skillCount}} 个技巧</text>
+  </view>
+
+  <!-- 知识点列表 -->
+  <scroll-view scroll-y class="skill-list">
+    <block wx:for="{{sentenceSkills}}" wx:key="id">
+      <view class="skill-card">
+        <!-- 知识点名称和难度标签 -->
+        <view class="skill-header">
+          <text class="name">{{item.name}}</text>
+          <text 
+            class="difficulty {{item.difficulty === '初级' ? 'beginner' : item.difficulty === '中级' ? 'intermediate' : 'advanced'}}"
+          >
+            {{item.difficulty}}
+          </text>
+        </view>
+        
+        <!-- 知识点描述 -->
+        <scroll-view scroll-y class="description">
+          <text>{{item.description}}</text>
+        </scroll-view>
+        
+        <!-- 新增字段展示区域 -->
+        <view class="additional-info">
+          <!-- 关键词 -->
+          <view class="info-item" wx:if="{{item.keywords}}">
+            <text class="info-label">关键词:</text>
+            <text class="info-content">{{item.keywords}}</text>
+          </view>
+          
+          <!-- 常见陷阱 -->
+          <view class="info-item" wx:if="{{item.pitfalls}}">
+            <text class="info-label">常见陷阱:</text>
+            <text class="info-content">{{item.pitfalls}}</text>
+          </view>
+          
+          <!-- 步骤列表 -->
+          <view class="info-item" wx:if="{{item.steps && item.steps.length > 0}}">
+            <text class="info-label">步骤:</text>
+            <view class="step-list">
+              <block wx:for="{{item.steps}}" wx:key="*this">
+                <view class="step-item">
+                  <text class="step-index">{{index + 1}}.</text>
+                  <text class="step-content">{{item.content || item}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 生成题目按钮 -->
+        <button bindtap="generateQuestions" data-index="{{index}}" class="generate-btn">查看题目</button>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 加载状态提示 -->
+  <view wx:if="{{isLoading}}" class="loading">
+    <text class="loading-icon">⏳</text>
+    <text>加载中...</text>
+  </view>
+  
+  <view wx:if="{{loadError}}" class="error">
+    <text class="error-icon">❌</text>
+    <text class="error-message">加载失败: {{errorMsg}}</text>
+    <button bindtap="retryFetch" class="retry-btn">重试</button>
+  </view>
+</view>

@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <text class="title">选择真题类型</text>
+    <text class="subtitle">智能辅助工具</text>
+  </view>
+
+  <!-- 功能区 -->
+  <view class="card-container">
+    <!-- 高中课外文言文真题卡片 -->
+    <view class="function-card word-card" bindtap="navigateToWord">
+      <view class="card-content">
+        <view class="card-icon">
+          <view class="icon">📚</view>
+        </view>
+        <view class="card-text">
+          <text class="card-title">高中-文言文赏析</text>
+          <text class="card-desc">查看高考文言文阅读真题</text>
+          <!-- <view class="card-hint">
+            <text>点击进入</text>
+            <text class="arrow">→</text>
+          </view> -->
+        </view>
+      </view>
+    </view>
+
+<!-- 高中课外古诗鉴赏真题卡片 -->
+    <view class="function-card PoetryAppreciationList-card" bindtap="navigateToPoetryAppreciationList">
+      <view class="card-content">
+        <view class="card-icon">
+          <view class="icon">📃</view>
+        </view>
+        <view class="card-text">
+          <text class="card-title">高中-古诗鉴赏</text>
+          <text class="card-desc">查看往年高考古诗鉴赏真题</text>
+          <!-- <view class="card-hint">
+            <text>点击进入</text>
+            <text class="arrow">→</text>
+          </view> -->
+        </view>
+      </view>
+    </view>
+
+    <!-- 初中、高中 课内古诗文真题卡片 -->
+    <view class="function-card sentence-card" bindtap="navigateToSentenceSegmentation">
+      <view class="card-content">
+        <view class="card-icon">
+          <view class="icon">📖</view>
+        </view>
+        <view class="card-text">
+          <text class="card-title">课内古诗古文</text>
+          <text class="card-desc">多题型打牢基础</text>
+          <!-- <view class="card-hint">
+            <text>点击进入</text>
+            <text class="arrow">→</text>
+          </view> -->
+        </view>
+      </view>
+    </view>
+
+        <!-- 初中、高中 古诗-情景默写卡片 -->
+        <view class="function-card PoemDictationList-card" bindtap="navigateToPoemDictationList">
+      <view class="card-content">
+        <view class="card-icon">
+          <view class="icon">📝</view>
+        </view>
+        <view class="card-text">
+          <text class="card-title">古诗情景默写</text>
+          <text class="card-desc">巩固理解，排查错别字</text>
+          <!-- <view class="card-hint">
+            <text>点击进入</text>
+            <text class="arrow">→</text>
+          </view> -->
+        </view>
+      </view>
+        </view>
+
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer">
+    <text>选择功能开始学习</text>
+  </view>
+</view>
+
+<!-- 在文件底部添加 -->
+<view class="float-nav-tool" bindtap="navigateToIndex">
+  <text class="float-nav-icon">🏠</text>
+</view>

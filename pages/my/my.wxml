@@ -1,0 +1,93 @@
+<view class="me-container">
+  <view class="agent-mask" wx:if="{{isSearching}}">
+  <view class="agent-dialog">
+    <view class="loading-spinner"></view> <text class="agent-text">{{agentStatusText}}</text>
+  </view>
+</view>
+  <view class="content-card user-card">
+    <view class="avatar-section">
+      <image class="user-avatar" src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png"></image>
+      <view class="grade-info" wx:if="{{isLoggedIn}}">
+        <text class="current-grade" wx:if="{{currentGrade}}">{{currentGrade}}</text>
+        <text class="current-grade" wx:if="{{!currentGrade}}">未设置年级</text>
+      </view>
+    </view>
+    
+    <view class="user-detail">
+      <text class="user-name">{{userInfo.nickname}}</text>
+      <text class="user-desc">古诗文学习，从这里开始</text>
+    </view>
+    
+    <block wx:if="{{!isLoggedIn}}">
+      <button class="login-btn" bindtap="goToLogin">去登录</button>
+    </block>
+    <block wx:else>
+      <view class="button-group">
+        <button class="grade-setting-btn" bindtap="goToGradeSelect">设置年级</button>
+        <!-- <button class="bg-setting-btn">设置背景</button> -->
+      <!-- 临时测试打卡 -->
+      <button bindtap="goTodaka">打卡</button>
+      <!-- 临时测试搜索 -->
+      <view class="search-box">
+        <input 
+          type="text" 
+          class="openclaw" 
+          placeholder="请输入古诗名" 
+          bindinput="onInput" 
+          bindconfirm="doSearch"
+          confirm-type="search" 
+        />
+        <button class="search-btn" bindtap="doSearch">直达古诗</button>
+      </view>
+
+
+      </view>
+    </block>
+  </view>
+
+  <view class="content-card tabs-card">
+    <view class="nav-tabs">
+      <view class="nav-tab active">我的收藏</view>
+      <view class="nav-tab">学习计划</view>
+    </view>
+  </view>
+
+  <view class="content-card list-card">
+    <view class="nav-list">
+      <view class="nav-item">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.jpg"></image>
+        <text class="nav-text">历史记录</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+      <view class="nav-item" bindtap="clearCache">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98.jpg"></image>
+        <text class="nav-text">清理缓存</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+      <view class="nav-item" bindtap="aboutUs">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC.jpg"></image>
+        <text class="nav-text">关于我们</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+      <view class="nav-item" bindtap="userAgreement">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E7%94%A8%E6%88%B7%E5%8D%8F%E8%AE%AE.jpg"></image>
+        <text class="nav-text">用户协议</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+      <view class="nav-item" bindtap="feedback">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E6%84%8F%E8%A7%81%E5%8F%8D%E9%A6%88.jpg"></image>
+        <text class="nav-text">意见反馈</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+      <view class="nav-item" bindtap="privacy">
+        <image class="nav-icon" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E9%9A%90%E7%A7%81%E5%AE%89%E5%85%A8.jpg"></image>
+        <text class="nav-text">隐私安全</text>
+        <image class="nav-arrow" src="https://newlan.oss-cn-shanghai.aliyuncs.com/icons/%E5%8F%B3%E7%AE%AD%E5%A4%B4.jpg"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="logout-btn {{isLoggedIn ? '' : 'logout-btn-disabled'}}" bindtap="logout">
+    <text>退出登录</text>
+  </view>
+</view>

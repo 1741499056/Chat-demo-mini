@@ -1,0 +1,49 @@
+<!-- pages/DailyPoem/DailyPoem.wxml -->
+<view class="page-container no-scroll">
+  <!-- 背景图 -->
+  <image 
+    src="https://newlan.oss-cn-shanghai.aliyuncs.com/%E7%99%BB%E5%BD%95%E8%83%8C%E6%99%AF1.png" 
+    mode="aspectFill" 
+    class="background-image"
+  ></image>
+
+  <view class="content-mask"></view>
+
+  <view class="motto">
+    <text>日积月累，水滴石穿</text>
+  </view>
+  
+  <view class="container">
+    <view class="poem-card">
+      <view class="title">{{poem.title}}</view>
+      <view class="author">{{poem.author || '佚名'}}·{{poem.dynasty}}</view>
+      <!-- 可滚动诗词区 -->
+      <scroll-view 
+        class="content"
+        scroll-y
+        enhanced
+        scroll-with-animation
+      >
+        <block wx:for="{{poem.content}}" wx:key="*this">
+          <view class="couplet-line">{{item}}</view>
+        </block>
+      </scroll-view>
+      <!-- 滚动提示 -->
+      <view class="scroll-tip">↑ 上下滑动查看全文 ↓</view>
+      <view class="date">{{today}}</view>
+    </view>
+    
+    <!-- 按钮容器 -->
+    <view class="button-container">
+      <!-- <button class="action-button" bindtap="aichat">财务助手</button> -->
+      <button 
+        class="action-button" 
+        bindtap="refreshPoem"
+        disabled="{{refreshing}}"
+      >
+        刷新诗词
+      </button>
+      <button class="action-button" bindtap="learnmore">了解更多</button>
+    </view>
+  </view>
+</view>
