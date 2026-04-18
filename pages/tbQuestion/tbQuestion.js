@@ -260,7 +260,7 @@ Page({
         try {
             // 调用全局的authRequest方法
             const res = await app.authRequest({
-                url: '/api/questions/comprehension',
+                url: '/questions/comprehension',
                 method: 'GET',
                 data: {
                     poemName: this.data.articleInput,

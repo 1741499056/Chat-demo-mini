@@ -63,7 +63,7 @@ Page({
 
         // 使用统一请求方法，注意 URL 中需要拼接 textId
         app.authRequest({
-            url: `/api/questions/choice/${textId}`,
+            url: `/questions/choice/${textId}`,
             method: 'GET'
         }).then(res => {
             if (res.statusCode === 200) {

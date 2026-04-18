@@ -52,14 +52,14 @@ Page({
       };
       
       wx.navigateTo({
-        url: '/api/pages/login/login',
+        url: '/pages/login/login',
       });
       return;
     }
 
     // 使用统一请求方法
     app.authRequest({
-      url: '/api/questions/choice_text', // 您的接口地址
+      url: '/questions/choice_text', // 您的接口地址
       method: 'GET',
       data: {
         page: currentPage,   

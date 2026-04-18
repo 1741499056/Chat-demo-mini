@@ -36,7 +36,7 @@ Page({
 
     // 更新接口地址与参数
     app.authRequest({
-      url: '/api/questions/exam/materials', // 新接口地址
+      url: '/questions/exam/materials', // 新接口地址
       method: 'GET',
       data: {
         page: currentPage,   

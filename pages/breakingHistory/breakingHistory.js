@@ -101,7 +101,7 @@ Page({
     // 移除了对 questionDetailsMap 的依赖和 ai/manual 的区分逻辑
     fetchUserAnswers() {
         return app.authRequest({
-            url: '/api/sentence-breaking/getuseranswers',
+            url: '/sentence-breaking/getuseranswers',
             method: 'GET',
         })
         .then(res => {

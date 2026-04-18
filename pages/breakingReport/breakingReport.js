@@ -63,7 +63,7 @@ Page({
      */
     loadAndAnalyzeData() {
         app.authRequest({
-            url: '/api/sentence-breaking/getuseranswers',
+            url: '/sentence-breaking/getuseranswers',
             method: 'GET',
         })
         .then(res => {

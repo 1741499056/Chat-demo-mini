@@ -13,7 +13,7 @@ Component({
         isTabBar: false 
       },
       {
-        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/wx_mini_program_img/%E8%AF%97%E6%96%87%E8%83%8C%E8%AF%B5.png',
+        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/main_fuction_img/1.png',
         name: '古诗查询',
         url: '/pages/poem/poem',
         isTabBar: false
@@ -25,13 +25,13 @@ Component({
         isTabBar: false
       },
       {
-        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/wx_mini_program_img/2.png',
+        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/main_fuction_img/2.png',
         name : '词语练习',
         url: '/pages/word/word',
         isTabBar: false
       },
       {
-        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/wx_mini_program_img/3.png',
+        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/main_fuction_img/3.png',
         name: '断句一览',
         url: '/pages/sentencesegmentation/sentencesegmentation',
         isTabBar: false
@@ -55,7 +55,7 @@ Component({
         isTabBar: false
       },
       {
-        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/wx_mini_program_img/4.png',
+        icon: 'https://ai4d-1thcz6r93hx1vs8rj1.oss-cn-shanghai.aliyuncs.com/main_fuction_img/4.png',
         name: '高考真题',
         url: '/pages/Type_of_Questions/Type_of_Questions',
         isTabBar: false

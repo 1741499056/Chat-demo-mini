@@ -19,7 +19,7 @@
   height: 600rpx; /* 增加高度以确保完整展示 */
   background: linear-gradient(to bottom, #a1c4fd 0%, #FFFFFF 100%);
   margin-top: 160rpx;
-  padding:20rpx;
+  padding:10rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -23,7 +23,7 @@ Page({
   fetchQuestions() {
     this.setData({ isLoading: true });
     app.authRequest({
-      url: `/api/questions/recitation/${this.data.poemId}`,
+      url: `/questions/recitation/${this.data.poemId}`,
       method: 'GET'
     }).then(res => {
       if (res.data && res.data.code === 1) {
@@ -57,7 +57,7 @@ Page({
 
     wx.showLoading({ title: '评判中...' });
     app.authRequest({
-      url: '/api/questions/recitation/submit',
+      url: '/questions/recitation/submit',
       method: 'POST',
       data: {
         poemId: parseInt(this.data.poemId),

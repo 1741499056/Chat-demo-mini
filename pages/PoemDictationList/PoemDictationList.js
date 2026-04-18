@@ -21,7 +21,7 @@ Page({
     this.setData({ isLoading: true, loadError: false });
 
     app.authRequest({
-      url: '/api/questions/recitation/poems',
+      url: '/questions/recitation/poems',
       method: 'GET',
       data: {
         page: this.data.currentPage,

@@ -24,7 +24,7 @@ Page({
   fetchQuestionDetail(id) {
     this.setData({ isLoading: true });
     app.authRequest({
-      url: `/api/questions/exam/${id}`,
+      url: `/questions/exam/${id}`,
       method: 'GET'
     }).then(res => {
       if (res.data && String(res.data.code) === '1') {
@@ -51,7 +51,7 @@ Page({
 
     // 3. 调用提交接口获取结果
     app.authRequest({
-      url: '/api/questions/exam/submit',
+      url: '/questions/exam/submit',
       method: 'POST',
       data: {
         questionId: id,
